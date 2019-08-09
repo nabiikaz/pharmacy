@@ -12,5 +12,10 @@
 */
 
 Route::get('dashboard', function () {
-    return view('dashboard');
+    return view('layouts.dashboard');
+});
+
+
+Route::get('dashboard/users',function(){
+    return view('users');
 });

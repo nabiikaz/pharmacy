@@ -21,6 +21,9 @@ window.Vue = require('vue');
 
 Vue.component('dashboard_nav',require('./components/dashboard/navbar.vue').default);
 Vue.component('dashboard_sidebar',require('./components/dashboard/sidebar.vue').default);
+
+Vue.component("dashboard_users",require('./components/dashboard/users.vue').default);
+Vue.component("dashboard_editUser",require('./components/dashboard/users/editUser.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

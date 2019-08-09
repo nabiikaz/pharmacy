@@ -6,7 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dashboard</title>
 
-    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{{asset('css/app.css')}}">
 </head>
 <body>
     <div id="app">
@@ -14,10 +17,13 @@
         <div class="container-fluid">
             <div class="row">
         <dashboard_sidebar></dashboard_sidebar>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style=" padding-top: 48px;">
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style=" padding-top: 20px;">
             
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-              <h1 class="h2">Dashboard</h1>
+             
+                <div class="container-fluid">
+                        @yield("content")
+                </div>
              
             </div>
            
@@ -30,6 +36,6 @@
 
 
 
-    <script src="js/app.js"></script>
+    <script src="{{asset('js/app.js')}}"></script>
 </body>
 </html>

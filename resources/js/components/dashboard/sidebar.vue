@@ -122,8 +122,6 @@ export default {
   text-transform: uppercase;
 }
 
-/*
- * Content
- */
+
 
 </style>
