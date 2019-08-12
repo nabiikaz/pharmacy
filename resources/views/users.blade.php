@@ -6,4 +6,4 @@
 <dashboard_users></dashboard_users>
 
 
-    @endsection
+@endsection

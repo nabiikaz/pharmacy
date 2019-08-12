@@ -2,13 +2,16 @@
   <div>
 
 <div class="table-wrapper">
-        <div class="table-title">
-            <div class="row">
+        <div class="table-title" style="background-color:#272b30;">
+            <div class="row" >
                 <div class="col-sm-5">
-                    <h2>User <b>Management</b></h2>
+                    <h2>Users <b>Manager</b></h2>
                 </div>
                 <div class="col-md-7">
-                    <a href="#" class="btn btn-primary"><i class="material-icons"></i> <span>Add New User</span></a>
+                    <a href="#" class="btn btn-primary"  data-toggle="modal" data-target="#modaladdUser" >
+                        <i class="material-icons"></i> <span>Add New User</span>
+                        
+                    </a>
                 </div>
             </div>
         </div>
@@ -26,16 +29,17 @@
             </thead>
             <tbody>
                 <tr>
+                    <input type="text" class="UserID" value="1"  hidden>
                     <td>
                         <img src="/img/avatars/nabi.jpg" class="avatar" alt="Avatar">
-                        Nabi Zakaria
+                        Nabi Zakaria 
                     </td>
                     <td>29/07/1995</td>                        
                     <td>0555655100</td>                        
                     <td>nabi@gmail.com</td>                        
                     <td>Admin</td>
                     <td>
-                        <a href="#" class="settings" title="" data-tooltip="tooltip"  data-toggle="modal" data-target="#modalRegisterForm" data-original-title="Settings" v-on:click="settings()" ><i class="material-icons"></i></a>
+                        <a href="#" class="settings" title="" data-tooltip="tooltip"  data-toggle="modal" data-target="#modaleditUser" data-original-title="Settings" v-on:click="settings()" ><i class="material-icons"></i></a>
                         <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete"><i class="material-icons"></i></a>
                     </td>
                 </tr>
@@ -58,7 +62,8 @@
     </div>
 
 
-    <dashboard_editUser></dashboard_editUser>
+    <editUser :userId="selectedUser_Id"></editUser>
+    <addUser></addUser>
 
 
 </div>  
@@ -66,15 +71,31 @@
 
 
 <script>
+    import editUser from './users/editUser.vue'
+    import addUser from './users/addUser.vue'
+    
 export default {
+     data(){
+        return {
+            selectedUser_Id : -1,
+
+        }
+    },
     mounted(){
         $('[data-tooltip="tooltip"]').tooltip();
+        
     },
+
+   
 
     methods:{
         settings(){
             
         },
+    },
+    components:{
+        'editUser' : editUser,
+        'addUser'  : addUser,
     }
     
 }

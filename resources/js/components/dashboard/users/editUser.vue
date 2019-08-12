@@ -1,6 +1,6 @@
 <template>
     <div>
-            <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            <div class="modal fade" id="modaleditUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -82,8 +82,8 @@
             </div>
             
         </div>
-        <div class="modal-footer d-flex justify-content-center">
-            <button class="btn btn-deep-orange">Sign up</button>
+        <div class="modal-footer justify-content-center">
+            <input type="submit" class="btn btn-primary submit-btn " value="submit">
         </div>
         </div>
     </div>
@@ -95,6 +95,16 @@
 
 <script>
 export default {
+      props: ['userId'],
+
+    mounted(){
+        
+    },
+    data(){
+        return{
+           
+        }
+    }
     
 }
 </script>
@@ -109,7 +119,14 @@ body{
 
 label{
     font-size: 14px;
+    color: gray;
     
 }
+
+.submit-btn{
+    width:400px;
+    background-color:#272b30;
+}
+
 </style>
 
