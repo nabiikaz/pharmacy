@@ -54,13 +54,13 @@
             <div class="clearfix">
 
                 <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    <li class="page-item disabled"><a href="#"  @click="(paginationCurrent > 1)? paginationCurrent--:true; " >Previous</a></li>
+                    <li class="page-item" v-if="paginationCurrent > 2"><a href="#" @click="paginationCurrent -=2 " class="page-link">{{paginationCurrent -2}}</a></li>
+                    <li class="page-item" v-if="paginationCurrent > 1"><a href="#" @click="paginationCurrent--" class="page-link">{{paginationCurrent -1}}</a></li>
+                    <li class="page-item active"><a href="#" class="page-link">{{paginationCurrent}}</a></li>
+                    <li class="page-item"><a href="#" @click="paginationCurrent++ " class="page-link">{{paginationCurrent+1}}</a></li>
+                    <li class="page-item"><a href="#" @click="paginationCurrent+=2 " class="page-link">{{paginationCurrent+2}}</a></li>
+                    <li class="page-item"><a href="#" @click="paginationCurrent++ " class="page-link">Next</a></li>
                 </ul>
             </div>
         </div>
@@ -118,8 +118,23 @@
                     },
 
                 ],
+                paginationCurrent : 2
 
             }
+        },
+        watch:{
+            paginationCurrent : function(val){
+                    getUsers(page);
+            }
+        },
+        //get users in the current page 
+        getUsers: function(page){
+            /** get users in the current page using the server's API with (axios)
+             * 
+             * 
+             * 
+             */
+
         },
 
 

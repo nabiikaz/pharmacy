@@ -2064,8 +2064,22 @@ __webpack_require__.r(__webpack_exports__);
         tel: "0555655100",
         email: "nabi@gmail.com",
         role: "Admin"
-      }]
+      }],
+      paginationCurrent: 2
     };
+  },
+  watch: {
+    paginationCurrent: function paginationCurrent(val) {
+      getUsers(page);
+    }
+  },
+  //get users in the current page 
+  getUsers: function getUsers(page) {
+    /** get users in the current page using the server's API with (axios)
+     * 
+     * 
+     * 
+     */
   },
   methods: {
     settings: function settings(UserId) {
@@ -38924,7 +38938,114 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _vm._m(3)
+        _c("div", { staticClass: "clearfix" }, [
+          _c("ul", { staticClass: "pagination" }, [
+            _c("li", { staticClass: "page-item disabled" }, [
+              _c(
+                "a",
+                {
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      _vm.paginationCurrent > 1 ? _vm.paginationCurrent-- : true
+                    }
+                  }
+                },
+                [_vm._v("Previous")]
+              )
+            ]),
+            _vm._v(" "),
+            _vm.paginationCurrent > 2
+              ? _c("li", { staticClass: "page-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          _vm.paginationCurrent -= 2
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.paginationCurrent - 2))]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.paginationCurrent > 1
+              ? _c("li", { staticClass: "page-item" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "page-link",
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          _vm.paginationCurrent--
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.paginationCurrent - 1))]
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("li", { staticClass: "page-item active" }, [
+              _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
+                _vm._v(_vm._s(_vm.paginationCurrent))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "page-item" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "page-link",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      _vm.paginationCurrent++
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.paginationCurrent + 1))]
+              )
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "page-item" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "page-link",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      _vm.paginationCurrent += 2
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.paginationCurrent + 2))]
+              )
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "page-item" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "page-link",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      _vm.paginationCurrent++
+                    }
+                  }
+                },
+                [_vm._v("Next")]
+              )
+            ])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _c("editUser", { attrs: { userId: _vm.selectedUser_Id } }),
@@ -39010,54 +39131,6 @@ var staticRenderFns = [
       },
       [_c("i", { staticClass: "material-icons" }, [_vm._v("")])]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "clearfix" }, [
-      _c("ul", { staticClass: "pagination" }, [
-        _c("li", { staticClass: "page-item disabled" }, [
-          _c("a", { attrs: { href: "#" } }, [_vm._v("Previous")])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("1")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("2")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item active" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("3")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("4")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("5")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "page-item" }, [
-          _c("a", { staticClass: "page-link", attrs: { href: "#" } }, [
-            _vm._v("Next")
-          ])
-        ])
-      ])
-    ])
   }
 ]
 render._withStripped = true
