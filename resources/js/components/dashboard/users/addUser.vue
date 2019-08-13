@@ -15,7 +15,9 @@
                             <h3 style="color: #6f6e6e;">Enter Personal Information</h3>
                         </div>
 
-                        <form @submit.prevent="NextModal">
+
+                        <form method="post" @submit.prevent="NextModal">
+                            
                             <div class="md-form mb-2">
 
 
@@ -23,12 +25,12 @@
                                     <div class="col-6">
                                         <label for="fullname">Fullname</label>
                                         <input name="fullname" type="text" id="fullname" class="form-control "
-                                            v-model="fullname" v-validate.initial="'required|min:8|max:25'">
+                                            v-model="fullname" required minlength="8" maxlength="25">
                                     </div>
                                     <div class="col-6">
                                         <label for="birthday">Birthday</label>
                                         <input name="birthday" type="date" id="birthday" class="form-control " 
-                                            v-model="birthday" v-validate.initial="'required'">
+                                            v-model="birthday" required>
 
                                     </div>
                                 </div>
@@ -41,21 +43,21 @@
                                     <div class="col-6">
                                         <label for="phone">Phone Number :</label>
                                         <input name="phone number" type="tel" id="phone" class="form-control " 
-                                                v-model="tel" v-validate.initial="'required|numeric|min:9|max:10'">
+                                                v-model="tel" required pattern="[0-9]{9}|[0-9]{10}">
 
                                     </div>
                                     <div class="col-6">
                                         <label for="email">Email</label>
 
                                         <input name="email" type="email" id="email" class="form-control " 
-                                        v-model="email" v-validate.initial="'required|email'">
+                                        v-model="email" required>
 
                                     </div>
                                 </div>
 
 
                             </div>
-                            <span class="text-danger" >{{validationError}}</span>
+                            
                             <hr>
                             <div class="d-flex justify-content-end">
                                 <input type="submit" class="btn btn-primary next-btn pull-right " value="Next">
@@ -83,7 +85,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="addUser">
+                    <form method="post" @submit.prevent="addUser">
                         <div class="modal-body mx-3">
                             <div class="md-from mb-2 ">
                                 <h3 style="color: #6f6e6e;">Enter User Credentials</h3>
@@ -92,18 +94,17 @@
                             <div class="md-form mb-2">
                                 <label for="username">Login Username</label>
                                 <input name="username" type="text" id="username" class="form-control"
-                                            v-validate.initial="'required|min:8|max:16'">
+                                            required minlength="8" maxlength="16">
                             </div>
 
 
                             <div class="md-form mb-2">
                                 <label for="password">Password</label>
                                 <input name="password" type="password" id="password" class="form-control " 
-                                            v-validate.initial="'required|min:8|max:16'">
+                                            required minlength="8" maxlength="16">
                             </div>
 
 
-                        <span class="text-danger" >{{validationError}}</span>
                             
                         </div>
 
@@ -125,7 +126,6 @@
 
 
 <script>
-    Vue.use('veeValidate');
     export default {
 
         props: ['userId'],
@@ -150,41 +150,10 @@
 
             }
         },
-        computed:{
-            
-            validation : function(){
-                
-                if(this.errors.count() > 0)
-                    return this.errors.items[0].msg
-            },
-        },
-
         methods: {
 
             NextModal: function (id) {
                 
-                this.validationError = ""
-                this.validationError = this.validation
-
-                //if any errors do exist then exit the function to validate again
-                if(this.errors.count() > 0  && !["username","password"].includes(this.errors.items[0].field))
-                     return
-
-                //here we do some AXAJ  with axios : 
-                /*
-                *
-                *
-                * 
-                * 
-                * 
-                * 
-                * 
-                **/
-
-
-
-
-
                //hide the current modal (the personal information modal)
                 $("#modaladdUser").modal('hide')
                 
@@ -216,15 +185,18 @@
                 $("#" + id).modal('hide');
             },
             addUser: function () { //this method adds a user via the api 
-                this.validationError = ""
-                this.validationError = this.validation
+                /* we add new User using Axios 
+                *
+                *
+                * 
+                * 
+                * 
+                * 
+                * 
+                * */
 
-                //if any errors do exist then exit the function to validate again
-                if(this.errors.count() > 0)
-                     return
 
-
-                alert("lkj")
+                alert("User Added")
             },
 
 

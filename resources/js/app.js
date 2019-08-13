@@ -19,8 +19,6 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-import VeeValidate from 'vee-Validate';
-Vue.use(VeeValidate)
 
 Vue.component('dashboard_nav',require('./components/dashboard/navbar.vue').default);
 Vue.component('dashboard_sidebar',require('./components/dashboard/sidebar.vue').default);
