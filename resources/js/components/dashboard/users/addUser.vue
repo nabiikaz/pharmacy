@@ -11,12 +11,19 @@
                         </button>
                     </div>
                     <div class="modal-body mx-3">
-                        <div class="md-from mb-2 ">
-                            <h3 style="color: #6f6e6e;">Enter Personal Information</h3>
-                        </div>
+                        
 
 
                         <form method="post" @submit.prevent="NextModal">
+                            <div class="md-form mb-2 text-center">
+                                <input style="display:none;" type="file" ref="imgInput" @change="onFileSelected" >
+                                <img class=" avatar" alt="Avatar" v-bind:src="img" width="150"
+                                    title="Upload the Medicine Image" style="cursor:pointer;border-radius:150px"
+                                    @click="$refs.imgInput.click()" />
+                            </div>
+                            <div class="md-from mb-2 ">
+                            <h3 style="color: #6f6e6e;">Enter Personal Information</h3>
+                        </div>
                             
                             <div class="md-form mb-2">
 
@@ -136,7 +143,8 @@
         data() {
             return {
 
-                currentModal: 1,
+                img: "/img/icons/man.png",
+                Img: null,
                 fullname: "",
                 birthday: "",
                 tel: "",
@@ -151,6 +159,12 @@
             }
         },
         methods: {
+            onFileSelected : function(event){
+                this.img = URL.createObjectURL(event.target.files[0])
+
+                this.Img = new FormData()
+                this.Img.append("image",event.target.files[0],event.target.files[0].name)
+            },
 
             NextModal: function (id) {
                 

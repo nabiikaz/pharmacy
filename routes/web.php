@@ -19,3 +19,8 @@ Route::get('dashboard', function () {
 Route::get('dashboard/users',function(){
     return view('users');
 });
+
+
+Route::get('dashboard/medicines',function(){
+    return view('medicines');
+});
