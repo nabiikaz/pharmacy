@@ -4801,7 +4801,7 @@ __webpack_require__.r(__webpack_exports__);
       this.fullname = "nabi zakaria";
       this.birthday = "1995-08-07";
       this.tel = "0555655100";
-      this.role = "employee";
+      this.role = "moderator";
       this.email = "nabizakaria";
       this.username = "ldlkjdlkdj";
       this.password = "lkksjlfkjf";
@@ -64489,8 +64489,8 @@ var render = function() {
                               }
                             },
                             [
-                              _c("option", { attrs: { value: "employee" } }, [
-                                _vm._v("Employee")
+                              _c("option", { attrs: { value: "moderator" } }, [
+                                _vm._v("Moderator")
                               ]),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "admin" } }, [

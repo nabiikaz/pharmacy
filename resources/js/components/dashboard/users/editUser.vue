@@ -43,7 +43,7 @@
                         <label for="role">Role</label>
                         <select name="role" class="form-control" id="role" v-model="role" >
                     
-                    <option value="employee">Employee</option>
+                    <option value="moderator">Moderator</option>
                     <option value="admin">Admin</option>
                 </select>
                     
@@ -124,7 +124,7 @@ export default {
                 this.fullname= "nabi zakaria"
                 this.birthday= "1995-08-07"
                 this.tel= "0555655100"
-                this.role="employee"
+                this.role="moderator"
                 this.email= "nabizakaria"
                 this.username= "ldlkjdlkdj"
                 this.password= "lkksjlfkjf"
