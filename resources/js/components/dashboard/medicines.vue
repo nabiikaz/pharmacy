@@ -4,10 +4,15 @@
         <div class="table-wrapper">
             <div class="table-title" style="background-color:#272b30;">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-4">
                         <h2>Medicines <b>Manager</b></h2>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-sm-4">
+                        <input class="form-control form-control-dark w-100" type="text" 
+                            placeholder="Search" aria-label="Search" v-model="search">
+
+                    </div>
+                    <div class="col-md-4">
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdMedicine">
                             <i class="material-icons"></i> <span>Add New Medicine</span>
 
@@ -93,6 +98,7 @@
 
         data() {
             return {
+                search : "",
                 selectedMedicine_Id: -1,
                 //displayed Users 
                 medicines: [{
@@ -106,20 +112,43 @@
                     refund: 1,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
                     
                     },
+                    {
+                    Id: 2,
+                    name : "DOLIPRANEE",
+                    dosage : "50 mg",
+                    form : "serop",
+                    family : "Antalgique et antipyrétique ",
+                    stock : 100,
+                    stock_min : 15,
+                    refund: 1,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
+                    
+                    }
+
                    
 
                 ],
-                paginationCurrent : 2
+                paginationCurrent : 1
 
             }
         },
         watch:{
-            paginationCurrent : function(val){
-                    getMedicines(page);
+            paginationCurrent : function(page){
+                    this.getMedicines();
+            },
+            search : function(val){
+            this.paginationCurrent = 1
+
+                this.getMedicines()
+
             }
         },
-        //get users in the current page 
-        getMedicines: function(page){
+        
+
+
+
+        methods: {
+            //get users in the current page 
+        getMedicines: function(){
             /** get users in the current page using the server's API with (axios)
              * 
              * 
@@ -127,10 +156,6 @@
              */
 
         },
-
-
-
-        methods: {
             settings(medicineId) {
                 this.selectedMedicine_Id = medicineId
 

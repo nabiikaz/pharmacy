@@ -4,10 +4,15 @@
         <div class="table-wrapper">
             <div class="table-title" style="background-color:#272b30;">
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-4">
                         <h2>Users <b>Manager</b></h2>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-sm-4">
+                        <input class="form-control form-control-dark w-100" type="text" 
+                                placeholder="Search" aria-label="Search" v-model="search">
+
+                    </div>
+                    <div class="col-md-4">
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdUser">
                             <i class="material-icons"></i> <span>Add New User</span>
 
@@ -87,6 +92,7 @@
 
         data() {
             return {
+                search:"",
                 selectedUser_Id: -1,
                 //displayed Users 
                 users: [{
@@ -118,28 +124,37 @@
                     },
 
                 ],
-                paginationCurrent : 2
+                paginationCurrent : 1
 
             }
         },
         watch:{
             paginationCurrent : function(val){
-                    getUsers(page);
+                    this.getUsers();
+            },
+             search : function(val){
+            this.paginationCurrent = 1
+
+                this.getUsers()
+
             }
         },
-        //get users in the current page 
-        getUsers: function(page){
-            /** get users in the current page using the server's API with (axios)
-             * 
-             * 
-             * 
-             */
-
-        },
+        
 
 
 
         methods: {
+                //get users in the current page 
+            getUsers: function(){
+
+                //don't forget the search and paginationCurrent 
+                /** get users in the current page using the server's API with (axios)
+                 * 
+                 * 
+                 * 
+                 */
+
+            },
             settings(UserId) {
                 this.selectedUser_Id = UserId
 

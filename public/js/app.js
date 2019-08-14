@@ -3780,6 +3780,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3788,6 +3793,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      search: "",
       selectedMedicine_Id: -1,
       //displayed Users 
       medicines: [{
@@ -3800,24 +3806,38 @@ __webpack_require__.r(__webpack_exports__);
         stock_min: 15,
         refund: 1 //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
 
+      }, {
+        Id: 2,
+        name: "DOLIPRANEE",
+        dosage: "50 mg",
+        form: "serop",
+        family: "Antalgique et antipyrétique ",
+        stock: 100,
+        stock_min: 15,
+        refund: 1 //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
+
       }],
-      paginationCurrent: 2
+      paginationCurrent: 1
     };
   },
   watch: {
-    paginationCurrent: function paginationCurrent(val) {
-      getMedicines(page);
+    paginationCurrent: function paginationCurrent(page) {
+      this.getMedicines();
+    },
+    search: function search(val) {
+      this.paginationCurrent = 1;
+      this.getMedicines();
     }
   },
-  //get users in the current page 
-  getMedicines: function getMedicines(page) {
-    /** get users in the current page using the server's API with (axios)
-     * 
-     * 
-     * 
-     */
-  },
   methods: {
+    //get users in the current page 
+    getMedicines: function getMedicines() {
+      /** get users in the current page using the server's API with (axios)
+       * 
+       * 
+       * 
+       */
+    },
     settings: function settings(medicineId) {
       this.selectedMedicine_Id = medicineId;
       $("#modaleditMedicine").modal("show");
@@ -4204,7 +4224,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
@@ -4375,6 +4394,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4383,6 +4407,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      search: "",
       selectedUser_Id: -1,
       //displayed Users 
       users: [{
@@ -4410,23 +4435,28 @@ __webpack_require__.r(__webpack_exports__);
         email: "nabi@gmail.com",
         role: "Admin"
       }],
-      paginationCurrent: 2
+      paginationCurrent: 1
     };
   },
   watch: {
     paginationCurrent: function paginationCurrent(val) {
-      getUsers(page);
+      this.getUsers();
+    },
+    search: function search(val) {
+      this.paginationCurrent = 1;
+      this.getUsers();
     }
   },
-  //get users in the current page 
-  getUsers: function getUsers(page) {
-    /** get users in the current page using the server's API with (axios)
-     * 
-     * 
-     * 
-     */
-  },
   methods: {
+    //get users in the current page 
+    getUsers: function getUsers() {//don't forget the search and paginationCurrent 
+
+      /** get users in the current page using the server's API with (axios)
+       * 
+       * 
+       * 
+       */
+    },
     settings: function settings(UserId) {
       this.selectedUser_Id = UserId;
       $("#modaleditUser").modal("show");
@@ -62174,10 +62204,51 @@ var render = function() {
     "div",
     [
       _c("div", { staticClass: "table-wrapper" }, [
-        _vm._m(0),
+        _c(
+          "div",
+          {
+            staticClass: "table-title",
+            staticStyle: { "background-color": "#272b30" }
+          },
+          [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-4" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.search,
+                      expression: "search"
+                    }
+                  ],
+                  staticClass: "form-control form-control-dark w-100",
+                  attrs: {
+                    type: "text",
+                    placeholder: "Search",
+                    "aria-label": "Search"
+                  },
+                  domProps: { value: _vm.search },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.search = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped table-hover" }, [
-          _vm._m(1),
+          _vm._m(2),
           _vm._v(" "),
           _c(
             "tbody",
@@ -62237,7 +62308,7 @@ var render = function() {
                     [_c("i", { staticClass: "material-icons" }, [_vm._v("")])]
                   ),
                   _vm._v(" "),
-                  _vm._m(2, true)
+                  _vm._m(3, true)
                 ])
               ])
             }),
@@ -62367,39 +62438,32 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "table-title",
-        staticStyle: { "background-color": "#272b30" }
-      },
-      [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-sm-5" }, [
-            _c("h2", [_vm._v("Medicines "), _c("b", [_vm._v("Manager")])])
-          ]),
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c("h2", [_vm._v("Medicines "), _c("b", [_vm._v("Manager")])])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-4" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-primary",
+          attrs: {
+            href: "#",
+            "data-toggle": "modal",
+            "data-target": "#modaladdMedicine"
+          }
+        },
+        [
+          _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-md-7" }, [
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-primary",
-                attrs: {
-                  href: "#",
-                  "data-toggle": "modal",
-                  "data-target": "#modaladdMedicine"
-                }
-              },
-              [
-                _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
-                _vm._v(" "),
-                _c("span", [_vm._v("Add New Medicine")])
-              ]
-            )
-          ])
-        ])
-      ]
-    )
+          _c("span", [_vm._v("Add New Medicine")])
+        ]
+      )
+    ])
   },
   function() {
     var _vm = this
@@ -63266,11 +63330,6 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control form-control-dark w-100",
-          attrs: { type: "text", placeholder: "Search", "aria-label": "Search" }
-        }),
-        _vm._v(" "),
         _vm._m(0)
       ]
     )
@@ -63528,10 +63587,51 @@ var render = function() {
     "div",
     [
       _c("div", { staticClass: "table-wrapper" }, [
-        _vm._m(0),
+        _c(
+          "div",
+          {
+            staticClass: "table-title",
+            staticStyle: { "background-color": "#272b30" }
+          },
+          [
+            _c("div", { staticClass: "row" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-sm-4" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.search,
+                      expression: "search"
+                    }
+                  ],
+                  staticClass: "form-control form-control-dark w-100",
+                  attrs: {
+                    type: "text",
+                    placeholder: "Search",
+                    "aria-label": "Search"
+                  },
+                  domProps: { value: _vm.search },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.search = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+          ]
+        ),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped table-hover" }, [
-          _vm._m(1),
+          _vm._m(2),
           _vm._v(" "),
           _c(
             "tbody",
@@ -63577,7 +63677,7 @@ var render = function() {
                     [_c("i", { staticClass: "material-icons" }, [_vm._v("")])]
                   ),
                   _vm._v(" "),
-                  _vm._m(2, true)
+                  _vm._m(3, true)
                 ])
               ])
             }),
@@ -63707,39 +63807,32 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "table-title",
-        staticStyle: { "background-color": "#272b30" }
-      },
-      [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-sm-5" }, [
-            _c("h2", [_vm._v("Users "), _c("b", [_vm._v("Manager")])])
-          ]),
+    return _c("div", { staticClass: "col-sm-4" }, [
+      _c("h2", [_vm._v("Users "), _c("b", [_vm._v("Manager")])])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-4" }, [
+      _c(
+        "a",
+        {
+          staticClass: "btn btn-primary",
+          attrs: {
+            href: "#",
+            "data-toggle": "modal",
+            "data-target": "#modaladdUser"
+          }
+        },
+        [
+          _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-md-7" }, [
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-primary",
-                attrs: {
-                  href: "#",
-                  "data-toggle": "modal",
-                  "data-target": "#modaladdUser"
-                }
-              },
-              [
-                _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
-                _vm._v(" "),
-                _c("span", [_vm._v("Add New User")])
-              ]
-            )
-          ])
-        ])
-      ]
-    )
+          _c("span", [_vm._v("Add New User")])
+        ]
+      )
+    ])
   },
   function() {
     var _vm = this
