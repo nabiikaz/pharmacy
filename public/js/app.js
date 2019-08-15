@@ -4916,6 +4916,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
@@ -4932,9 +4934,10 @@ __webpack_require__.r(__webpack_exports__);
       batchId: this.$attrs.batchId,
       route: window.location.pathname,
       search: "",
+      selectedSale_Id: -1,
       search_by: "",
       filter_flow: 'Ascending',
-      filter_by: null,
+      filter_by: '0',
       //displayed sales 
       sales: [{
         Id: 1,
@@ -18011,7 +18014,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-35e8add6] {\n        color: #566787;\n        background: #f5f5f5;\n        font-family: 'Varela Round', sans-serif;\n        font-size: 13px;\n}\n.table-wrapper[data-v-35e8add6] {\n        background: #fff;\n        padding: 20px 25px;\n        margin: 30px 0;\n        border-radius: 3px;\n        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-35e8add6] {\n        padding-bottom: 15px;\n        background: #299be4;\n        color: #fff;\n        padding: 16px 30px;\n        margin: -20px -25px 10px;\n        border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-35e8add6] {\n        margin: 5px 0 0;\n        font-size: 24px;\n}\n.table-title .btn[data-v-35e8add6] {\n        color: #566787;\n        float: right;\n        font-size: 13px;\n        background: #fff;\n        border: none;\n        min-width: 50px;\n        border-radius: 2px;\n        border: none;\n        outline: none !important;\n        margin-left: 10px;\n}\n.table-title .btn[data-v-35e8add6]:hover,\n    .table-title .btn[data-v-35e8add6]:focus {\n        color: #566787;\n        background: #f2f2f2;\n}\n.table-title .btn i[data-v-35e8add6] {\n        float: left;\n        font-size: 21px;\n        margin-right: 5px;\n}\n.table-title .btn span[data-v-35e8add6] {\n        float: left;\n        margin-top: 2px;\n}\ntable.table tr th[data-v-35e8add6],\n    table.table tr td[data-v-35e8add6] {\n        border-color: #e9e9e9;\n        padding: 12px 15px;\n        vertical-align: middle;\n}\ntable.table tr th[data-v-35e8add6]:last-child {\n        width: 100px;\n}\ntable.table-striped tbody tr[data-v-35e8add6]:nth-of-type(odd) {\n        background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-35e8add6]:hover {\n        background: #f5f5f5;\n}\ntable.table th i[data-v-35e8add6] {\n        font-size: 13px;\n        margin: 0 5px;\n        cursor: pointer;\n}\ntable.table td:last-child i[data-v-35e8add6] {\n        opacity: 0.9;\n        font-size: 22px;\n        margin: 0 5px;\n}\ntable.table td a[data-v-35e8add6] {\n        font-weight: bold;\n        color: #566787;\n        display: inline-block;\n        text-decoration: none;\n}\ntable.table td a[data-v-35e8add6]:hover {\n        color: #2196F3;\n}\ntable.table td a.settings[data-v-35e8add6] {\n        color: #2196F3;\n}\ntable.table td a.delete[data-v-35e8add6] {\n        color: #F44336;\n}\ntable.table td i[data-v-35e8add6] {\n        font-size: 19px;\n}\ntable.table .avatar[data-v-35e8add6] {\n        border-radius: 50%;\n        vertical-align: middle;\n        margin-right: 10px;\n        width: 40px;\n}\n.status[data-v-35e8add6] {\n        font-size: 30px;\n        margin: 2px 2px 0 0;\n        display: inline-block;\n        vertical-align: middle;\n        line-height: 2px;\n}\n.text-success[data-v-35e8add6] {\n        color: #10c469;\n}\n.text-info[data-v-35e8add6] {\n        color: #62c9e8;\n}\n.text-warning[data-v-35e8add6] {\n        color: #FFC107;\n}\n.text-danger[data-v-35e8add6] {\n        color: #ff5b5b;\n}\n.pagination[data-v-35e8add6] {\n        float: right;\n        margin: 0 0 5px;\n}\n.pagination li a[data-v-35e8add6] {\n        border: none;\n        font-size: 13px;\n        min-width: 30px;\n        min-height: 30px;\n        color: #999;\n        margin: 0 2px;\n        line-height: 30px;\n        border-radius: 2px !important;\n        text-align: center;\n        padding: 0 6px;\n}\n.pagination li a[data-v-35e8add6]:hover {\n        color: #666;\n}\n.pagination li.active a[data-v-35e8add6],\n    .pagination li.active a.page-link[data-v-35e8add6] {\n        background: #03A9F4;\n}\n.pagination li.active a[data-v-35e8add6]:hover {\n        background: #0397d6;\n}\n.pagination li.disabled i[data-v-35e8add6] {\n        color: #ccc;\n}\n.pagination li i[data-v-35e8add6] {\n        font-size: 16px;\n        padding-top: 6px\n}\n.hint-text[data-v-35e8add6] {\n        float: left;\n        margin-top: 10px;\n        font-size: 13px;\n}\nlabel[data-v-35e8add6]{\n    font-size: 14px;\n    color: gray;\n}\n.select-search-data[data-v-35e8add6]{\n        \n        background-color: #c5e4b254;\n}\n.select-search[data-v-35e8add6]{\n        background-color: #4e9cda;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-35e8add6] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-35e8add6] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-35e8add6] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-35e8add6] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-35e8add6] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-35e8add6]:hover,\n.table-title .btn[data-v-35e8add6]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-35e8add6] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-35e8add6] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-35e8add6],\ntable.table tr td[data-v-35e8add6] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-35e8add6]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-35e8add6]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-35e8add6]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-35e8add6] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-35e8add6] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-35e8add6] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-35e8add6]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-35e8add6] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-35e8add6] {\n    color: #F44336;\n}\ntable.table td i[data-v-35e8add6] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-35e8add6] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-35e8add6] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-35e8add6] {\n    color: #10c469;\n}\n.text-info[data-v-35e8add6] {\n    color: #62c9e8;\n}\n.text-warning[data-v-35e8add6] {\n    color: #FFC107;\n}\n.text-danger[data-v-35e8add6] {\n    color: #ff5b5b;\n}\n.pagination[data-v-35e8add6] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-35e8add6] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-35e8add6]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-35e8add6],\n.pagination li.active a.page-link[data-v-35e8add6] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-35e8add6]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-35e8add6] {\n    color: #ccc;\n}\n.pagination li i[data-v-35e8add6] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-35e8add6] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\nlabel[data-v-35e8add6] {\n    font-size: 14px;\n    color: gray;\n}\n.select-search-data[data-v-35e8add6] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-35e8add6] {\n    background-color: #4e9cda;\n}\n\n", ""]);
 
 // exports
 
@@ -65821,28 +65824,6 @@ var render = function() {
                   }
                 }
               })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-4" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: {
-                    href: "#",
-                    "data-toggle": "modal",
-                    "data-target":
-                      _vm.batchId == -1
-                        ? "#modalSelectMedicine"
-                        : "#modalSelectSupplier"
-                  }
-                },
-                [
-                  _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("Add New Sale")])
-                ]
-              )
             ])
           ])
         ]
@@ -65950,7 +65931,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Medicine Name")]
+              [_vm._v("Medicine\n                        Name")]
             ),
             _vm._v(" "),
             _c(
@@ -65998,7 +65979,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Quantity Sold")]
+              [_vm._v("Quantity\n                        Sold")]
             ),
             _vm._v(" "),
             _c(
@@ -66030,7 +66011,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Total Price")]
+              [_vm._v("Total Price\n                    ")]
             ),
             _vm._v(" "),
             _c(
@@ -66064,7 +66045,11 @@ var render = function() {
                         ? "select-search-data"
                         : ""
                   },
-                  [_vm._v(_vm._s(sale.medicine_name))]
+                  [
+                    _vm._v(
+                      "\n                        " + _vm._s(sale.medicine_name)
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c(
@@ -66074,7 +66059,11 @@ var render = function() {
                     class:
                       _vm.search_by == "pharmacist" ? "select-search-data" : ""
                   },
-                  [_vm._v(_vm._s(sale.pharmacist))]
+                  [
+                    _vm._v(
+                      "\n                        " + _vm._s(sale.pharmacist)
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c(
@@ -66084,7 +66073,11 @@ var render = function() {
                     class:
                       _vm.search_by == "sale_date" ? "select-search-data" : ""
                   },
-                  [_vm._v(_vm._s(sale.sale_date))]
+                  [
+                    _vm._v(
+                      "\n                        " + _vm._s(sale.sale_date)
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c(
@@ -66096,7 +66089,11 @@ var render = function() {
                         ? "select-search-data"
                         : ""
                   },
-                  [_vm._v(_vm._s(sale.quantity_sold))]
+                  [
+                    _vm._v(
+                      "\n                        " + _vm._s(sale.quantity_sold)
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c(
@@ -66106,7 +66103,11 @@ var render = function() {
                     class:
                       _vm.search_by == "unit_price" ? "select-search-data" : ""
                   },
-                  [_vm._v(_vm._s(sale.unit_price))]
+                  [
+                    _vm._v(
+                      "\n                        " + _vm._s(sale.unit_price)
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c(
@@ -66116,10 +66117,39 @@ var render = function() {
                     class:
                       _vm.search_by == "total_price" ? "select-search-data" : ""
                   },
-                  [_vm._v(_vm._s(sale.total_price))]
+                  [
+                    _vm._v(
+                      "\n                        " + _vm._s(sale.total_price)
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c("td", { staticClass: "text-center" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "bill",
+                      attrs: {
+                        href: "#",
+                        title: "",
+                        "data-tooltip": "tooltip",
+                        "data-original-title": "bill",
+                        "data-toggle": "modal",
+                        "data-target": "#modalBill"
+                      },
+                      on: {
+                        click: function($event) {
+                          _vm.selectedSale_Id = sale.Id
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        attrs: { src: "/img/icons/bill.png", width: "22" }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
                   _c(
                     "a",
                     {
@@ -66258,7 +66288,46 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(3)
+    _c(
+      "div",
+      { staticClass: "modal fade", attrs: { id: "modalBill", role: "dialog" } },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "modal-content ",
+                staticStyle: {
+                  "border-top-left-radius": "10px",
+                  "border-top-right-radius": "10px"
+                }
+              },
+              [
+                _vm._m(3),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("iframe", {
+                    attrs: {
+                      src:
+                        _vm.selectedSale_Id > -1
+                          ? "/dashboard/medicines/sales/bill/" +
+                            _vm.selectedSale_Id
+                          : "",
+                      frameborder: "0",
+                      width: "770",
+                      height: "480"
+                    }
+                  })
+                ])
+              ]
+            )
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -66328,93 +66397,26 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "modalAddNewSale",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "add New Batch",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "modal-content ",
-                staticStyle: {
-                  "border-top-left-radius": "10px",
-                  "border-top-right-radius": "10px"
-                }
-              },
-              [
-                _c(
-                  "div",
-                  { staticClass: "modal-header bg-success text-center" },
-                  [
-                    _c(
-                      "h4",
-                      {
-                        staticClass:
-                          "modal-title  w-100 font-weight-bold text-white"
-                      },
-                      [_vm._v("Add New Medicine Batch")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "close text-white",
-                        attrs: {
-                          type: "button",
-                          "data-dismiss": "modal",
-                          "aria-label": "Close"
-                        }
-                      },
-                      [
-                        _c("span", { attrs: { "aria-hidden": "true" } }, [
-                          _vm._v("×")
-                        ])
-                      ]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "modal-body mx-3" }, [
-                  _c("div", { staticClass: "md-form text-center" }, [
-                    _c("h3", { staticStyle: { color: "#6f6e6e" } }, [
-                      _vm._v(
-                        "1- To Add New Medicine Batch Please Select a Medicine"
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "md-form " }, [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "form-control btn btn-success",
-                        attrs: { href: "/dashboard/medicines" }
-                      },
-                      [_vm._v("Select A Medicine")]
-                    )
-                  ])
-                ])
-              ]
-            )
-          ]
-        )
-      ]
-    )
+    return _c("div", { staticClass: "modal-header bg-success text-center" }, [
+      _c(
+        "h4",
+        { staticClass: "modal-title  w-100 font-weight-bold text-white" },
+        [_vm._v("Add New Medicine Batch")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close text-white",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
   }
 ]
 render._withStripped = true

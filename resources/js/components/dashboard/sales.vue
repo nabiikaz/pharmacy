@@ -12,60 +12,56 @@
                             aria-label="Search" v-model="search">
 
                     </div>
-                    <div class="col-md-4">
-                        <a href="#" class="btn btn-primary" data-toggle="modal"
-                            :data-target="(batchId==-1)? '#modalSelectMedicine':'#modalSelectSupplier'">
-                            <i class="material-icons"></i> <span>Add New Sale</span>
-
-                        </a>
-                    </div>
+                   
                 </div>
-                
+
             </div>
-             <div class="row">
-                    <div class="col-sm-5">
-                         <ul class="nav nav-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/dashboard/medicines">Medicines</a>
-                            </li>
+            <div class="row">
+                <div class="col-sm-5">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/medicines">Medicines</a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link " href="/dashboard/medicines/batches">Batches</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="/dashboard/medicines/batches">Batches</a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">Sales</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Sales</a>
+                        </li>
 
-                        
 
-                        </ul>
-                        
-                    </div>
 
-                    <div class="col-sm-7 ">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="md-form ">
-                                    <select class="form-control" v-model="filter_by">
-                                        <option value="0" style="display:none;">Select Column : </option>
-                                        <option value="medicine_name">Medicine Name</option>
-                                        <option value="sale_date">Sale Date</option>
-                                        <option value="quantity_sold">Quantity Sold</option>
-                                        <option value="total_price">Total Price</option>
-                                    </select>
-                                    
-                                </div>
-                                
-                            </div>
-                            <div class="col-sm-2">
-                                <img style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38" @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'" :title="filter_flow">
-                            </div>
-                        </div>
-                        
-                    </div>
+                    </ul>
+
                 </div>
-           
+
+                <div class="col-sm-7 ">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="md-form ">
+                                <select class="form-control" v-model="filter_by">
+                                    <option value="0" style="display:none;">Select Column : </option>
+                                    <option value="medicine_name">Medicine Name</option>
+                                    <option value="sale_date">Sale Date</option>
+                                    <option value="quantity_sold">Quantity Sold</option>
+                                    <option value="total_price">Total Price</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+                        <div class="col-sm-2">
+                            <img style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
+                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
+                                :title="filter_flow">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
             <table class="table table-striped table-hover">
                 <thead>
                     <tr style="cursor:pointer">
@@ -76,36 +72,59 @@
 
 
 
-                        <th class="text-center" :class="(search_by== 'medicine_name')? 'select-search':''" @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'">Medicine Name</th>
-                        <th class="text-center" :class="(search_by== 'pharmacist')? 'select-search':''" @click="(search_by== 'pharmacist')? search_by= '':search_by= 'pharmacist'">Made By</th>
-                        <th class="text-center" :class="(search_by== 'sale_date')? 'select-search':''" @click="(search_by== 'sale_date')? search_by= '':search_by= 'sale_date'">Date</th>
-                        <th class="text-center" :class="(search_by== 'quantity_sold')? 'select-search':''" @click="(search_by== 'quantity_sold')? search_by= '':search_by= 'quantity_sold'">Quantity Sold</th>
-                        <th class="text-center" :class="(search_by== 'unit_price')? 'select-search':''" @click="(search_by== 'unit_price')? search_by= '':search_by= 'unit_price'">Unit Price</th>
-                        <th class="text-center" :class="(search_by== 'total_price')? 'select-search':''" @click="(search_by== 'total_price')? search_by= '':search_by= 'total_price'">Total Price</th>
+                        <th class="text-center" :class="(search_by== 'medicine_name')? 'select-search':''"
+                            @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'">Medicine
+                            Name</th>
+                        <th class="text-center" :class="(search_by== 'pharmacist')? 'select-search':''"
+                            @click="(search_by== 'pharmacist')? search_by= '':search_by= 'pharmacist'">Made By</th>
+                        <th class="text-center" :class="(search_by== 'sale_date')? 'select-search':''"
+                            @click="(search_by== 'sale_date')? search_by= '':search_by= 'sale_date'">Date</th>
+                        <th class="text-center" :class="(search_by== 'quantity_sold')? 'select-search':''"
+                            @click="(search_by== 'quantity_sold')? search_by= '':search_by= 'quantity_sold'">Quantity
+                            Sold</th>
+                        <th class="text-center" :class="(search_by== 'unit_price')? 'select-search':''"
+                            @click="(search_by== 'unit_price')? search_by= '':search_by= 'unit_price'">Unit Price</th>
+                        <th class="text-center" :class="(search_by== 'total_price')? 'select-search':''"
+                            @click="(search_by== 'total_price')? search_by= '':search_by= 'total_price'">Total Price
+                        </th>
                         <th class="text-center" style="width:170px;">Action</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    <tr v-for="(sale,index) in sales" :key="index" data-toggle="popover" 
-                                    :title="sale.name" :data-content="sale.name" >
+                    <tr v-for="(sale,index) in sales" :key="index" data-toggle="popover" :title="sale.name"
+                        :data-content="sale.name">
 
-                        
 
-                        <td class="text-center" :class="(search_by== 'medicine_name')? 'select-search-data':''">{{sale.medicine_name }}</td>
-                        <td class="text-center" :class="(search_by== 'pharmacist')? 'select-search-data':''">{{sale.pharmacist }}</td>
-                        <td class="text-center" :class="(search_by== 'sale_date')? 'select-search-data':''">{{sale.sale_date }}</td>
-                        <td class="text-center" :class="(search_by== 'quantity_sold')? 'select-search-data':''">{{sale.quantity_sold }}</td>
-                        <td class="text-center" :class="(search_by== 'unit_price')? 'select-search-data':''">{{sale.unit_price }}</td>
-                        <td class="text-center" :class="(search_by== 'total_price')? 'select-search-data':''">{{sale.total_price }}</td>
-                        
+
+                        <td class="text-center" :class="(search_by== 'medicine_name')? 'select-search-data':''">
+                            {{sale.medicine_name }}</td>
+                        <td class="text-center" :class="(search_by== 'pharmacist')? 'select-search-data':''">
+                            {{sale.pharmacist }}</td>
+                        <td class="text-center" :class="(search_by== 'sale_date')? 'select-search-data':''">
+                            {{sale.sale_date }}</td>
+                        <td class="text-center" :class="(search_by== 'quantity_sold')? 'select-search-data':''">
+                            {{sale.quantity_sold }}</td>
+                        <td class="text-center" :class="(search_by== 'unit_price')? 'select-search-data':''">
+                            {{sale.unit_price }}</td>
+                        <td class="text-center" :class="(search_by== 'total_price')? 'select-search-data':''">
+                            {{sale.total_price }}</td>
+
 
 
                         <td class="text-center">
-                            <a :href="'/dashboard/medicines/batches/'+sale.medicine_Id" class="batch" title="" data-tooltip="tooltip" data-original-title="batches"
-                            ><img src="/img/icons/batch.png" width="22" ></a>
+                            <a href="#" class="bill" title="" data-tooltip="tooltip" data-original-title="bill"
+                                data-toggle="modal" data-target="#modalBill" @click="selectedSale_Id=sale.Id"><img
+                                    src="/img/icons/bill.png" width="22"></a>
 
-                            
+                            <a :href="'/dashboard/medicines/batches/'+sale.medicine_Id" class="batch" title=""
+                                data-tooltip="tooltip" data-original-title="batches"><img src="/img/icons/batch.png"
+                                    width="22"></a>
+
+
+
+
+
 
                             <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
                                 <img src="/img/icons/trash.png" width="24">
@@ -136,10 +155,8 @@
             </div>
         </div>
 
-
-        <div class="modal fade" id="modalAddNewSale" tabindex="-1" role="dialog" aria-labelledby="add New Batch"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div id="modalBill" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
                     <div class="modal-header bg-success text-center">
                         <h4 class="modal-title  w-100 font-weight-bold text-white">Add New Medicine Batch</h4>
@@ -147,33 +164,18 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-
-                    <div class="modal-body mx-3">
-                        <div class="md-form text-center">
-                            <h3 style="color: #6f6e6e;">1- To Add New Medicine Batch Please Select a Medicine</h3>
-
-
-
-
-
-                        </div>
-                        <hr>
-                        <div class="md-form ">
-                            <a href="/dashboard/medicines" class="form-control btn btn-success">Select A Medicine</a>
-                        </div>
-
-
-
-
+                    <div class="modal-body">
+                        <iframe :src="(selectedSale_Id > -1)? '/dashboard/medicines/sales/bill/'+selectedSale_Id:''"
+                            frameborder="0" width="770" height="480"></iframe>
                     </div>
 
-
                 </div>
+
             </div>
         </div>
 
     </div>
-   
+
 </template>
 
 
@@ -182,54 +184,56 @@
 
         mounted() {
             $('[data-tooltip="tooltip"]').tooltip();
-           
 
-            $('[data-toggle="popover"]').mouseover(function(){
+
+            $('[data-toggle="popover"]').mouseover(function () {
                 $(this).popover("show")
-                
-                
+
+
             })
 
-            $('[data-toggle="popover"]').mouseout(function(){
+            $('[data-toggle="popover"]').mouseout(function () {
                 $(this).popover("hide")
             })
 
-        
+
 
 
 
         },
 
         data() {
-            
+
             return {
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 batchId: this.$attrs.batchId,
                 route: window.location.pathname,
                 search: "",
 
+                selectedSale_Id: -1,
+
                 search_by: "",
 
                 filter_flow: 'Ascending',
-                filter_by: null,
+                filter_by: '0',
 
                 //displayed sales 
                 sales: [{
                         Id: 1,
                         medicine_name: "DOLIPRANE",
-                        pharmacist : "Nabi Zakaria",
-                        sale_date : "Nabi Zakaria",
-                        medicine_Id : 0,
+                        pharmacist: "Nabi Zakaria",
+                        sale_date: "Nabi Zakaria",
+                        medicine_Id: 0,
                         dosage: 0.1,
                         form: "gélule",
                         fabrication_date: "2019-08-26",
                         expiry_date: "2020-08-27",
                         unit_price: 1,
-                       
+
                         quantity_sold: 25,
                         total_price: 25,
-                        
-                        
+
+
 
 
                     },
@@ -255,7 +259,7 @@
                 this.getsales()
 
             },
-            
+
 
         },
 
@@ -272,7 +276,7 @@
                  */
 
             },
-            
+
 
         },
         components: {
@@ -475,16 +479,19 @@
         margin-top: 10px;
         font-size: 13px;
     }
-    label{
-    font-size: 14px;
-    color: gray;
-    
-}
-.select-search-data{
-        
+
+    label {
+        font-size: 14px;
+        color: gray;
+
+    }
+
+    .select-search-data {
+
         background-color: #c5e4b254;
     }
-    .select-search{
+
+    .select-search {
         background-color: #4e9cda;
 
     }
