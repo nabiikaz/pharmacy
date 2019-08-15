@@ -24,3 +24,13 @@ Route::get('dashboard/users',function(){
 Route::get('dashboard/medicines',function(){
     return view('medicines');
 });
+
+
+Route::get('dashboard/medicines/batches/{id}',function($id){
+    return view('batches',compact('id'));
+});
+
+Route::get('dashboard/medicines/batches',function(){
+    $id= -1;
+    return view('batches')->with('id',$id);
+});

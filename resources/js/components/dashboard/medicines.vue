@@ -19,7 +19,25 @@
                         </a>
                     </div>
                 </div>
+                
             </div>
+            <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active"  
+                        href="#">Medicines</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" :class="(this.route == '/dashboard/batches')? 'active':''"
+                         href="/dashboard/medicines/batches">Batches</a>
+                    </li>
+
+                     <li class="nav-item">
+                        <a class="nav-link " 
+                         href="/dashboard/medicines/sales">Sales</a>
+                    </li>
+                    
+                </ul>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -30,7 +48,7 @@
                         <th class="text-center">Family</th>
                         <th class="text-center">Stock</th>
                         <th class="text-center">Refund</th>
-                        <th class="text-center">Action</th>
+                        <th class="text-center " style="width:170px">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,12 +65,17 @@
                             <img width="22" height="22" v-bind:src="(medicine.refund > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
                         </td>
                         
-                        <td>
+                        <td class="text-center">
                             
-                            <a href="#" class="settings" title="" data-tooltip="tooltip" data-original-title="Settings"
-                                v-on:click="settings(medicine.Id)"><i class="material-icons"></i></a>
-                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete"><i
-                                    class="material-icons"></i></a>
+                            <a :href="'/dashboard/medicines/batches/'+medicine.Id" class="batch" title="" data-tooltip="tooltip" data-original-title="batches"
+                            ><img src="/img/icons/batch.png" width="22" ></a>
+                            
+                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
+                                v-on:click="settings(medicine.Id)"><img src="/img/icons/settings.png" width="22" ></a>
+
+
+                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
+                                <img src="/img/icons/trash.png" width="24" ></a>
                         </td>
 
                     </tr>
@@ -94,10 +117,15 @@
         mounted() {
             $('[data-tooltip="tooltip"]').tooltip();
 
+            
+
+
+
         },
 
         data() {
             return {
+                route : window.location.pathname,
                 search : "",
                 selectedMedicine_Id: -1,
                 //displayed Users 

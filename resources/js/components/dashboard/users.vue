@@ -45,10 +45,10 @@
                         <td>{{user.email}}</td>
                         <td>{{user.role}}</td>
                         <td>
-                            <a href="#" class="settings" title="" data-tooltip="tooltip" data-original-title="Settings"
-                                v-on:click="settings(user.userId)"><i class="material-icons"></i></a>
-                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete"><i
-                                    class="material-icons"></i></a>
+                           <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
+                                v-on:click="settings(users.Id)"><img src="/img/icons/settings.png" width="22" ></a>
+                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
+                                <img src="/img/icons/trash.png" width="24" ></a>
                         </td>
 
                     </tr>

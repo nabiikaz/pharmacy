@@ -5,7 +5,6 @@
 
 
 
-<dashboard_medicines></dashboard_medicines>
-
+<dashboard_batches :medicineId="{{$id}}"></dashboard_batches>
 
 @endsection
