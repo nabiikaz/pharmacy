@@ -34,3 +34,14 @@ Route::get('dashboard/medicines/batches',function(){
     $id= -1;
     return view('batches')->with('id',$id);
 });
+
+
+Route::get('dashboard/medicines/sales',function(){
+    $id= -1;    
+    return view('sales')->with('id',$id);
+});
+
+
+Route::get('dashboard/medicines/sales/{id}',function($id){
+    return view('sales')->with('id',$id);
+});

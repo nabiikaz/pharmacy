@@ -22,23 +22,55 @@
                 </div>
 
             </div>
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard/medicines">Medicines</a>
-                </li>
+            
 
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Batches</a>
-                </li>
+             <div class="row">
+                    <div class="col-sm-5">
+                        <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/medicines">Medicines</a>
+                        </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard/medicines/sales">Sales</a>
-                </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Batches</a>
+                        </li>
 
-            </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/medicines/sales">Sales</a>
+                        </li>
+
+                    </ul>
+                        
+                    </div>
+
+                    <div class="col-sm-7 ">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="md-form ">
+                                    <select class="form-control" v-model="filter_by">
+                                        <option  value="0" style="display:none;">Select Column : </option>
+                                        <option value="medicine_name">Medicine Name</option>
+                                        <option  value="fabrication_date" >Fabrication Date </option>
+                                        <option  value="expiry_date" >Expiry Date </option>
+                                        <option  value="unit_price" >Unit Price </option>
+                                        <option  value="batch_price" >Batch Price </option>
+                                        <option  value="quantity_stock" >Quantity In Stock </option>
+                                     
+                                    </select>
+                                    
+                                </div>
+                                
+                            </div>
+                            <div class="col-sm-2">
+                                <img style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38" @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'" :title="filter_flow">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
             <table class="table table-striped table-hover">
                 <thead>
-                    <tr>
+                    <tr style="cursor:pointer">
 
 
 
@@ -46,12 +78,12 @@
 
 
 
-                        <th class="text-center">Name</th>
-                        <th class="text-center">Fabrication Date</th>
-                        <th class="text-center">Expiry Date</th>
-                        <th class="text-center">Unit Price</th>
-                        <th class="text-center">Batch Price</th>
-                        <th class="text-center">Quantity</th>
+                        <th class="text-center " :class="(search_by== 'medicine_name')? 'select-search':''" @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'">Name</th>
+                        <th class="text-center"  :class="(search_by== 'fabrication_date')? 'select-search':''" @click="(search_by== 'fabrication_date')? search_by= '':search_by= 'fabrication_date'">Fabrication Date</th>
+                        <th class="text-center"  :class="(search_by== 'expiry_date')? 'select-search':''" @click="(search_by== 'expiry_date')? search_by= '':search_by= 'expiry_date'">Expiry Date</th>
+                        <th class="text-center"  :class="(search_by== 'unit_price')? 'select-search':''" @click="(search_by== 'unit_price')? search_by= '':search_by= 'unit_price'">Unit Price</th>
+                        <th class="text-center"  :class="(search_by== 'batch_price')? 'select-search':''" @click="(search_by== 'batch_price')? search_by= '':search_by= 'batch_price'">Batch Price</th>
+                        <th class="text-center"  :class="(search_by== 'quantity_stock')? 'select-search':''" @click="(search_by== 'quantity_stock')? search_by= '':search_by= 'quantity_stock'">Quantity</th>
                         <th class="text-center" style="width:170px;">Action</th>
                     </tr>
                 </thead>
@@ -60,12 +92,12 @@
 
 
 
-                        <td class="text-center">{{batch.name }}</td>
-                        <td class="text-center">{{batch.fabrication_date }}</td>
-                        <td class="text-center">{{batch.expiry_date }}</td>
-                        <td class="text-center">{{batch.unit_price }}</td>
-                        <td class="text-center">{{batch.batch_price }}</td>
-                        <td class="text-center"
+                        <td class="text-center" :class="(search_by== 'medicine_name')? 'select-search-data':''"  >{{batch.medicine_name }}</td>
+                        <td class="text-center" :class="(search_by== 'fabrication_date')? 'select-search-data':''"  >{{batch.fabrication_date }}</td>
+                        <td class="text-center" :class="(search_by== 'expiry_date')? 'select-search-data':''"  >{{batch.expiry_date }}</td>
+                        <td class="text-center" :class="(search_by== 'unit_price')? 'select-search-data':''"  >{{batch.unit_price }}</td>
+                        <td class="text-center" :class="(search_by== 'batch_price')? 'select-search-data':''"  >{{batch.batch_price }}</td>
+                        <td class="text-center" :class="(search_by== 'quantity_stock')? 'select-search-data':''"
                             :style="(batch.quantity_stock<batch.quantity_min)? 'color:red;':'color:green;'"
                             data-tooltip="tooltip"
                             :data-original-title="(batch.quantity_stock<batch.quantity_min)?'Quantity en Stock < min( '+batch.quantity_min+' )       risk of rupture':'' ">
@@ -339,11 +371,15 @@
                 medicineId: this.$attrs.medicineid,
                 route: window.location.pathname,
                 search: "",
+                search_by: "",
+
+                filter_flow: 'Ascending',
+                filter_by: '0',
 
                 //displayed batches 
                 batches: [{
                         Id: 1,
-                        name: "DOLIPRANE",
+                        medicine_name: "DOLIPRANE",
                         fabrication_date: "2019-08-26",
                         expiry_date: "2020-08-27",
                         unit_price: 0,
@@ -645,5 +681,14 @@
     color: gray;
     
 }
+
+.select-search-data{
+        
+        background-color: #c5e4b254;
+    }
+    .select-search{
+        background-color: #4e9cda;
+
+    }
 
 </style>

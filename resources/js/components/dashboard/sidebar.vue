@@ -6,28 +6,28 @@
             <ul class="nav flex-column">
               
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <img src="/img/icons/users.png" width="24" height="24">
+                <a class="nav-link" href="/dashboard/users">
+                  <img src="/img/icons/pharmacist.png" width="24" height="24">
                  
-                  Users
+                  pharmacists
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/dashboard/medicines">
                   <img src="/img/icons/medicine.png" width="24" height="24">
                  
                   Pharmaceuticals
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/dashboard/suppliers">
                   <img src="/img/icons/supplier.png" width="24" height="24">
                   Suppliers
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <img src="/img/icons/customer.png" width="24" height="24">
+                <a class="nav-link" href="/dashboard/customers">
+                  <img src="/img/icons/customers.png" width="24" height="24">
                   Customers
                 </a>
               </li>

@@ -29,6 +29,7 @@ Vue.component("dashboard_editUser",require('./components/dashboard/users/editUse
 
 Vue.component("dashboard_medicines",require('./components/dashboard/medicines.vue').default);
 Vue.component("dashboard_batches",require('./components/dashboard/batches.vue').default);
+Vue.component("dashboard_sales",require('./components/dashboard/sales.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -39,7 +40,7 @@ Vue.component("dashboard_batches",require('./components/dashboard/batches.vue').
 const app = new Vue({
     el: '#app',
     data:{
-        csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        
     }
     
 });

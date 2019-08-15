@@ -21,33 +21,60 @@
                 </div>
                 
             </div>
-            <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active"  
-                        href="#">Medicines</a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" :class="(this.route == '/dashboard/batches')? 'active':''"
-                         href="/dashboard/medicines/batches">Batches</a>
-                    </li>
+           <div class="row">
+                    <div class="col-sm-5">
+                         <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#">Medicines</a>
+                            </li>
 
-                     <li class="nav-item">
-                        <a class="nav-link " 
-                         href="/dashboard/medicines/sales">Sales</a>
-                    </li>
-                    
-                </ul>
+                            <li class="nav-item">
+                                <a class="nav-link " href="/dashboard/medicines/batches">Batches</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link " href="/dashboard/medicines/sales">Sales</a>
+                            </li>
+
+                        
+
+                        </ul>
+                        
+                    </div>
+
+                    <div class="col-sm-7 ">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="md-form ">
+                                    <select class="form-control">
+                                        <option  style="display:none;">Select Column : </option>
+                                        <option value="medicine_name">Medicine Name</option>
+                                        <option value="dosage">Dosage</option>
+                                        <option value="form">Form</option>
+                                        <option value="family">Family</option>
+                                        <option value="refund">Refund</option>
+                                    </select>
+                                    
+                                </div>
+                                
+                            </div>
+                            <div class="col-sm-2">
+                                <img style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38" @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'" :title="filter_flow">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
             <table class="table table-striped table-hover">
                 <thead>
-                    <tr>
+                    <tr style="cursor:pointer">
 
-                        <th class="text-center">Name</th>
-                        <th class="text-center">Dosage</th>
-                        <th class="text-center">Form</th>
-                        <th class="text-center">Family</th>
-                        <th class="text-center">Stock</th>
-                        <th class="text-center">Refund</th>
+                        <th class="text-center " :class="(search_by== 'medicine_name')? 'select-search':''" @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'" >Name</th>
+                        <th class="text-center" :class="(search_by== 'dosage')? 'select-search':''" @click="(search_by== 'dosage')? search_by= '':search_by= 'dosage'">Dosage</th>
+                        <th class="text-center" :class="(search_by== 'form')? 'select-search':''" @click="(search_by== 'form')? search_by= '':search_by= 'form'">Form</th>
+                        <th class="text-center" :class="(search_by== 'family')? 'select-search':''" @click="(search_by== 'family')? search_by= '':search_by= 'family'">Family</th>
+                        
+                        <th class="text-center" :class="(search_by== 'refund')? 'select-search':''" @click="(search_by== 'refund')? search_by= '':search_by= 'refund'">Refund</th>
                         <th class="text-center " style="width:170px">Action</th>
                     </tr>
                 </thead>
@@ -56,12 +83,12 @@
 
                         
                         
-                        <td class="text-center">{{medicine.name}}</td>
-                        <td class="text-center">{{medicine.dosage}}</td>
-                        <td class="text-center">{{medicine.form}}</td>
-                        <td class="text-center">{{medicine.family}}</td>
-                        <td class="text-center">{{medicine.stock}}</td>
-                        <td class="d-flex justify-content-center">
+                        <td class="text-center " :class="(search_by== 'medicine_name')? 'select-search-data':''"  >{{medicine.name}}</td>
+                        <td class="text-center"  :class="(search_by== 'dosage')? 'select-search-data':''">{{medicine.dosage}}</td>
+                        <td class="text-center"  :class="(search_by== 'form')? 'select-search-data':''">{{medicine.form}}</td>
+                        <td class="text-center"  :class="(search_by== 'family')? 'select-search-data':''">{{medicine.family}}</td>
+                        
+                        <td class="d-flex justify-content-center" :class="(search_by== 'refund')? 'select-search-data':''">
                             <img width="22" height="22" v-bind:src="(medicine.refund > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
                         </td>
                         
@@ -128,6 +155,10 @@
                 route : window.location.pathname,
                 search : "",
                 selectedMedicine_Id: -1,
+
+                search_by: "",
+
+                filter_flow : 'Ascending',
                 //displayed Users 
                 medicines: [{
                     Id: 1,
@@ -135,8 +166,7 @@
                     dosage : "500 mg",
                     form : "gélule",
                     family : "Antalgique et antipyrétique ",
-                    stock : 100,
-                    stock_min : 15,
+                    
                     refund: 1,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
                     
                     },
@@ -146,8 +176,7 @@
                     dosage : "50 mg",
                     form : "serop",
                     family : "Antalgique et antipyrétique ",
-                    stock : 100,
-                    stock_min : 15,
+                   
                     refund: 1,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
                     
                     }
@@ -392,6 +421,14 @@
         float: left;
         margin-top: 10px;
         font-size: 13px;
+    }
+    .select-search-data{
+        
+        background-color: #c5e4b254;
+    }
+    .select-search{
+        background-color: #4e9cda;
+
     }
 
 </style>
