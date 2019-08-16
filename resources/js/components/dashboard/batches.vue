@@ -45,6 +45,11 @@
 
                     <div class="col-sm-7 ">
                         <div class="row">
+                             <div class="col-sm-1">
+                                <img class="" style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38" @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'" :title="filter_flow">
+                               
+                               
+                            </div>
                             <div class="col-sm-6">
                                 <div class="md-form ">
                                     <select class="form-control" v-model="filter_by">
@@ -61,9 +66,15 @@
                                 </div>
                                 
                             </div>
-                            <div class="col-sm-2">
-                                <img style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38" @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'" :title="filter_flow">
+                            <div class="col-sm-5 d-flex justify-content-end  pr-5">
+                                 <img style="cursor:pointer;" src="/img/icons/add_to_cart.png" width="38" :title="filter_flow">
+                                <span :class=" (batches_in_cart_lenght==0)? 'rounded-circle   text-center pt-1  text-white bg-danger':'rounded-circle   text-center pt-1  text-white bg-success'" style="width:30px;height:30px;position:absolute;margin-top:-13px;margin-left:13px;"><b>{{batches_in_cart_lenght}}</b></span>
+
                             </div>
+                           
+                           
+
+                            
                         </div>
                         
                     </div>
@@ -105,7 +116,11 @@
 
 
                         <td class="text-center">
-
+                            <a href="#" class="sell" title="" 
+                                data-tooltip="tooltip" data-original-title="Add To Cart" @click="addToCart(batch.Id)">
+                                <img src="/img/icons/add_to_cart.png" style="color:green;" width="22">
+                            </a>
+                            
                             <a :href="'/dashboard/medicines/sales/'+batch.Id" class="sales" title=""
                                 data-tooltip="tooltip" data-original-title="Sales">
                                 <img src="/img/icons/sales.png" style="color:green;" width="22">
@@ -348,6 +363,25 @@
         </div>
 
 
+        <div id="modalCart" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
+                    <div class="modal-header bg-success text-center">
+                        <h4 class="modal-title  w-100 font-weight-bold text-white">Current Items In The Cart</h4>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                       
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
 
     </div>
 </template>
@@ -376,6 +410,12 @@
                 filter_flow: 'Ascending',
                 filter_by: '0',
 
+
+                //batches in the cart are with no session ( that means if the page is refreshed the items will vanish)
+                batches_in_cart:[],
+                batches_in_cart_lenght: 0,
+
+
                 //displayed batches 
                 batches: [{
                         Id: 1,
@@ -390,6 +430,19 @@
 
 
                     },
+                    {
+                        Id: 2 ,
+                        medicine_name: "sulpiride",
+                        fabrication_date: "2019-08-26",
+                        expiry_date: "2020-08-27",
+                        unit_price: 150,
+                        batch_price: 100,
+                        quantity_bought: 25,
+                        quantity_stock: 9,
+                        quantity_min: 90
+
+
+                    }
 
 
 
@@ -418,6 +471,7 @@
                     },
                 ],
                 newBatch:{
+                    Id:0,
                     name : "",
                     fabrication_date :"",
                     expiry_date :"",
@@ -451,7 +505,14 @@
                 $("#modalAddNewBatch").modal("show")
 
 
+            },
+
+            //watch batches_in_cart so that if a new batch is being added to the cart the number of items increases
+            batches_in_cart : function(val){
+                this.batches_in_cart_lenght = val.length
+
             }
+            
 
         },
 
@@ -459,13 +520,47 @@
 
 
         methods: {
-            //get users in the current page 
+            //get batches in the current page 
             getBatches: function () {
-                /** get users in the current page using the server's API with (axios)
+                /** get batches in the current page using the server's API with (axios)
                  * 
                  * 
                  * 
                  */
+                
+
+            },
+            getBatch: function(batchId){
+
+                /** get the batch with the batchId  using the server's API with (axios)
+                 * 
+                 * 
+                 * 
+                 */
+
+                let batch = {
+                    Id: 0,
+                    name : "",
+                    fabrication_date :"",
+                    expiry_date :"",
+                    unit_price :null,
+                    batch_price :null,
+                    quantity_bought :null,
+                    quantity_stock :5,
+                    quantity_min :3,
+
+                    
+                };
+
+                
+
+
+
+                
+
+
+
+                return batch
 
             },
             addNewSupplier: function () {
@@ -473,7 +568,55 @@
             },
             addNewBatch : function(){
 
+            },
+            //this function add a new a batch to cart : 
+            addToCart : function(batchId){
+                //retrieve the batch informations from the server 
+                let batch = this.getBatch(batchId)
+                console.log(batch)
+
+                batch.quantity = 1
+
+                
+                //test if the batch already exist in the batches_in_cart data
+                for (let i = 0;i<this.batches_in_cart.length;i++){
+                    //if the batch exist in batches_in_cart then we increment the quantity by one 
+                    if(batch.Id == this.batches_in_cart[i].Id){
+                        //test if the quantity in the stock is above 0 ( > 0)
+
+
+                        if(this.batches_in_cart[i].quantity_stock > batch.quantity)
+                        
+                            
+                            this.batches_in_cart[i].quantity++
+                    }
+                    else //else add a new batch to the cart
+                         this.batches_in_cart.push(batch)
+
+                }
+
+                if(this.batches_in_cart.length == 0)
+                    this.batches_in_cart.push(batch)
+
+                
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+                
             }
+
+
 
         },
         components: {

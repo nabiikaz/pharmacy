@@ -4052,6 +4052,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
@@ -4065,6 +4099,9 @@ __webpack_require__.r(__webpack_exports__);
       search_by: "",
       filter_flow: 'Ascending',
       filter_by: '0',
+      //batches in the cart are with no session ( that means if the page is refreshed the items will vanish)
+      batches_in_cart: [],
+      batches_in_cart_lenght: 0,
       //displayed batches 
       batches: [{
         Id: 1,
@@ -4073,6 +4110,16 @@ __webpack_require__.r(__webpack_exports__);
         expiry_date: "2020-08-27",
         unit_price: 0,
         batch_price: 0,
+        quantity_bought: 25,
+        quantity_stock: 9,
+        quantity_min: 90
+      }, {
+        Id: 2,
+        medicine_name: "sulpiride",
+        fabrication_date: "2019-08-26",
+        expiry_date: "2020-08-27",
+        unit_price: 150,
+        batch_price: 100,
         quantity_bought: 25,
         quantity_stock: 9,
         quantity_min: 90
@@ -4096,6 +4143,7 @@ __webpack_require__.r(__webpack_exports__);
         name: "ilyes"
       }],
       newBatch: {
+        Id: 0,
         name: "",
         fabrication_date: "",
         expiry_date: "",
@@ -4120,19 +4168,60 @@ __webpack_require__.r(__webpack_exports__);
     selected_supplier: function selected_supplier() {
       $("#modalSelectSupplier").modal("hide");
       $("#modalAddNewBatch").modal("show");
+    },
+    //watch batches_in_cart so that if a new batch is being added to the cart the number of items increases
+    batches_in_cart: function batches_in_cart(val) {
+      this.batches_in_cart_lenght = val.length;
     }
   },
   methods: {
-    //get users in the current page 
+    //get batches in the current page 
     getBatches: function getBatches() {
-      /** get users in the current page using the server's API with (axios)
+      /** get batches in the current page using the server's API with (axios)
        * 
        * 
        * 
        */
     },
+    getBatch: function getBatch(batchId) {
+      /** get the batch with the batchId  using the server's API with (axios)
+       * 
+       * 
+       * 
+       */
+      var batch = {
+        Id: 0,
+        name: "",
+        fabrication_date: "",
+        expiry_date: "",
+        unit_price: null,
+        batch_price: null,
+        quantity_bought: null,
+        quantity_stock: 5,
+        quantity_min: 3
+      };
+      return batch;
+    },
     addNewSupplier: function addNewSupplier() {},
-    addNewBatch: function addNewBatch() {}
+    addNewBatch: function addNewBatch() {},
+    //this function add a new a batch to cart : 
+    addToCart: function addToCart(batchId) {
+      //retrieve the batch informations from the server 
+      var batch = this.getBatch(batchId);
+      console.log(batch);
+      batch.quantity = 1; //test if the batch already exist in the batches_in_cart data
+
+      for (var i = 0; i < this.batches_in_cart.length; i++) {
+        //if the batch exist in batches_in_cart then we increment the quantity by one 
+        if (batch.Id == this.batches_in_cart[i].Id) {
+          //test if the quantity in the stock is above 0 ( > 0)
+          if (this.batches_in_cart[i].quantity_stock > batch.quantity) this.batches_in_cart[i].quantity++;
+        } else //else add a new batch to the cart
+          this.batches_in_cart.push(batch);
+      }
+
+      if (this.batches_in_cart.length == 0) this.batches_in_cart.push(batch);
+    }
   },
   components: {}
 });
@@ -63120,6 +63209,24 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "col-sm-7 " }, [
           _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-sm-1" }, [
+              _c("img", {
+                staticStyle: { cursor: "pointer" },
+                attrs: {
+                  src: "/img/icons/" + _vm.filter_flow + ".png",
+                  width: "38",
+                  title: _vm.filter_flow
+                },
+                on: {
+                  click: function($event) {
+                    _vm.filter_flow == "Ascending"
+                      ? (_vm.filter_flow = "Descending")
+                      : (_vm.filter_flow = "Ascending")
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
             _c("div", { staticClass: "col-sm-6" }, [
               _c("div", { staticClass: "md-form " }, [
                 _c(
@@ -63188,23 +63295,38 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-sm-2" }, [
-              _c("img", {
-                staticStyle: { cursor: "pointer" },
-                attrs: {
-                  src: "/img/icons/" + _vm.filter_flow + ".png",
-                  width: "38",
-                  title: _vm.filter_flow
-                },
-                on: {
-                  click: function($event) {
-                    _vm.filter_flow == "Ascending"
-                      ? (_vm.filter_flow = "Descending")
-                      : (_vm.filter_flow = "Ascending")
+            _c(
+              "div",
+              { staticClass: "col-sm-5 d-flex justify-content-end  pr-5" },
+              [
+                _c("img", {
+                  staticStyle: { cursor: "pointer" },
+                  attrs: {
+                    src: "/img/icons/add_to_cart.png",
+                    width: "38",
+                    title: _vm.filter_flow
                   }
-                }
-              })
-            ])
+                }),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    class:
+                      _vm.batches_in_cart_lenght == 0
+                        ? "rounded-circle   text-center pt-1  text-white bg-danger"
+                        : "rounded-circle   text-center pt-1  text-white bg-success",
+                    staticStyle: {
+                      width: "30px",
+                      height: "30px",
+                      position: "absolute",
+                      "margin-top": "-13px",
+                      "margin-left": "13px"
+                    }
+                  },
+                  [_c("b", [_vm._v(_vm._s(_vm.batches_in_cart_lenght))])]
+                )
+              ]
+            )
           ])
         ])
       ]),
@@ -63407,6 +63529,30 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("td", { staticClass: "text-center" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "sell",
+                    attrs: {
+                      href: "#",
+                      title: "",
+                      "data-tooltip": "tooltip",
+                      "data-original-title": "Add To Cart"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.addToCart(batch.Id)
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticStyle: { color: "green" },
+                      attrs: { src: "/img/icons/add_to_cart.png", width: "22" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
                 _c(
                   "a",
                   {
@@ -64158,7 +64304,9 @@ var render = function() {
           ]
         )
       ]
-    )
+    ),
+    _vm._v(" "),
+    _vm._m(8)
   ])
 }
 var staticRenderFns = [
@@ -64385,6 +64533,68 @@ var staticRenderFns = [
         _vm._v("Add New Supplier")
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "modal fade", attrs: { id: "modalCart", role: "dialog" } },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "modal-content ",
+                staticStyle: {
+                  "border-top-left-radius": "10px",
+                  "border-top-right-radius": "10px"
+                }
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "modal-header bg-success text-center" },
+                  [
+                    _c(
+                      "h4",
+                      {
+                        staticClass:
+                          "modal-title  w-100 font-weight-bold text-white"
+                      },
+                      [_vm._v("Current Items In The Cart")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "close text-white",
+                        attrs: {
+                          type: "button",
+                          "data-dismiss": "modal",
+                          "aria-label": "Close"
+                        }
+                      },
+                      [
+                        _c("span", { attrs: { "aria-hidden": "true" } }, [
+                          _vm._v("×")
+                        ])
+                      ]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" })
+              ]
+            )
+          ]
+        )
+      ]
+    )
   }
 ]
 render._withStripped = true
