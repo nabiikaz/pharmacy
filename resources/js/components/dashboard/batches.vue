@@ -22,11 +22,11 @@
                 </div>
 
             </div>
-            
 
-             <div class="row">
-                    <div class="col-sm-5">
-                        <ul class="nav nav-tabs">
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <ul class="nav nav-tabs">
                         <li class="nav-item">
                             <a class="nav-link" href="/dashboard/medicines">Medicines</a>
                         </li>
@@ -40,45 +40,50 @@
                         </li>
 
                     </ul>
-                        
-                    </div>
 
-                    <div class="col-sm-7 ">
-                        <div class="row">
-                             <div class="col-sm-1">
-                                <img class="" style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38" @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'" :title="filter_flow">
-                               
-                               
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="md-form ">
-                                    <select class="form-control" v-model="filter_by">
-                                        <option  value="0" style="display:none;">Select Column : </option>
-                                        <option value="medicine_name">Medicine Name</option>
-                                        <option  value="fabrication_date" >Fabrication Date </option>
-                                        <option  value="expiry_date" >Expiry Date </option>
-                                        <option  value="unit_price" >Unit Price </option>
-                                        <option  value="batch_price" >Batch Price </option>
-                                        <option  value="quantity_stock" >Quantity In Stock </option>
-                                     
-                                    </select>
-                                    
-                                </div>
-                                
-                            </div>
-                            <div class="col-sm-5 d-flex justify-content-end  pr-5">
-                                 <img style="cursor:pointer;" src="/img/icons/add_to_cart.png" width="38" :title="filter_flow">
-                                <span :class=" (batches_in_cart_lenght==0)? 'rounded-circle   text-center pt-1  text-white bg-danger':'rounded-circle   text-center pt-1  text-white bg-success'" style="width:30px;height:30px;position:absolute;margin-top:-13px;margin-left:13px;"><b>{{batches_in_cart_lenght}}</b></span>
-
-                            </div>
-                           
-                           
-
-                            
-                        </div>
-                        
-                    </div>
                 </div>
+
+                <div class="col-sm-7 ">
+                    <div class="row">
+                        <div class="col-sm-1">
+                            <img class="" style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
+                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
+                                :title="filter_flow">
+
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="md-form ">
+                                <select class="form-control" v-model="filter_by">
+                                    <option value="0" style="display:none;">Select Column : </option>
+                                    <option value="medicine_name">Medicine Name</option>
+                                    <option value="fabrication_date">Fabrication Date </option>
+                                    <option value="expiry_date">Expiry Date </option>
+                                    <option value="unit_price">Unit Price </option>
+                                    <option value="batch_price">Batch Price </option>
+                                    <option value="quantity_stock">Quantity In Stock </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+                        <div class="col-sm-5 d-flex justify-content-end  pr-5" data-toggle="modal" data-target="#modalCart">
+                            <img style="cursor:pointer;" src="/img/icons/add_to_cart.png" width="38"
+                                :title="filter_flow">
+                            <span
+                                :class=" (batches_in_cart_lenght==0)? 'rounded-circle   text-center pt-1  text-white bg-danger':'rounded-circle   text-center pt-1  text-white bg-success'"
+                                style="width:30px;height:30px;position:absolute;margin-top:-13px;margin-left:13px;"><b>{{batches_in_cart_lenght}}</b></span>
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr style="cursor:pointer">
@@ -89,12 +94,22 @@
 
 
 
-                        <th class="text-center " :class="(search_by== 'medicine_name')? 'select-search':''" @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'">Name</th>
-                        <th class="text-center"  :class="(search_by== 'fabrication_date')? 'select-search':''" @click="(search_by== 'fabrication_date')? search_by= '':search_by= 'fabrication_date'">Fabrication Date</th>
-                        <th class="text-center"  :class="(search_by== 'expiry_date')? 'select-search':''" @click="(search_by== 'expiry_date')? search_by= '':search_by= 'expiry_date'">Expiry Date</th>
-                        <th class="text-center"  :class="(search_by== 'unit_price')? 'select-search':''" @click="(search_by== 'unit_price')? search_by= '':search_by= 'unit_price'">Unit Price</th>
-                        <th class="text-center"  :class="(search_by== 'batch_price')? 'select-search':''" @click="(search_by== 'batch_price')? search_by= '':search_by= 'batch_price'">Batch Price</th>
-                        <th class="text-center"  :class="(search_by== 'quantity_stock')? 'select-search':''" @click="(search_by== 'quantity_stock')? search_by= '':search_by= 'quantity_stock'">Quantity</th>
+                        <th class="text-center " :class="(search_by== 'medicine_name')? 'select-search':''"
+                            @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'">Name</th>
+                        <th class="text-center" :class="(search_by== 'fabrication_date')? 'select-search':''"
+                            @click="(search_by== 'fabrication_date')? search_by= '':search_by= 'fabrication_date'">
+                            Fabrication Date</th>
+                        <th class="text-center" :class="(search_by== 'expiry_date')? 'select-search':''"
+                            @click="(search_by== 'expiry_date')? search_by= '':search_by= 'expiry_date'">Expiry Date
+                        </th>
+                        <th class="text-center" :class="(search_by== 'unit_price')? 'select-search':''"
+                            @click="(search_by== 'unit_price')? search_by= '':search_by= 'unit_price'">Unit Price</th>
+                        <th class="text-center" :class="(search_by== 'batch_price')? 'select-search':''"
+                            @click="(search_by== 'batch_price')? search_by= '':search_by= 'batch_price'">Batch Price
+                        </th>
+                        <th class="text-center" :class="(search_by== 'quantity_stock')? 'select-search':''"
+                            @click="(search_by== 'quantity_stock')? search_by= '':search_by= 'quantity_stock'">Quantity
+                        </th>
                         <th class="text-center" style="width:170px;">Action</th>
                     </tr>
                 </thead>
@@ -103,11 +118,16 @@
 
 
 
-                        <td class="text-center" :class="(search_by== 'medicine_name')? 'select-search-data':''"  >{{batch.medicine_name }}</td>
-                        <td class="text-center" :class="(search_by== 'fabrication_date')? 'select-search-data':''"  >{{batch.fabrication_date }}</td>
-                        <td class="text-center" :class="(search_by== 'expiry_date')? 'select-search-data':''"  >{{batch.expiry_date }}</td>
-                        <td class="text-center" :class="(search_by== 'unit_price')? 'select-search-data':''"  >{{batch.unit_price }}</td>
-                        <td class="text-center" :class="(search_by== 'batch_price')? 'select-search-data':''"  >{{batch.batch_price }}</td>
+                        <td class="text-center" :class="(search_by== 'medicine_name')? 'select-search-data':''">
+                            {{batch.medicine_name }}</td>
+                        <td class="text-center" :class="(search_by== 'fabrication_date')? 'select-search-data':''">
+                            {{batch.fabrication_date }}</td>
+                        <td class="text-center" :class="(search_by== 'expiry_date')? 'select-search-data':''">
+                            {{batch.expiry_date }}</td>
+                        <td class="text-center" :class="(search_by== 'unit_price')? 'select-search-data':''">
+                            {{batch.unit_price }}</td>
+                        <td class="text-center" :class="(search_by== 'batch_price')? 'select-search-data':''">
+                            {{batch.batch_price }}</td>
                         <td class="text-center" :class="(search_by== 'quantity_stock')? 'select-search-data':''"
                             :style="(batch.quantity_stock<batch.quantity_min)? 'color:red;':'color:green;'"
                             data-tooltip="tooltip"
@@ -116,11 +136,11 @@
 
 
                         <td class="text-center">
-                            <a href="#" class="sell" title="" 
-                                data-tooltip="tooltip" data-original-title="Add To Cart" @click="addToCart(batch.Id)">
+                            <a href="#" class="sell" title="" data-tooltip="tooltip" data-original-title="Add To Cart"
+                                @click="addToCart(batch.Id)">
                                 <img src="/img/icons/add_to_cart.png" style="color:green;" width="22">
                             </a>
-                            
+
                             <a :href="'/dashboard/medicines/sales/'+batch.Id" class="sales" title=""
                                 data-tooltip="tooltip" data-original-title="Sales">
                                 <img src="/img/icons/sales.png" style="color:green;" width="22">
@@ -278,59 +298,59 @@
                         <div class="md-form ">
                             <h3 style="color: #6f6e6e;" class="text-center ">Add New Medicine Batch : </h3>
 
-                           
-                           
+
+
                             <form @submit.prevent="addNewBatch">
                                 <span style="color:gray;">Medicine Name :<strong> {{newBatch.name}} </strong> </span>
                                 <div class="pb-2 ">
                                     <label for="fabrication_date" class="mb-0 ">Fabricaion Date</label>
-                                    <input type="date" id="fabrication_date"  class="form-control"
+                                    <input type="date" id="fabrication_date" class="form-control"
                                         v-model="newBatch.fabricaion_date" required>
                                 </div>
 
                                 <div class="pb-2 ">
                                     <label for="expiry_date" class="mb-0 ">Expiry Datee</label>
-                                    <input type="date" id="expiry_date"  class="form-control"
+                                    <input type="date" id="expiry_date" class="form-control"
                                         v-model="newBatch.expiry_date" required>
                                 </div>
                                 <div class="row">
-                                       <div class="col-sm-4">
-                                            <label for="quatity_bought" class="mb-0 ">Quantity Purchased</label>
-                                            <input type="number"  id="quatity_bought"  class="form-control"
-                                                v-model="newBatch.quatity_bought" required min="0">
-                                       </div>
+                                    <div class="col-sm-4">
+                                        <label for="quatity_bought" class="mb-0 ">Quantity Purchased</label>
+                                        <input type="number" id="quatity_bought" class="form-control"
+                                            v-model="newBatch.quatity_bought" required min="0">
+                                    </div>
 
-                                        <div class="col-sm-4">
-                                            <label for="quantity_stock" class="mb-0 ">Quantity Stock</label>
-                                            <input type="number"  id="quantity_stock"  class="form-control"
-                                                v-model="newBatch.quantity_stock" required min="0">
-                                       </div>
+                                    <div class="col-sm-4">
+                                        <label for="quantity_stock" class="mb-0 ">Quantity Stock</label>
+                                        <input type="number" id="quantity_stock" class="form-control"
+                                            v-model="newBatch.quantity_stock" required min="0">
+                                    </div>
 
-                                        <div class="col-sm-4">
-                                            <label for="quantity_minimum" class="mb-0 ">Quantity Minimum</label>
-                                            <input type="number"  id="quantity_minimum"  class="form-control"
-                                                v-model="newBatch.quantity_min" required min="0">
-                                       </div>
+                                    <div class="col-sm-4">
+                                        <label for="quantity_minimum" class="mb-0 ">Quantity Minimum</label>
+                                        <input type="number" id="quantity_minimum" class="form-control"
+                                            v-model="newBatch.quantity_min" required min="0">
+                                    </div>
 
 
-                                   </div>
+                                </div>
 
-                                   <div class="row">
-                                       <div class="col-sm-6">
-                                            <label for="unit_price" class="mb-0 ">Unit Price</label>
-                                            <input type="number" step="0.01" id="unit_price"  class="form-control"
-                                                v-model="newBatch.unit_price" required min="0">
-                                       </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="unit_price" class="mb-0 ">Unit Price</label>
+                                        <input type="number" step="0.01" id="unit_price" class="form-control"
+                                            v-model="newBatch.unit_price" required min="0">
+                                    </div>
 
-                                       <div class="col-sm-6">
-                                            <label for="batch_price" class="mb-0 ">Batch Price</label>
-                                            <input type="number" step="0.01" id="batch_price"  class="form-control"
-                                                v-model="newBatch.batch_price" required min="0">
-                                       </div>
+                                    <div class="col-sm-6">
+                                        <label for="batch_price" class="mb-0 ">Batch Price</label>
+                                        <input type="number" step="0.01" id="batch_price" class="form-control"
+                                            v-model="newBatch.batch_price" required min="0">
+                                    </div>
 
-                                   </div>
+                                </div>
 
-                                   
+
 
                                 <hr>
 
@@ -373,20 +393,64 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                       
+
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr style="cursor:pointer">
+
+
+
+
+
+
+
+                                    <th class="text-center ">Name</th>
+                                    <th class="text-center">Fabrication Date</th>
+                                    <th class="text-center">Expiry Date</th>
+                                    <th class="text-center">Unit Price</th>
+                                    <th class="text-center">Batch Price</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center" style="width:170px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(batch,index) in batches_in_cart" :key="index">
+
+
+
+                                    <td class="text-center">{{batch.medicine_name }}</td>
+                                    <td class="text-center">{{batch.fabrication_date }}</td>
+                                    <td class="text-center">{{batch.expiry_date }}</td>
+                                    <td class="text-center">{{batch.unit_price }}</td>
+                                    <td class="text-center">{{batch.batch_price }}</td>
+                                    <td class="text-center">
+                                        <input type="number" class="form-control" v-model.number="batch.quantity" :max="batch.quantity_stock" min="1">
+                                    </td>
+
+
+                                    <td class="text-center">
+                                        
+
+                                       
+
+                                        <a href="#" class="delete" title="" data-tooltip="tooltip"
+                                            data-original-title="Delete">
+                                            <img src="/img/icons/trash.png" width="24">
+                                        </a>
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    
                     </div>
-
                 </div>
-
             </div>
         </div>
-
-
-
     </div>
 </template>
-
-
 <script>
     export default {
 
@@ -399,7 +463,7 @@
         },
 
         data() {
-            
+
             return {
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 medicineId: this.$attrs.medicineid,
@@ -412,11 +476,11 @@
 
 
                 //batches in the cart are with no session ( that means if the page is refreshed the items will vanish)
-                batches_in_cart:[],
+                batches_in_cart: [],
                 batches_in_cart_lenght: 0,
 
 
-                //displayed batches 
+                //displayed batches
                 batches: [{
                         Id: 1,
                         medicine_name: "DOLIPRANE",
@@ -431,7 +495,7 @@
 
                     },
                     {
-                        Id: 2 ,
+                        Id: 2,
                         medicine_name: "sulpiride",
                         fabrication_date: "2019-08-26",
                         expiry_date: "2020-08-27",
@@ -470,25 +534,25 @@
                         name: "ilyes"
                     },
                 ],
-                newBatch:{
-                    Id:0,
-                    name : "",
-                    fabrication_date :"",
-                    expiry_date :"",
-                    unit_price :null,
-                    batch_price :null,
-                    quantity_bought :null,
-                    quantity_stock :null,
-                    quantity_min :null,
+                newBatch: {
+                    Id: 0,
+                    name: "",
+                    fabrication_date: "",
+                    expiry_date: "",
+                    unit_price: null,
+                    batch_price: null,
+                    quantity_bought: null,
+                    quantity_stock: null,
+                    quantity_min: null,
 
                 },
 
                 paginationCurrent: 1
 
-            }
-        },
+        }
+    },
 
-        watch: {
+    watch: {
             paginationCurrent: function (page) {
                 this.getBatches();
             },
@@ -498,7 +562,7 @@
                 this.getBatches()
 
             },
-            //when selected_supplier is changed (a supplier is selected) then exit the modal and show the addNewBatch  modal
+            //when selected_supplier is changed (a supplier is selected) then exit the modal and show theaddNewBatch modal
             selected_supplier: function () {
 
                 $("#modalSelectSupplier").modal("hide")
@@ -508,11 +572,13 @@
             },
 
             //watch batches_in_cart so that if a new batch is being added to the cart the number of items increases
-            batches_in_cart : function(val){
+            batches_in_cart: function (old,val) {
                 this.batches_in_cart_lenght = val.length
+                
 
             }
-            
+
+
 
         },
 
@@ -520,43 +586,43 @@
 
 
         methods: {
-            //get batches in the current page 
+            //get batches in the current page
             getBatches: function () {
                 /** get batches in the current page using the server's API with (axios)
-                 * 
-                 * 
-                 * 
+                 *
+                 *
+                 *
                  */
-                
+
 
             },
-            getBatch: function(batchId){
+            getBatch: function (batchId) {
 
-                /** get the batch with the batchId  using the server's API with (axios)
-                 * 
-                 * 
-                 * 
+                /** get the batch with the batchId using the server's API with (axios)
+                 *
+                 *
+                 *
                  */
 
                 let batch = {
                     Id: 0,
-                    name : "",
-                    fabrication_date :"",
-                    expiry_date :"",
-                    unit_price :null,
-                    batch_price :null,
-                    quantity_bought :null,
-                    quantity_stock :5,
-                    quantity_min :3,
+                    medicine_name: "test Medicine Name",
+                    fabrication_date: "07/08/2015",
+                    expiry_date: "07/09/2019",
+                    unit_price: 29,
+                    batch_price: 20,
+                    quantity_bought: null,
+                    quantity_stock: 5,
+                    quantity_min: 3,
 
-                    
+
                 };
 
-                
 
 
 
-                
+
+
 
 
 
@@ -566,40 +632,39 @@
             addNewSupplier: function () {
 
             },
-            addNewBatch : function(){
+            addNewBatch: function () {
 
             },
-            //this function add a new a batch to cart : 
-            addToCart : function(batchId){
-                //retrieve the batch informations from the server 
+            //this function add a new a batch to cart :
+            addToCart: function (batchId) {
+                //retrieve the batch informations from the server
                 let batch = this.getBatch(batchId)
-                console.log(batch)
+                //we add the quantity property to batch object
 
-                batch.quantity = 1
 
-                
                 //test if the batch already exist in the batches_in_cart data
-                for (let i = 0;i<this.batches_in_cart.length;i++){
-                    //if the batch exist in batches_in_cart then we increment the quantity by one 
-                    if(batch.Id == this.batches_in_cart[i].Id){
-                        //test if the quantity in the stock is above 0 ( > 0)
+                //if the batch exist in batches_in_cart thenwe increment the quantity by one
+                for (let i = 0; i < this.batches_in_cart.length; i++) { 
+                    //test if thequantity in the stock is above 0( > 0)
+                    if (batch.Id == this.batches_in_cart[i].Id) { 
 
-
-                        if(this.batches_in_cart[i].quantity_stock > batch.quantity)
-                        
-                            
+                        if (this.batches_in_cart[i].quantity < batch.quantity_stock){
                             this.batches_in_cart[i].quantity++
-                    }
-                    else //else add a new batch to the cart
-                         this.batches_in_cart.push(batch)
+
+                            
+
+                            console.log(batch.Id+" / "+this.batches_in_cart[i].Id)
+
+
+                        }
+                    } 
 
                 }
 
-                if(this.batches_in_cart.length == 0)
+                if (this.batches_in_cart.length == 0){
+                    batch.quantity = 1
                     this.batches_in_cart.push(batch)
-
-                
-
+                }
 
 
 
@@ -611,9 +676,10 @@
 
 
 
-                
 
-                
+
+
+
             }
 
 
@@ -819,17 +885,19 @@
         margin-top: 10px;
         font-size: 13px;
     }
-    label{
-    font-size: 14px;
-    color: gray;
-    
-}
 
-.select-search-data{
-        
+    label {
+        font-size: 14px;
+        color: gray;
+
+    }
+
+    .select-search-data {
+
         background-color: #c5e4b254;
     }
-    .select-search{
+
+    .select-search {
         background-color: #4e9cda;
 
     }

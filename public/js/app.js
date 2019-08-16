@@ -4086,6 +4086,70 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
@@ -4102,7 +4166,7 @@ __webpack_require__.r(__webpack_exports__);
       //batches in the cart are with no session ( that means if the page is refreshed the items will vanish)
       batches_in_cart: [],
       batches_in_cart_lenght: 0,
-      //displayed batches 
+      //displayed batches
       batches: [{
         Id: 1,
         medicine_name: "DOLIPRANE",
@@ -4164,38 +4228,38 @@ __webpack_require__.r(__webpack_exports__);
       this.paginationCurrent = 1;
       this.getBatches();
     },
-    //when selected_supplier is changed (a supplier is selected) then exit the modal and show the addNewBatch  modal
+    //when selected_supplier is changed (a supplier is selected) then exit the modal and show theaddNewBatch modal
     selected_supplier: function selected_supplier() {
       $("#modalSelectSupplier").modal("hide");
       $("#modalAddNewBatch").modal("show");
     },
     //watch batches_in_cart so that if a new batch is being added to the cart the number of items increases
-    batches_in_cart: function batches_in_cart(val) {
+    batches_in_cart: function batches_in_cart(old, val) {
       this.batches_in_cart_lenght = val.length;
     }
   },
   methods: {
-    //get batches in the current page 
+    //get batches in the current page
     getBatches: function getBatches() {
       /** get batches in the current page using the server's API with (axios)
-       * 
-       * 
-       * 
+       *
+       *
+       *
        */
     },
     getBatch: function getBatch(batchId) {
-      /** get the batch with the batchId  using the server's API with (axios)
-       * 
-       * 
-       * 
+      /** get the batch with the batchId using the server's API with (axios)
+       *
+       *
+       *
        */
       var batch = {
         Id: 0,
-        name: "",
-        fabrication_date: "",
-        expiry_date: "",
-        unit_price: null,
-        batch_price: null,
+        medicine_name: "test Medicine Name",
+        fabrication_date: "07/08/2015",
+        expiry_date: "07/09/2019",
+        unit_price: 29,
+        batch_price: 20,
         quantity_bought: null,
         quantity_stock: 5,
         quantity_min: 3
@@ -4204,23 +4268,27 @@ __webpack_require__.r(__webpack_exports__);
     },
     addNewSupplier: function addNewSupplier() {},
     addNewBatch: function addNewBatch() {},
-    //this function add a new a batch to cart : 
+    //this function add a new a batch to cart :
     addToCart: function addToCart(batchId) {
-      //retrieve the batch informations from the server 
-      var batch = this.getBatch(batchId);
-      console.log(batch);
-      batch.quantity = 1; //test if the batch already exist in the batches_in_cart data
+      //retrieve the batch informations from the server
+      var batch = this.getBatch(batchId); //we add the quantity property to batch object
+      //test if the batch already exist in the batches_in_cart data
+      //if the batch exist in batches_in_cart thenwe increment the quantity by one
 
       for (var i = 0; i < this.batches_in_cart.length; i++) {
-        //if the batch exist in batches_in_cart then we increment the quantity by one 
+        //test if thequantity in the stock is above 0( > 0)
         if (batch.Id == this.batches_in_cart[i].Id) {
-          //test if the quantity in the stock is above 0 ( > 0)
-          if (this.batches_in_cart[i].quantity_stock > batch.quantity) this.batches_in_cart[i].quantity++;
-        } else //else add a new batch to the cart
-          this.batches_in_cart.push(batch);
+          if (this.batches_in_cart[i].quantity < batch.quantity_stock) {
+            this.batches_in_cart[i].quantity++;
+            console.log(batch.Id + " / " + this.batches_in_cart[i].Id);
+          }
+        }
       }
 
-      if (this.batches_in_cart.length == 0) this.batches_in_cart.push(batch);
+      if (this.batches_in_cart.length == 0) {
+        batch.quantity = 1;
+        this.batches_in_cart.push(batch);
+      }
     }
   },
   components: {}
@@ -18008,7 +18076,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-65518fb2] {\n        color: #566787;\n        background: #f5f5f5;\n        font-family: 'Varela Round', sans-serif;\n        font-size: 13px;\n}\n.table-wrapper[data-v-65518fb2] {\n        background: #fff;\n        padding: 20px 25px;\n        margin: 30px 0;\n        border-radius: 3px;\n        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-65518fb2] {\n        padding-bottom: 15px;\n        background: #299be4;\n        color: #fff;\n        padding: 16px 30px;\n        margin: -20px -25px 10px;\n        border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-65518fb2] {\n        margin: 5px 0 0;\n        font-size: 24px;\n}\n.table-title .btn[data-v-65518fb2] {\n        color: #566787;\n        float: right;\n        font-size: 13px;\n        background: #fff;\n        border: none;\n        min-width: 50px;\n        border-radius: 2px;\n        border: none;\n        outline: none !important;\n        margin-left: 10px;\n}\n.table-title .btn[data-v-65518fb2]:hover,\n    .table-title .btn[data-v-65518fb2]:focus {\n        color: #566787;\n        background: #f2f2f2;\n}\n.table-title .btn i[data-v-65518fb2] {\n        float: left;\n        font-size: 21px;\n        margin-right: 5px;\n}\n.table-title .btn span[data-v-65518fb2] {\n        float: left;\n        margin-top: 2px;\n}\ntable.table tr th[data-v-65518fb2],\n    table.table tr td[data-v-65518fb2] {\n        border-color: #e9e9e9;\n        padding: 12px 15px;\n        vertical-align: middle;\n}\ntable.table tr th[data-v-65518fb2]:last-child {\n        width: 100px;\n}\ntable.table-striped tbody tr[data-v-65518fb2]:nth-of-type(odd) {\n        background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-65518fb2]:hover {\n        background: #f5f5f5;\n}\ntable.table th i[data-v-65518fb2] {\n        font-size: 13px;\n        margin: 0 5px;\n        cursor: pointer;\n}\ntable.table td:last-child i[data-v-65518fb2] {\n        opacity: 0.9;\n        font-size: 22px;\n        margin: 0 5px;\n}\ntable.table td a[data-v-65518fb2] {\n        font-weight: bold;\n        color: #566787;\n        display: inline-block;\n        text-decoration: none;\n}\ntable.table td a[data-v-65518fb2]:hover {\n        color: #2196F3;\n}\ntable.table td a.settings[data-v-65518fb2] {\n        color: #2196F3;\n}\ntable.table td a.delete[data-v-65518fb2] {\n        color: #F44336;\n}\ntable.table td i[data-v-65518fb2] {\n        font-size: 19px;\n}\ntable.table .avatar[data-v-65518fb2] {\n        border-radius: 50%;\n        vertical-align: middle;\n        margin-right: 10px;\n        width: 40px;\n}\n.status[data-v-65518fb2] {\n        font-size: 30px;\n        margin: 2px 2px 0 0;\n        display: inline-block;\n        vertical-align: middle;\n        line-height: 2px;\n}\n.text-success[data-v-65518fb2] {\n        color: #10c469;\n}\n.text-info[data-v-65518fb2] {\n        color: #62c9e8;\n}\n.text-warning[data-v-65518fb2] {\n        color: #FFC107;\n}\n.text-danger[data-v-65518fb2] {\n        color: #ff5b5b;\n}\n.pagination[data-v-65518fb2] {\n        float: right;\n        margin: 0 0 5px;\n}\n.pagination li a[data-v-65518fb2] {\n        border: none;\n        font-size: 13px;\n        min-width: 30px;\n        min-height: 30px;\n        color: #999;\n        margin: 0 2px;\n        line-height: 30px;\n        border-radius: 2px !important;\n        text-align: center;\n        padding: 0 6px;\n}\n.pagination li a[data-v-65518fb2]:hover {\n        color: #666;\n}\n.pagination li.active a[data-v-65518fb2],\n    .pagination li.active a.page-link[data-v-65518fb2] {\n        background: #03A9F4;\n}\n.pagination li.active a[data-v-65518fb2]:hover {\n        background: #0397d6;\n}\n.pagination li.disabled i[data-v-65518fb2] {\n        color: #ccc;\n}\n.pagination li i[data-v-65518fb2] {\n        font-size: 16px;\n        padding-top: 6px\n}\n.hint-text[data-v-65518fb2] {\n        float: left;\n        margin-top: 10px;\n        font-size: 13px;\n}\nlabel[data-v-65518fb2]{\n    font-size: 14px;\n    color: gray;\n}\n.select-search-data[data-v-65518fb2]{\n        \n        background-color: #c5e4b254;\n}\n.select-search[data-v-65518fb2]{\n        background-color: #4e9cda;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-65518fb2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-65518fb2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-65518fb2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-65518fb2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-65518fb2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-65518fb2]:hover,\n.table-title .btn[data-v-65518fb2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-65518fb2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-65518fb2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-65518fb2],\ntable.table tr td[data-v-65518fb2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-65518fb2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-65518fb2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-65518fb2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-65518fb2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-65518fb2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-65518fb2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-65518fb2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-65518fb2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-65518fb2] {\n    color: #F44336;\n}\ntable.table td i[data-v-65518fb2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-65518fb2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-65518fb2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-65518fb2] {\n    color: #10c469;\n}\n.text-info[data-v-65518fb2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-65518fb2] {\n    color: #FFC107;\n}\n.text-danger[data-v-65518fb2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-65518fb2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-65518fb2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-65518fb2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-65518fb2],\n.pagination li.active a.page-link[data-v-65518fb2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-65518fb2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-65518fb2] {\n    color: #ccc;\n}\n.pagination li i[data-v-65518fb2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-65518fb2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\nlabel[data-v-65518fb2] {\n    font-size: 14px;\n    color: gray;\n}\n.select-search-data[data-v-65518fb2] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-65518fb2] {\n    background-color: #4e9cda;\n}\n\n", ""]);
 
 // exports
 
@@ -63297,7 +63365,10 @@ var render = function() {
             _vm._v(" "),
             _c(
               "div",
-              { staticClass: "col-sm-5 d-flex justify-content-end  pr-5" },
+              {
+                staticClass: "col-sm-5 d-flex justify-content-end  pr-5",
+                attrs: { "data-toggle": "modal", "data-target": "#modalCart" }
+              },
               [
                 _c("img", {
                   staticStyle: { cursor: "pointer" },
@@ -63364,7 +63435,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Fabrication Date")]
+              [_vm._v("\n                        Fabrication Date")]
             ),
             _vm._v(" "),
             _c(
@@ -63380,7 +63451,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Expiry Date")]
+              [_vm._v("Expiry Date\n                    ")]
             ),
             _vm._v(" "),
             _c(
@@ -63412,7 +63483,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Batch Price")]
+              [_vm._v("Batch Price\n                    ")]
             ),
             _vm._v(" "),
             _c(
@@ -63428,7 +63499,7 @@ var render = function() {
                   }
                 }
               },
-              [_vm._v("Quantity")]
+              [_vm._v("Quantity\n                    ")]
             ),
             _vm._v(" "),
             _c(
@@ -63450,7 +63521,11 @@ var render = function() {
                   class:
                     _vm.search_by == "medicine_name" ? "select-search-data" : ""
                 },
-                [_vm._v(_vm._s(batch.medicine_name))]
+                [
+                  _vm._v(
+                    "\n                        " + _vm._s(batch.medicine_name)
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -63462,7 +63537,12 @@ var render = function() {
                       ? "select-search-data"
                       : ""
                 },
-                [_vm._v(_vm._s(batch.fabrication_date))]
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(batch.fabrication_date)
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -63472,7 +63552,11 @@ var render = function() {
                   class:
                     _vm.search_by == "expiry_date" ? "select-search-data" : ""
                 },
-                [_vm._v(_vm._s(batch.expiry_date))]
+                [
+                  _vm._v(
+                    "\n                        " + _vm._s(batch.expiry_date)
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -63482,7 +63566,11 @@ var render = function() {
                   class:
                     _vm.search_by == "unit_price" ? "select-search-data" : ""
                 },
-                [_vm._v(_vm._s(batch.unit_price))]
+                [
+                  _vm._v(
+                    "\n                        " + _vm._s(batch.unit_price)
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -63492,7 +63580,11 @@ var render = function() {
                   class:
                     _vm.search_by == "batch_price" ? "select-search-data" : ""
                 },
-                [_vm._v(_vm._s(batch.batch_price))]
+                [
+                  _vm._v(
+                    "\n                        " + _vm._s(batch.batch_price)
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -64306,7 +64398,107 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _vm._m(8)
+    _c(
+      "div",
+      { staticClass: "modal fade", attrs: { id: "modalCart", role: "dialog" } },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "modal-content ",
+                staticStyle: {
+                  "border-top-left-radius": "10px",
+                  "border-top-right-radius": "10px"
+                }
+              },
+              [
+                _vm._m(8),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c(
+                    "table",
+                    { staticClass: "table table-striped table-hover" },
+                    [
+                      _vm._m(9),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.batches_in_cart, function(batch, index) {
+                          return _c("tr", { key: index }, [
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(batch.medicine_name))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(batch.fabrication_date))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(batch.expiry_date))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(batch.unit_price))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(batch.batch_price))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model.number",
+                                    value: batch.quantity,
+                                    expression: "batch.quantity",
+                                    modifiers: { number: true }
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "number",
+                                  max: batch.quantity_stock,
+                                  min: "1"
+                                },
+                                domProps: { value: batch.quantity },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      batch,
+                                      "quantity",
+                                      _vm._n($event.target.value)
+                                    )
+                                  },
+                                  blur: function($event) {
+                                    return _vm.$forceUpdate()
+                                  }
+                                }
+                              })
+                            ]),
+                            _vm._v(" "),
+                            _vm._m(10, true)
+                          ])
+                        }),
+                        0
+                      )
+                    ]
+                  )
+                ])
+              ]
+            )
+          ]
+        )
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -64538,63 +64730,72 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "modal fade", attrs: { id: "modalCart", role: "dialog" } },
-      [
+    return _c("div", { staticClass: "modal-header bg-success text-center" }, [
+      _c(
+        "h4",
+        { staticClass: "modal-title  w-100 font-weight-bold text-white" },
+        [_vm._v("Current Items In The Cart")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close text-white",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", { staticStyle: { cursor: "pointer" } }, [
+        _c("th", { staticClass: "text-center " }, [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Fabrication Date")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Expiry Date")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Unit Price")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Batch Price")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [_vm._v("Quantity")]),
+        _vm._v(" "),
         _c(
-          "div",
-          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "modal-content ",
-                staticStyle: {
-                  "border-top-left-radius": "10px",
-                  "border-top-right-radius": "10px"
-                }
-              },
-              [
-                _c(
-                  "div",
-                  { staticClass: "modal-header bg-success text-center" },
-                  [
-                    _c(
-                      "h4",
-                      {
-                        staticClass:
-                          "modal-title  w-100 font-weight-bold text-white"
-                      },
-                      [_vm._v("Current Items In The Cart")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "close text-white",
-                        attrs: {
-                          type: "button",
-                          "data-dismiss": "modal",
-                          "aria-label": "Close"
-                        }
-                      },
-                      [
-                        _c("span", { attrs: { "aria-hidden": "true" } }, [
-                          _vm._v("×")
-                        ])
-                      ]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "modal-body" })
-              ]
-            )
-          ]
+          "th",
+          { staticClass: "text-center", staticStyle: { width: "170px" } },
+          [_vm._v("Action")]
         )
-      ]
-    )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { staticClass: "text-center" }, [
+      _c(
+        "a",
+        {
+          staticClass: "delete",
+          attrs: {
+            href: "#",
+            title: "",
+            "data-tooltip": "tooltip",
+            "data-original-title": "Delete"
+          }
+        },
+        [_c("img", { attrs: { src: "/img/icons/trash.png", width: "24" } })]
+      )
+    ])
   }
 ]
 render._withStripped = true
