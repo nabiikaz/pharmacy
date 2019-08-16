@@ -4150,6 +4150,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
@@ -4176,7 +4185,9 @@ __webpack_require__.r(__webpack_exports__);
         batch_price: 0,
         quantity_bought: 25,
         quantity_stock: 9,
-        quantity_min: 90
+        quantity_min: 90,
+        refund: 1 //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
+
       }, {
         Id: 2,
         medicine_name: "sulpiride",
@@ -4186,7 +4197,9 @@ __webpack_require__.r(__webpack_exports__);
         batch_price: 100,
         quantity_bought: 25,
         quantity_stock: 9,
-        quantity_min: 90
+        quantity_min: 90,
+        refund: 0 //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
+
       }],
       selected_supplier: null,
       new_supplier: {
@@ -4439,10 +4452,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4462,9 +4471,7 @@ __webpack_require__.r(__webpack_exports__);
         name: "DOLIPRANE",
         dosage: "500 mg",
         form: "gélule",
-        family: "Antalgique et antipyrétique ",
-        refund: 1 //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
-
+        family: "Antalgique et antipyrétique "
       }, {
         Id: 2,
         name: "DOLIPRANEE",
@@ -63504,6 +63511,22 @@ var render = function() {
             _vm._v(" "),
             _c(
               "th",
+              {
+                staticClass: "text-center",
+                class: _vm.search_by == "refund" ? "select-search" : "",
+                on: {
+                  click: function($event) {
+                    _vm.search_by == "refund"
+                      ? (_vm.search_by = "")
+                      : (_vm.search_by = "refund")
+                  }
+                }
+              },
+              [_vm._v("Refund")]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
               { staticClass: "text-center", staticStyle: { width: "170px" } },
               [_vm._v("Action")]
             )
@@ -63617,6 +63640,31 @@ var render = function() {
                   ),
                   _c("strong", [_vm._v("/")]),
                   _vm._v(" " + _vm._s(batch.quantity_bought))
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                {
+                  staticClass: "d-flex justify-content-center",
+                  class: _vm.search_by == "refund" ? "select-search-data" : "",
+                  attrs: {
+                    "data-tooltip": "tooltip",
+                    "data-original-title": batch.refund + " %"
+                  }
+                },
+                [
+                  _c("img", {
+                    staticClass: "icon",
+                    attrs: {
+                      width: "22",
+                      height: "22",
+                      src:
+                        batch.refund > 0
+                          ? "/img/icons/checkmark.png"
+                          : "/img/icons/xmark.png"
+                    }
+                  })
                 ]
               ),
               _vm._v(" "),
@@ -64965,22 +65013,6 @@ var render = function() {
               _c(
                 "th",
                 {
-                  staticClass: "text-center",
-                  class: _vm.search_by == "refund" ? "select-search" : "",
-                  on: {
-                    click: function($event) {
-                      _vm.search_by == "refund"
-                        ? (_vm.search_by = "")
-                        : (_vm.search_by = "refund")
-                    }
-                  }
-                },
-                [_vm._v("Refund")]
-              ),
-              _vm._v(" "),
-              _c(
-                "th",
-                {
                   staticClass: "text-center ",
                   staticStyle: { width: "170px" }
                 },
@@ -65032,28 +65064,30 @@ var render = function() {
                   [_vm._v(_vm._s(medicine.family))]
                 ),
                 _vm._v(" "),
-                _c(
-                  "td",
-                  {
-                    staticClass: "d-flex justify-content-center",
-                    class: _vm.search_by == "refund" ? "select-search-data" : ""
-                  },
-                  [
-                    _c("img", {
-                      staticClass: "icon",
-                      attrs: {
-                        width: "22",
-                        height: "22",
-                        src:
-                          medicine.refund > 0
-                            ? "/img/icons/checkmark.png"
-                            : "/img/icons/xmark.png"
-                      }
-                    })
-                  ]
-                ),
-                _vm._v(" "),
                 _c("td", { staticClass: "text-center" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "edit",
+                      attrs: {
+                        href: "#",
+                        title: "",
+                        "data-tooltip": "tooltip",
+                        "data-original-title": "Edit Medicine"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.settings(medicine.Id)
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        attrs: { src: "/img/icons/edit.png", width: "22" }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
                   _c(
                     "a",
                     {
@@ -65068,29 +65102,6 @@ var render = function() {
                     [
                       _c("img", {
                         attrs: { src: "/img/icons/batch.png", width: "22" }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "settings ",
-                      attrs: {
-                        href: "#",
-                        title: "",
-                        "data-tooltip": "tooltip",
-                        "data-original-title": "Settings"
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.settings(medicine.Id)
-                        }
-                      }
-                    },
-                    [
-                      _c("img", {
-                        attrs: { src: "/img/icons/settings.png", width: "22" }
                       })
                     ]
                   ),
@@ -65307,9 +65318,7 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("option", { attrs: { value: "form" } }, [_vm._v("Form")]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "family" } }, [_vm._v("Family")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "refund" } }, [_vm._v("Refund")])
+          _c("option", { attrs: { value: "family" } }, [_vm._v("Family")])
         ])
       ])
     ])

@@ -110,6 +110,10 @@
                         <th class="text-center" :class="(search_by== 'quantity_stock')? 'select-search':''"
                             @click="(search_by== 'quantity_stock')? search_by= '':search_by= 'quantity_stock'">Quantity
                         </th>
+                        <th class="text-center" :class="(search_by== 'refund')? 'select-search':''"
+                         @click="(search_by== 'refund')? search_by= '':search_by= 'refund'"  >Refund</th>
+
+
                         <th class="text-center" style="width:170px;">Action</th>
                     </tr>
                 </thead>
@@ -134,7 +138,12 @@
                             :data-original-title="(batch.quantity_stock<batch.quantity_min)?'Quantity en Stock < min( '+batch.quantity_min+' )       risk of rupture':'' ">
                             {{batch.quantity_stock }} <strong>/</strong> {{batch.quantity_bought }}</td>
 
+                         <td class="d-flex justify-content-center" :class="(search_by== 'refund')? 'select-search-data':''"
+                                                             data-tooltip="tooltip" :data-original-title="batch.refund+' %'" >
+                            <img width="22" height="22" v-bind:src="(batch.refund > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
+                        </td>
 
+        
                         <td class="text-center">
                             <a href="#" class="sell" title="" data-tooltip="tooltip" data-original-title="Add To Cart"
                                 @click="addToCart(batch.Id)">
@@ -490,7 +499,9 @@
                         batch_price: 0,
                         quantity_bought: 25,
                         quantity_stock: 9,
-                        quantity_min: 90
+                        quantity_min: 90,
+                        refund: 1,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
+                        
 
 
                     },
@@ -503,7 +514,9 @@
                         batch_price: 100,
                         quantity_bought: 25,
                         quantity_stock: 9,
-                        quantity_min: 90
+                        quantity_min: 90,
+                        refund: 0,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
+
 
 
                     }

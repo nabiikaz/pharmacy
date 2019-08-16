@@ -52,7 +52,6 @@
                                         <option value="dosage">Dosage</option>
                                         <option value="form">Form</option>
                                         <option value="family">Family</option>
-                                        <option value="refund">Refund</option>
                                     </select>
                                     
                                 </div>
@@ -74,7 +73,6 @@
                         <th class="text-center" :class="(search_by== 'form')? 'select-search':''" @click="(search_by== 'form')? search_by= '':search_by= 'form'">Form</th>
                         <th class="text-center" :class="(search_by== 'family')? 'select-search':''" @click="(search_by== 'family')? search_by= '':search_by= 'family'">Family</th>
                         
-                        <th class="text-center" :class="(search_by== 'refund')? 'select-search':''" @click="(search_by== 'refund')? search_by= '':search_by= 'refund'">Refund</th>
                         <th class="text-center " style="width:170px">Action</th>
                     </tr>
                 </thead>
@@ -88,17 +86,15 @@
                         <td class="text-center"  :class="(search_by== 'form')? 'select-search-data':''">{{medicine.form}}</td>
                         <td class="text-center"  :class="(search_by== 'family')? 'select-search-data':''">{{medicine.family}}</td>
                         
-                        <td class="d-flex justify-content-center" :class="(search_by== 'refund')? 'select-search-data':''">
-                            <img width="22" height="22" v-bind:src="(medicine.refund > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
-                        </td>
+                       
                         
                         <td class="text-center">
+                            <a href="#" class="edit" title="" data-tooltip="tooltip" data-original-title="Edit Medicine"
+                                v-on:click="settings(medicine.Id)"><img src="/img/icons/edit.png" width="22" ></a>
                             
                             <a :href="'/dashboard/medicines/batches/'+medicine.Id" class="batch" title="" data-tooltip="tooltip" data-original-title="batches"
                             ><img src="/img/icons/batch.png" width="22" ></a>
                             
-                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
-                                v-on:click="settings(medicine.Id)"><img src="/img/icons/settings.png" width="22" ></a>
 
 
                             <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
@@ -167,7 +163,6 @@
                     form : "gélule",
                     family : "Antalgique et antipyrétique ",
                     
-                    refund: 1,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
                     
                     },
                     {
