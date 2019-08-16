@@ -172,7 +172,6 @@
                     form : "serop",
                     family : "Antalgique et antipyrétique ",
                    
-                    refund: 1,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
                     
                     }
 

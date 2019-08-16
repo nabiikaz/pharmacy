@@ -4210,18 +4210,18 @@ __webpack_require__.r(__webpack_exports__);
         email: ""
       },
       suppliers: [{
-        id: 1,
+        Id: 1,
         name: "ahmed"
       }, {
-        id: 2,
+        Id: 2,
         name: "zakaria"
       }, {
-        id: 3,
+        Id: 3,
         name: "ilyes"
       }],
       newBatch: {
         Id: 0,
-        name: "",
+        medicine_name: "",
         fabrication_date: "",
         expiry_date: "",
         unit_price: null,
@@ -4252,6 +4252,13 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    //remove batch from the cart 
+    removeBatchFromCart: function removeBatchFromCart(batchId) {
+      //search for the batch in batches_in_cart collection
+      for (var i = 0; i < this.batches_in_cart.length; i++) {
+        if (batchId == this.batches_in_cart[i].Id) this.batches_in_cart.splice(i, 1);
+      }
+    },
     //get batches in the current page
     getBatches: function getBatches() {
       /** get batches in the current page using the server's API with (axios)
@@ -4477,9 +4484,7 @@ __webpack_require__.r(__webpack_exports__);
         name: "DOLIPRANEE",
         dosage: "50 mg",
         form: "serop",
-        family: "Antalgique et antipyrétique ",
-        refund: 1 //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
-
+        family: "Antalgique et antipyrétique "
       }],
       paginationCurrent: 1
     };
@@ -64130,7 +64135,9 @@ var render = function() {
                         _c("span", { staticStyle: { color: "gray" } }, [
                           _vm._v("Medicine Name :"),
                           _c("strong", [
-                            _vm._v(" " + _vm._s(_vm.newBatch.name) + " ")
+                            _vm._v(
+                              " " + _vm._s(_vm.newBatch.medicine_name) + " "
+                            )
                           ])
                         ]),
                         _vm._v(" "),
@@ -64533,7 +64540,33 @@ var render = function() {
                               })
                             ]),
                             _vm._v(" "),
-                            _vm._m(10, true)
+                            _c("td", { staticClass: "text-center" }, [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "delete",
+                                  attrs: {
+                                    href: "#",
+                                    title: "",
+                                    "data-tooltip": "tooltip",
+                                    "data-original-title": "Delete"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.removeBatchFromCart(batch.Id)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("img", {
+                                    attrs: {
+                                      src: "/img/icons/trash.png",
+                                      width: "24"
+                                    }
+                                  })
+                                ]
+                              )
+                            ])
                           ])
                         }),
                         0
@@ -64823,26 +64856,6 @@ var staticRenderFns = [
           [_vm._v("Action")]
         )
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", { staticClass: "text-center" }, [
-      _c(
-        "a",
-        {
-          staticClass: "delete",
-          attrs: {
-            href: "#",
-            title: "",
-            "data-tooltip": "tooltip",
-            "data-original-title": "Delete"
-          }
-        },
-        [_c("img", { attrs: { src: "/img/icons/trash.png", width: "24" } })]
-      )
     ])
   }
 ]
