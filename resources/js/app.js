@@ -19,23 +19,7 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-
-Vue.component('dashboard_nav',require('./components/dashboard/navbar.vue').default);
-Vue.component('dashboard_sidebar',require('./components/dashboard/sidebar.vue').default);
-
-Vue.component("dashboard_users",require('./components/dashboard/users.vue').default);
-Vue.component("dashboard_editUser",require('./components/dashboard/users/editUser.vue').default);
-
-
-Vue.component("dashboard_medicines",require('./components/dashboard/medicines.vue').default);
-Vue.component("dashboard_batches",require('./components/dashboard/batches.vue').default);
-Vue.component("dashboard_sales",require('./components/dashboard/sales.vue').default);
-
-
-Vue.component("dashboard_suppliers",require('./components/dashboard/suppliers.vue').default);
-
-Vue.component("dashboard_customers",require('./components/dashboard/customers.vue').default);
-
+Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -45,12 +29,4 @@ Vue.component("dashboard_customers",require('./components/dashboard/customers.vu
 
 const app = new Vue({
     el: '#app',
-    data:{
-        
-    }
-    
 });
-
-
-
-
