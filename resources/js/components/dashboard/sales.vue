@@ -55,18 +55,17 @@
 
 
 
-                        <th class="text-center" :class="(selected_column.includes('medicine_name'))? 'select-search':''"
-                            @click="((selected_column.includes('medicine_name'))? selected_column=selected_column.filter(function(e) { return e !== 'medicine_name' }):selected_column.push('medicine_name'))">Medicine
-                            Name</th>
-                        <th class="text-center" :class="(selected_column.includes('pharmacist'))? 'select-search':''"
+                       
+                        <th  class="text-center" :class="(selected_column.includes('pharmacist'))? 'select-search':''"
                             @click="((selected_column.includes('pharmacist'))? selected_column=selected_column.filter(function(e) { return e !== 'pharmacist' }):selected_column.push('pharmacist'))">Made By</th>
+                        
+                        <th class="text-center" :class="(selected_column.includes('customer'))? 'select-search':''"
+                            @click="((selected_column.includes('customer'))? selected_column=selected_column.filter(function(e) { return e !== 'customer' }):selected_column.push('customer'))">Customer</th>
+                        
+                        
                         <th class="text-center" :class="(selected_column.includes('sale_date'))? 'select-search':''"
                             @click="((selected_column.includes('sale_date'))? selected_column=selected_column.filter(function(e) { return e !== 'sale_date' }):selected_column.push('sale_date'))">Date</th>
-                        <th class="text-center" :class="(selected_column.includes('quantity_sold'))? 'select-search':''"
-                            @click="((selected_column.includes('quantity_sold'))? selected_column=selected_column.filter(function(e) { return e !== 'quantity_sold' }):selected_column.push('quantity_sold'))">Quantity
-                            Sold</th>
-                        <th class="text-center" :class="(selected_column.includes('unit_price'))? 'select-search':''"
-                            @click="((selected_column.includes('unit_price'))? selected_column=selected_column.filter(function(e) { return e !== 'unit_price' }):selected_column.push('unit_price'))">Unit Price</th>
+                       
                         <th class="text-center" :class="(selected_column.includes('total_price'))? 'select-search':''"
                             @click="((selected_column.includes('total_price'))? selected_column=selected_column.filter(function(e) { return e !== 'total_price' }):selected_column.push('total_price'))">Total Price
                         </th>
@@ -74,35 +73,31 @@
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr v-for="(sale,index) in sales" :key="index" data-toggle="popover" :title="sale.name"
-                        :data-content="sale.name">
+                    <tr v-for="(sale,index) in sales" :key="index" >
 
 
 
-                        <td class="text-center" :class="(selected_column.includes('medicine_name'))? 'select-search-data':''">
-                            {{sale.medicine_name }}</td>
+                       
                         <td class="text-center" :class="(selected_column.includes('pharmacist'))? 'select-search-data':''">
                             {{sale.pharmacist }}</td>
+
+                        <td class="text-center" :class="(selected_column.includes('customer'))? 'select-search-data':''">
+                            {{sale.customer }}</td>
+
                         <td class="text-center" :class="(selected_column.includes('sale_date'))? 'select-search-data':''">
                             {{sale.sale_date }}</td>
-                        <td class="text-center" :class="(selected_column.includes('quantity_sold'))? 'select-search-data':''">
-                            {{sale.quantity_sold }}</td>
-                        <td class="text-center" :class="(selected_column.includes('unit_price'))? 'select-search-data':''">
-                            {{sale.unit_price }}</td>
+                       
                         <td class="text-center" :class="(selected_column.includes('total_price'))? 'select-search-data':''">
                             {{sale.total_price }}</td>
 
 
 
                         <td class="text-center">
-                            <a href="#" class="bill" title="" data-tooltip="tooltip" data-original-title="bill"
-                                data-toggle="modal" data-target="#modalBill" @click="selectedSale_Id=sale.Id"><img
+                            <a href="#" class="invoice" title="" data-tooltip="tooltip" data-original-title="invoice"
+                                data-toggle="modal" data-target="#modalinvoice" @click="selectedSale_Id=sale.Id"><img
                                     src="/img/icons/bill.png" width="22"></a>
 
-                            <a :href="'/dashboard/medicines/batches/'+sale.medicine_Id" class="batch" title=""
-                                data-tooltip="tooltip" data-original-title="batches"><img src="/img/icons/batch.png"
-                                    width="22"></a>
+                           
 
 
 
@@ -138,17 +133,17 @@
             </div>
         </div>
 
-        <div id="modalBill" class="modal fade" role="dialog">
+        <div id="modalinvoice" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
                     <div class="modal-header bg-success text-center">
-                        <h4 class="modal-title  w-100 font-weight-bold text-white">Add New Medicine Batch</h4>
+                        <h4 class="modal-title  w-100 font-weight-bold text-white">View Invoice</h4>
                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <iframe :src="(selectedSale_Id > -1)? '/dashboard/medicines/sales/bill/'+selectedSale_Id:''"
+                        <iframe :src="(selectedSale_Id > -1)? '/dashboard/medicines/sales/invoice/'+selectedSale_Id:''"
                             frameborder="0" width="770" height="480"></iframe>
                     </div>
 
@@ -203,17 +198,20 @@
                 //displayed sales 
                 sales: [{
                         Id: 1,
-                        medicine_name: "DOLIPRANE",
                         pharmacist: "Nabi Zakaria",
+                        customer: "N/A",
                         sale_date: "2019-01-07",
-                        medicine_Id: 0,
-                        dosage: 0.1,
-                        form: "gélule",
-                        fabrication_date: "2019-08-26",
-                        expiry_date: "2020-08-27",
-                        unit_price: 1,
+                        total_price: 25,
 
-                        quantity_sold: 25,
+
+
+
+                    },
+                    {
+                        Id: 2,
+                        pharmacist: "Ahmed Nabi",
+                        customer: "N/A",
+                        sale_date: "2019-01-07",
                         total_price: 25,
 
 
@@ -259,7 +257,41 @@
                  */
 
             },
+            //get sale with saleId
+            getSale: function(saleId){
 
+
+                return {
+                    
+                        Id: 1,
+                        pharmacist: "Nabi Zakaria",
+                        customer: "N/A",
+                        sale_date: "2019-01-07",
+                        total_price: 25,
+                        medicines:[
+                            {
+                                Id: 1,
+                                name : "DOLIPRANE",
+                                dosage : "500 mg",
+                                form : "gélule",
+                                family : "Antalgique et antipyrétique ",
+                                quantity:10
+                            },
+                            {
+                                Id: 2,
+                                name : "sulpiride",
+                                dosage : "50 mg",
+                                form : "sérop",
+                                family : "Antalgique  ",
+                                quantity:5
+                            }
+                        ]
+                        
+
+                }
+
+            },
+           
 
         },
         components: {
@@ -273,6 +305,9 @@
 
 
 <style scoped>
+.popover{
+    max-width: 100%; /* Max Width of the popover (depending on the container!) */
+}
     body {
         color: #566787;
         background: #f5f5f5;
@@ -476,6 +511,11 @@
 
     .select-search {
         background-color: #4e9cda;
+
+    }
+    th{
+        border-left:  1px solid  #dee2e6;
+        border-right:  1px solid  #dee2e6;
 
     }
 

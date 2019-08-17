@@ -382,5 +382,10 @@
         background-color: #4e9cda;
 
     }
+    th{
+        border-left:  1px solid  #dee2e6;
+        border-right:  1px solid  #dee2e6;
+
+    }
 
 </style>

@@ -5484,11 +5484,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
@@ -5511,16 +5506,15 @@ __webpack_require__.r(__webpack_exports__);
       //displayed sales 
       sales: [{
         Id: 1,
-        medicine_name: "DOLIPRANE",
         pharmacist: "Nabi Zakaria",
+        customer: "N/A",
         sale_date: "2019-01-07",
-        medicine_Id: 0,
-        dosage: 0.1,
-        form: "gélule",
-        fabrication_date: "2019-08-26",
-        expiry_date: "2020-08-27",
-        unit_price: 1,
-        quantity_sold: 25,
+        total_price: 25
+      }, {
+        Id: 2,
+        pharmacist: "Ahmed Nabi",
+        customer: "N/A",
+        sale_date: "2019-01-07",
         total_price: 25
       }],
       paginationCurrent: 1
@@ -5543,6 +5537,31 @@ __webpack_require__.r(__webpack_exports__);
        * 
        * 
        */
+    },
+    //get sale with saleId
+    getSale: function getSale(saleId) {
+      return {
+        Id: 1,
+        pharmacist: "Nabi Zakaria",
+        customer: "N/A",
+        sale_date: "2019-01-07",
+        total_price: 25,
+        medicines: [{
+          Id: 1,
+          name: "DOLIPRANE",
+          dosage: "500 mg",
+          form: "gélule",
+          family: "Antalgique et antipyrétique ",
+          quantity: 10
+        }, {
+          Id: 2,
+          name: "sulpiride",
+          dosage: "50 mg",
+          form: "sérop",
+          family: "Antalgique  ",
+          quantity: 5
+        }]
+      };
     }
   },
   components: {}
@@ -18929,7 +18948,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-65518fb2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-65518fb2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-65518fb2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-65518fb2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-65518fb2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-65518fb2]:hover,\n.table-title .btn[data-v-65518fb2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-65518fb2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-65518fb2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-65518fb2],\ntable.table tr td[data-v-65518fb2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-65518fb2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-65518fb2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-65518fb2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-65518fb2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-65518fb2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-65518fb2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-65518fb2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-65518fb2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-65518fb2] {\n    color: #F44336;\n}\ntable.table td i[data-v-65518fb2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-65518fb2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-65518fb2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-65518fb2] {\n    color: #10c469;\n}\n.text-info[data-v-65518fb2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-65518fb2] {\n    color: #FFC107;\n}\n.text-danger[data-v-65518fb2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-65518fb2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-65518fb2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-65518fb2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-65518fb2],\n.pagination li.active a.page-link[data-v-65518fb2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-65518fb2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-65518fb2] {\n    color: #ccc;\n}\n.pagination li i[data-v-65518fb2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-65518fb2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\nlabel[data-v-65518fb2] {\n    font-size: 14px;\n    color: gray;\n}\n.select-search-data[data-v-65518fb2] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-65518fb2] {\n    background-color: #4e9cda;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-65518fb2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-65518fb2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-65518fb2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-65518fb2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-65518fb2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-65518fb2]:hover,\n.table-title .btn[data-v-65518fb2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-65518fb2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-65518fb2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-65518fb2],\ntable.table tr td[data-v-65518fb2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-65518fb2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-65518fb2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-65518fb2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-65518fb2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-65518fb2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-65518fb2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-65518fb2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-65518fb2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-65518fb2] {\n    color: #F44336;\n}\ntable.table td i[data-v-65518fb2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-65518fb2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-65518fb2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-65518fb2] {\n    color: #10c469;\n}\n.text-info[data-v-65518fb2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-65518fb2] {\n    color: #FFC107;\n}\n.text-danger[data-v-65518fb2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-65518fb2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-65518fb2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-65518fb2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-65518fb2],\n.pagination li.active a.page-link[data-v-65518fb2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-65518fb2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-65518fb2] {\n    color: #ccc;\n}\n.pagination li i[data-v-65518fb2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-65518fb2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\nlabel[data-v-65518fb2] {\n    font-size: 14px;\n    color: gray;\n}\n.select-search-data[data-v-65518fb2] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-65518fb2] {\n    background-color: #4e9cda;\n}\nth[data-v-65518fb2]{\n    border-left:  1px solid  #dee2e6;\n    border-right:  1px solid  #dee2e6;\n}\n\n", ""]);
 
 // exports
 
@@ -18948,7 +18967,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-5f9cab9f] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-5f9cab9f] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-5f9cab9f] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-5f9cab9f] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-5f9cab9f] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-5f9cab9f]:hover,\n.table-title .btn[data-v-5f9cab9f]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-5f9cab9f] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-5f9cab9f] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-5f9cab9f],\ntable.table tr td[data-v-5f9cab9f] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-5f9cab9f]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-5f9cab9f]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-5f9cab9f]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-5f9cab9f] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-5f9cab9f] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-5f9cab9f] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-5f9cab9f]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-5f9cab9f] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-5f9cab9f] {\n    color: #F44336;\n}\ntable.table td i[data-v-5f9cab9f] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-5f9cab9f] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-5f9cab9f] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-5f9cab9f] {\n    color: #10c469;\n}\n.text-info[data-v-5f9cab9f] {\n    color: #62c9e8;\n}\n.text-warning[data-v-5f9cab9f] {\n    color: #FFC107;\n}\n.text-danger[data-v-5f9cab9f] {\n    color: #ff5b5b;\n}\n.pagination[data-v-5f9cab9f] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-5f9cab9f] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-5f9cab9f]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-5f9cab9f],\n.pagination li.active a.page-link[data-v-5f9cab9f] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-5f9cab9f]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-5f9cab9f] {\n    color: #ccc;\n}\n.pagination li i[data-v-5f9cab9f] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-5f9cab9f] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-5f9cab9f] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-5f9cab9f] {\n    background-color: #4e9cda;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-5f9cab9f] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-5f9cab9f] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-5f9cab9f] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-5f9cab9f] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-5f9cab9f] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-5f9cab9f]:hover,\n.table-title .btn[data-v-5f9cab9f]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-5f9cab9f] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-5f9cab9f] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-5f9cab9f],\ntable.table tr td[data-v-5f9cab9f] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-5f9cab9f]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-5f9cab9f]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-5f9cab9f]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-5f9cab9f] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-5f9cab9f] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-5f9cab9f] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-5f9cab9f]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-5f9cab9f] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-5f9cab9f] {\n    color: #F44336;\n}\ntable.table td i[data-v-5f9cab9f] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-5f9cab9f] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-5f9cab9f] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-5f9cab9f] {\n    color: #10c469;\n}\n.text-info[data-v-5f9cab9f] {\n    color: #62c9e8;\n}\n.text-warning[data-v-5f9cab9f] {\n    color: #FFC107;\n}\n.text-danger[data-v-5f9cab9f] {\n    color: #ff5b5b;\n}\n.pagination[data-v-5f9cab9f] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-5f9cab9f] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-5f9cab9f]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-5f9cab9f],\n.pagination li.active a.page-link[data-v-5f9cab9f] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-5f9cab9f]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-5f9cab9f] {\n    color: #ccc;\n}\n.pagination li i[data-v-5f9cab9f] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-5f9cab9f] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-5f9cab9f] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-5f9cab9f] {\n    background-color: #4e9cda;\n}\nth[data-v-5f9cab9f]{\n    border-left:  1px solid  #dee2e6;\n    border-right:  1px solid  #dee2e6;\n}\n\n", ""]);
 
 // exports
 
@@ -19005,7 +19024,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-30416ec3] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-30416ec3] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-30416ec3] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-30416ec3] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-30416ec3] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-30416ec3]:hover,\n.table-title .btn[data-v-30416ec3]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-30416ec3] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-30416ec3] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-30416ec3],\ntable.table tr td[data-v-30416ec3] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-30416ec3]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-30416ec3]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-30416ec3]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-30416ec3] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-30416ec3] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-30416ec3] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-30416ec3]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-30416ec3] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-30416ec3] {\n    color: #F44336;\n}\ntable.table td i[data-v-30416ec3] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-30416ec3] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-30416ec3] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-30416ec3] {\n    color: #10c469;\n}\n.text-info[data-v-30416ec3] {\n    color: #62c9e8;\n}\n.text-warning[data-v-30416ec3] {\n    color: #FFC107;\n}\n.text-danger[data-v-30416ec3] {\n    color: #ff5b5b;\n}\n.pagination[data-v-30416ec3] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-30416ec3] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-30416ec3]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-30416ec3],\n.pagination li.active a.page-link[data-v-30416ec3] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-30416ec3]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-30416ec3] {\n    color: #ccc;\n}\n.pagination li i[data-v-30416ec3] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-30416ec3] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-30416ec3]{\n    \n    background-color: #c5e4b254;\n}\n.select-search[data-v-30416ec3]{\n    background-color: #4e9cda;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-30416ec3] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-30416ec3] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-30416ec3] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-30416ec3] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-30416ec3] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-30416ec3]:hover,\n.table-title .btn[data-v-30416ec3]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-30416ec3] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-30416ec3] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-30416ec3],\ntable.table tr td[data-v-30416ec3] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-30416ec3]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-30416ec3]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-30416ec3]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-30416ec3] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-30416ec3] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-30416ec3] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-30416ec3]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-30416ec3] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-30416ec3] {\n    color: #F44336;\n}\ntable.table td i[data-v-30416ec3] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-30416ec3] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-30416ec3] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-30416ec3] {\n    color: #10c469;\n}\n.text-info[data-v-30416ec3] {\n    color: #62c9e8;\n}\n.text-warning[data-v-30416ec3] {\n    color: #FFC107;\n}\n.text-danger[data-v-30416ec3] {\n    color: #ff5b5b;\n}\n.pagination[data-v-30416ec3] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-30416ec3] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-30416ec3]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-30416ec3],\n.pagination li.active a.page-link[data-v-30416ec3] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-30416ec3]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-30416ec3] {\n    color: #ccc;\n}\n.pagination li i[data-v-30416ec3] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-30416ec3] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-30416ec3]{\n    \n    background-color: #c5e4b254;\n}\n.select-search[data-v-30416ec3]{\n    background-color: #4e9cda;\n}\nth[data-v-30416ec3]{\n    border-left:  1px solid  #dee2e6;\n    border-right:  1px solid  #dee2e6;\n}\n\n", ""]);
 
 // exports
 
@@ -19081,7 +19100,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-35e8add6] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-35e8add6] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-35e8add6] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-35e8add6] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-35e8add6] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-35e8add6]:hover,\n.table-title .btn[data-v-35e8add6]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-35e8add6] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-35e8add6] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-35e8add6],\ntable.table tr td[data-v-35e8add6] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-35e8add6]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-35e8add6]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-35e8add6]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-35e8add6] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-35e8add6] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-35e8add6] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-35e8add6]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-35e8add6] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-35e8add6] {\n    color: #F44336;\n}\ntable.table td i[data-v-35e8add6] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-35e8add6] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-35e8add6] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-35e8add6] {\n    color: #10c469;\n}\n.text-info[data-v-35e8add6] {\n    color: #62c9e8;\n}\n.text-warning[data-v-35e8add6] {\n    color: #FFC107;\n}\n.text-danger[data-v-35e8add6] {\n    color: #ff5b5b;\n}\n.pagination[data-v-35e8add6] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-35e8add6] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-35e8add6]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-35e8add6],\n.pagination li.active a.page-link[data-v-35e8add6] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-35e8add6]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-35e8add6] {\n    color: #ccc;\n}\n.pagination li i[data-v-35e8add6] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-35e8add6] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\nlabel[data-v-35e8add6] {\n    font-size: 14px;\n    color: gray;\n}\n.select-search-data[data-v-35e8add6] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-35e8add6] {\n    background-color: #4e9cda;\n}\n\n", ""]);
+exports.push([module.i, "\n.popover[data-v-35e8add6]{\r\n    max-width: 100%; /* Max Width of the popover (depending on the container!) */\n}\nbody[data-v-35e8add6] {\r\n        color: #566787;\r\n        background: #f5f5f5;\r\n        font-family: 'Varela Round', sans-serif;\r\n        font-size: 13px;\n}\n.table-wrapper[data-v-35e8add6] {\r\n        background: #fff;\r\n        padding: 20px 25px;\r\n        margin: 30px 0;\r\n        border-radius: 3px;\r\n        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-35e8add6] {\r\n        padding-bottom: 15px;\r\n        background: #299be4;\r\n        color: #fff;\r\n        padding: 16px 30px;\r\n        margin: -20px -25px 10px;\r\n        border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-35e8add6] {\r\n        margin: 5px 0 0;\r\n        font-size: 24px;\n}\n.table-title .btn[data-v-35e8add6] {\r\n        color: #566787;\r\n        float: right;\r\n        font-size: 13px;\r\n        background: #fff;\r\n        border: none;\r\n        min-width: 50px;\r\n        border-radius: 2px;\r\n        border: none;\r\n        outline: none !important;\r\n        margin-left: 10px;\n}\n.table-title .btn[data-v-35e8add6]:hover,\r\n    .table-title .btn[data-v-35e8add6]:focus {\r\n        color: #566787;\r\n        background: #f2f2f2;\n}\n.table-title .btn i[data-v-35e8add6] {\r\n        float: left;\r\n        font-size: 21px;\r\n        margin-right: 5px;\n}\n.table-title .btn span[data-v-35e8add6] {\r\n        float: left;\r\n        margin-top: 2px;\n}\ntable.table tr th[data-v-35e8add6],\r\n    table.table tr td[data-v-35e8add6] {\r\n        border-color: #e9e9e9;\r\n        padding: 12px 15px;\r\n        vertical-align: middle;\n}\ntable.table tr th[data-v-35e8add6]:last-child {\r\n        width: 100px;\n}\ntable.table-striped tbody tr[data-v-35e8add6]:nth-of-type(odd) {\r\n        background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-35e8add6]:hover {\r\n        background: #f5f5f5;\n}\ntable.table th i[data-v-35e8add6] {\r\n        font-size: 13px;\r\n        margin: 0 5px;\r\n        cursor: pointer;\n}\ntable.table td:last-child i[data-v-35e8add6] {\r\n        opacity: 0.9;\r\n        font-size: 22px;\r\n        margin: 0 5px;\n}\ntable.table td a[data-v-35e8add6] {\r\n        font-weight: bold;\r\n        color: #566787;\r\n        display: inline-block;\r\n        text-decoration: none;\n}\ntable.table td a[data-v-35e8add6]:hover {\r\n        color: #2196F3;\n}\ntable.table td a.settings[data-v-35e8add6] {\r\n        color: #2196F3;\n}\ntable.table td a.delete[data-v-35e8add6] {\r\n        color: #F44336;\n}\ntable.table td i[data-v-35e8add6] {\r\n        font-size: 19px;\n}\ntable.table .avatar[data-v-35e8add6] {\r\n        border-radius: 50%;\r\n        vertical-align: middle;\r\n        margin-right: 10px;\r\n        width: 40px;\n}\n.status[data-v-35e8add6] {\r\n        font-size: 30px;\r\n        margin: 2px 2px 0 0;\r\n        display: inline-block;\r\n        vertical-align: middle;\r\n        line-height: 2px;\n}\n.text-success[data-v-35e8add6] {\r\n        color: #10c469;\n}\n.text-info[data-v-35e8add6] {\r\n        color: #62c9e8;\n}\n.text-warning[data-v-35e8add6] {\r\n        color: #FFC107;\n}\n.text-danger[data-v-35e8add6] {\r\n        color: #ff5b5b;\n}\n.pagination[data-v-35e8add6] {\r\n        float: right;\r\n        margin: 0 0 5px;\n}\n.pagination li a[data-v-35e8add6] {\r\n        border: none;\r\n        font-size: 13px;\r\n        min-width: 30px;\r\n        min-height: 30px;\r\n        color: #999;\r\n        margin: 0 2px;\r\n        line-height: 30px;\r\n        border-radius: 2px !important;\r\n        text-align: center;\r\n        padding: 0 6px;\n}\n.pagination li a[data-v-35e8add6]:hover {\r\n        color: #666;\n}\n.pagination li.active a[data-v-35e8add6],\r\n    .pagination li.active a.page-link[data-v-35e8add6] {\r\n        background: #03A9F4;\n}\n.pagination li.active a[data-v-35e8add6]:hover {\r\n        background: #0397d6;\n}\n.pagination li.disabled i[data-v-35e8add6] {\r\n        color: #ccc;\n}\n.pagination li i[data-v-35e8add6] {\r\n        font-size: 16px;\r\n        padding-top: 6px\n}\n.hint-text[data-v-35e8add6] {\r\n        float: left;\r\n        margin-top: 10px;\r\n        font-size: 13px;\n}\nlabel[data-v-35e8add6] {\r\n        font-size: 14px;\r\n        color: gray;\n}\n.select-search-data[data-v-35e8add6] {\r\n\r\n        background-color: #c5e4b254;\n}\n.select-search[data-v-35e8add6] {\r\n        background-color: #4e9cda;\n}\nth[data-v-35e8add6]{\r\n        border-left:  1px solid  #dee2e6;\r\n        border-right:  1px solid  #dee2e6;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -19119,7 +19138,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-5ba73671] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-5ba73671] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-5ba73671] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-5ba73671] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-5ba73671] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-5ba73671]:hover,\n.table-title .btn[data-v-5ba73671]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-5ba73671] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-5ba73671] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-5ba73671],\ntable.table tr td[data-v-5ba73671] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-5ba73671]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-5ba73671]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-5ba73671]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-5ba73671] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-5ba73671] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-5ba73671] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-5ba73671]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-5ba73671] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-5ba73671] {\n    color: #F44336;\n}\ntable.table td i[data-v-5ba73671] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-5ba73671] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-5ba73671] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-5ba73671] {\n    color: #10c469;\n}\n.text-info[data-v-5ba73671] {\n    color: #62c9e8;\n}\n.text-warning[data-v-5ba73671] {\n    color: #FFC107;\n}\n.text-danger[data-v-5ba73671] {\n    color: #ff5b5b;\n}\n.pagination[data-v-5ba73671] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-5ba73671] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-5ba73671]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-5ba73671],\n.pagination li.active a.page-link[data-v-5ba73671] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-5ba73671]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-5ba73671] {\n    color: #ccc;\n}\n.pagination li i[data-v-5ba73671] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-5ba73671] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-5ba73671] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-5ba73671] {\n    background-color: #4e9cda;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-5ba73671] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-5ba73671] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-5ba73671] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-5ba73671] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-5ba73671] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-5ba73671]:hover,\n.table-title .btn[data-v-5ba73671]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-5ba73671] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-5ba73671] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-5ba73671],\ntable.table tr td[data-v-5ba73671] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-5ba73671]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-5ba73671]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-5ba73671]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-5ba73671] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-5ba73671] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-5ba73671] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-5ba73671]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-5ba73671] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-5ba73671] {\n    color: #F44336;\n}\ntable.table td i[data-v-5ba73671] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-5ba73671] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-5ba73671] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-5ba73671] {\n    color: #10c469;\n}\n.text-info[data-v-5ba73671] {\n    color: #62c9e8;\n}\n.text-warning[data-v-5ba73671] {\n    color: #FFC107;\n}\n.text-danger[data-v-5ba73671] {\n    color: #ff5b5b;\n}\n.pagination[data-v-5ba73671] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-5ba73671] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-5ba73671]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-5ba73671],\n.pagination li.active a.page-link[data-v-5ba73671] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-5ba73671]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-5ba73671] {\n    color: #ccc;\n}\n.pagination li i[data-v-5ba73671] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-5ba73671] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-5ba73671] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-5ba73671] {\n    background-color: #4e9cda;\n}\nth[data-v-5ba73671]{\n    border-left:  1px solid  #dee2e6;\n    border-right:  1px solid  #dee2e6;\n}\n\n", ""]);
 
 // exports
 
@@ -19176,7 +19195,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-502a14d2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-502a14d2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-502a14d2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-502a14d2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-502a14d2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-502a14d2]:hover,\n.table-title .btn[data-v-502a14d2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-502a14d2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-502a14d2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-502a14d2],\ntable.table tr td[data-v-502a14d2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-502a14d2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-502a14d2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-502a14d2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-502a14d2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-502a14d2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-502a14d2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-502a14d2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-502a14d2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-502a14d2] {\n    color: #F44336;\n}\ntable.table td i[data-v-502a14d2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-502a14d2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-502a14d2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-502a14d2] {\n    color: #10c469;\n}\n.text-info[data-v-502a14d2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-502a14d2] {\n    color: #FFC107;\n}\n.text-danger[data-v-502a14d2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-502a14d2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-502a14d2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-502a14d2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-502a14d2],\n.pagination li.active a.page-link[data-v-502a14d2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-502a14d2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-502a14d2] {\n    color: #ccc;\n}\n.pagination li i[data-v-502a14d2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-502a14d2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-502a14d2] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-502a14d2] {\n    background-color: #4e9cda;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-502a14d2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-502a14d2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-502a14d2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-502a14d2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-502a14d2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-502a14d2]:hover,\n.table-title .btn[data-v-502a14d2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-502a14d2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-502a14d2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-502a14d2],\ntable.table tr td[data-v-502a14d2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-502a14d2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-502a14d2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-502a14d2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-502a14d2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-502a14d2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-502a14d2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-502a14d2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-502a14d2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-502a14d2] {\n    color: #F44336;\n}\ntable.table td i[data-v-502a14d2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-502a14d2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-502a14d2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-502a14d2] {\n    color: #10c469;\n}\n.text-info[data-v-502a14d2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-502a14d2] {\n    color: #FFC107;\n}\n.text-danger[data-v-502a14d2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-502a14d2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-502a14d2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-502a14d2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-502a14d2],\n.pagination li.active a.page-link[data-v-502a14d2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-502a14d2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-502a14d2] {\n    color: #ccc;\n}\n.pagination li i[data-v-502a14d2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-502a14d2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-502a14d2] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-502a14d2] {\n    background-color: #4e9cda;\n}\nth[data-v-502a14d2]{\n    border-left:  1px solid  #dee2e6;\n    border-right:  1px solid  #dee2e6;\n}\n\n", ""]);
 
 // exports
 
@@ -65024,7 +65043,7 @@ var render = function() {
                       _vm._l(_vm.suppliers, function(supplier, index) {
                         return _c(
                           "option",
-                          { key: index, domProps: { value: supplier.id } },
+                          { key: index, domProps: { value: supplier.Id } },
                           [
                             _vm._v(
                               "\n                                " +
@@ -68336,28 +68355,6 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("medicine_name")
-                  ? "select-search"
-                  : "",
-                on: {
-                  click: function($event) {
-                    _vm.selected_column.includes("medicine_name")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "medicine_name"
-                          }
-                        ))
-                      : _vm.selected_column.push("medicine_name")
-                  }
-                }
-              },
-              [_vm._v("Medicine\n                        Name")]
-            ),
-            _vm._v(" "),
-            _c(
-              "th",
-              {
-                staticClass: "text-center",
                 class: _vm.selected_column.includes("pharmacist")
                   ? "select-search"
                   : "",
@@ -68380,6 +68377,28 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
+                class: _vm.selected_column.includes("customer")
+                  ? "select-search"
+                  : "",
+                on: {
+                  click: function($event) {
+                    _vm.selected_column.includes("customer")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "customer"
+                          }
+                        ))
+                      : _vm.selected_column.push("customer")
+                  }
+                }
+              },
+              [_vm._v("Customer")]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              {
+                staticClass: "text-center",
                 class: _vm.selected_column.includes("sale_date")
                   ? "select-search"
                   : "",
@@ -68396,50 +68415,6 @@ var render = function() {
                 }
               },
               [_vm._v("Date")]
-            ),
-            _vm._v(" "),
-            _c(
-              "th",
-              {
-                staticClass: "text-center",
-                class: _vm.selected_column.includes("quantity_sold")
-                  ? "select-search"
-                  : "",
-                on: {
-                  click: function($event) {
-                    _vm.selected_column.includes("quantity_sold")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "quantity_sold"
-                          }
-                        ))
-                      : _vm.selected_column.push("quantity_sold")
-                  }
-                }
-              },
-              [_vm._v("Quantity\n                        Sold")]
-            ),
-            _vm._v(" "),
-            _c(
-              "th",
-              {
-                staticClass: "text-center",
-                class: _vm.selected_column.includes("unit_price")
-                  ? "select-search"
-                  : "",
-                on: {
-                  click: function($event) {
-                    _vm.selected_column.includes("unit_price")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "unit_price"
-                          }
-                        ))
-                      : _vm.selected_column.push("unit_price")
-                  }
-                }
-              },
-              [_vm._v("Unit Price")]
             ),
             _vm._v(" "),
             _c(
@@ -68475,156 +68450,84 @@ var render = function() {
         _c(
           "tbody",
           _vm._l(_vm.sales, function(sale, index) {
-            return _c(
-              "tr",
-              {
-                key: index,
-                attrs: {
-                  "data-toggle": "popover",
-                  title: sale.name,
-                  "data-content": sale.name
-                }
-              },
-              [
+            return _c("tr", { key: index }, [
+              _c(
+                "td",
+                {
+                  staticClass: "text-center",
+                  class: _vm.selected_column.includes("pharmacist")
+                    ? "select-search-data"
+                    : ""
+                },
+                [_vm._v("\n                        " + _vm._s(sale.pharmacist))]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                {
+                  staticClass: "text-center",
+                  class: _vm.selected_column.includes("customer")
+                    ? "select-search-data"
+                    : ""
+                },
+                [_vm._v("\n                        " + _vm._s(sale.customer))]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                {
+                  staticClass: "text-center",
+                  class: _vm.selected_column.includes("sale_date")
+                    ? "select-search-data"
+                    : ""
+                },
+                [_vm._v("\n                        " + _vm._s(sale.sale_date))]
+              ),
+              _vm._v(" "),
+              _c(
+                "td",
+                {
+                  staticClass: "text-center",
+                  class: _vm.selected_column.includes("total_price")
+                    ? "select-search-data"
+                    : ""
+                },
+                [
+                  _vm._v(
+                    "\n                        " + _vm._s(sale.total_price)
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-center" }, [
                 _c(
-                  "td",
+                  "a",
                   {
-                    staticClass: "text-center",
-                    class: _vm.selected_column.includes("medicine_name")
-                      ? "select-search-data"
-                      : ""
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " + _vm._s(sale.medicine_name)
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  {
-                    staticClass: "text-center",
-                    class: _vm.selected_column.includes("pharmacist")
-                      ? "select-search-data"
-                      : ""
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " + _vm._s(sale.pharmacist)
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  {
-                    staticClass: "text-center",
-                    class: _vm.selected_column.includes("sale_date")
-                      ? "select-search-data"
-                      : ""
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " + _vm._s(sale.sale_date)
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  {
-                    staticClass: "text-center",
-                    class: _vm.selected_column.includes("quantity_sold")
-                      ? "select-search-data"
-                      : ""
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " + _vm._s(sale.quantity_sold)
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  {
-                    staticClass: "text-center",
-                    class: _vm.selected_column.includes("unit_price")
-                      ? "select-search-data"
-                      : ""
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " + _vm._s(sale.unit_price)
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  {
-                    staticClass: "text-center",
-                    class: _vm.selected_column.includes("total_price")
-                      ? "select-search-data"
-                      : ""
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " + _vm._s(sale.total_price)
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("td", { staticClass: "text-center" }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "bill",
-                      attrs: {
-                        href: "#",
-                        title: "",
-                        "data-tooltip": "tooltip",
-                        "data-original-title": "bill",
-                        "data-toggle": "modal",
-                        "data-target": "#modalBill"
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.selectedSale_Id = sale.Id
-                        }
-                      }
+                    staticClass: "invoice",
+                    attrs: {
+                      href: "#",
+                      title: "",
+                      "data-tooltip": "tooltip",
+                      "data-original-title": "invoice",
+                      "data-toggle": "modal",
+                      "data-target": "#modalinvoice"
                     },
-                    [
-                      _c("img", {
-                        attrs: { src: "/img/icons/bill.png", width: "22" }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "batch",
-                      attrs: {
-                        href:
-                          "/dashboard/medicines/batches/" + sale.medicine_Id,
-                        title: "",
-                        "data-tooltip": "tooltip",
-                        "data-original-title": "batches"
+                    on: {
+                      click: function($event) {
+                        _vm.selectedSale_Id = sale.Id
                       }
-                    },
-                    [
-                      _c("img", {
-                        attrs: { src: "/img/icons/batch.png", width: "22" }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _vm._m(2, true)
-                ])
-              ]
-            )
+                    }
+                  },
+                  [
+                    _c("img", {
+                      attrs: { src: "/img/icons/bill.png", width: "22" }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(2, true)
+              ])
+            ])
           }),
           0
         )
@@ -68742,7 +68645,10 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "modal fade", attrs: { id: "modalBill", role: "dialog" } },
+      {
+        staticClass: "modal fade",
+        attrs: { id: "modalinvoice", role: "dialog" }
+      },
       [
         _c(
           "div",
@@ -68765,7 +68671,7 @@ var render = function() {
                     attrs: {
                       src:
                         _vm.selectedSale_Id > -1
-                          ? "/dashboard/medicines/sales/bill/" +
+                          ? "/dashboard/medicines/sales/invoice/" +
                             _vm.selectedSale_Id
                           : "",
                       frameborder: "0",
@@ -68855,7 +68761,7 @@ var staticRenderFns = [
       _c(
         "h4",
         { staticClass: "modal-title  w-100 font-weight-bold text-white" },
-        [_vm._v("Add New Medicine Batch")]
+        [_vm._v("View Invoice")]
       ),
       _vm._v(" "),
       _c(

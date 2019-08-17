@@ -233,7 +233,7 @@
                             <h3 style="color: #6f6e6e;" class="text-center ">2- Select the Supplier : </h3>
 
                             <select v-model="selected_supplier" class="form-control">
-                                <option v-for="(supplier,index) in suppliers" :key="index" :value="supplier.id">
+                                <option v-for="(supplier,index) in suppliers" :key="index" :value="supplier.Id">
                                     {{supplier.name}}</option>
                             </select>
                             <span class="text-primary mb-3">Or add a new supplier !</span>
@@ -919,6 +919,11 @@
 
     .select-search {
         background-color: #4e9cda;
+
+    }
+    th{
+        border-left:  1px solid  #dee2e6;
+        border-right:  1px solid  #dee2e6;
 
     }
 
