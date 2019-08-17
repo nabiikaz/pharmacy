@@ -57,3 +57,16 @@ Route::get('dashboard/suppliers',function(){
 Route::get('dashboard/suppliers/{id}',function($id){
     return view('suppliers')->with('id',$id);
 });
+
+
+//customers  --------------------------------------------------
+
+Route::get('dashboard/customers',function(){
+    $id= -1;    
+    return view('customers')->with('id',$id);
+});
+
+
+Route::get('dashboard/customers/{id}',function($id){
+    return view('customers')->with('id',$id);
+});

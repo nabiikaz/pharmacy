@@ -34,6 +34,9 @@ Vue.component("dashboard_sales",require('./components/dashboard/sales.vue').defa
 
 Vue.component("dashboard_suppliers",require('./components/dashboard/suppliers.vue').default);
 
+Vue.component("dashboard_customers",require('./components/dashboard/customers.vue').default);
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
