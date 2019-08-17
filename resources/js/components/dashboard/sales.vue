@@ -7,10 +7,15 @@
                     <div class="col-sm-4">
                         <h2>Medicines / sales </h2>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <input class="form-control form-control-dark w-100" type="text" placeholder="Search"
                             aria-label="Search" v-model="search">
 
+                    </div>
+                    <div class="col-sm-1 ml-0 pl-0">
+                        <img class="" style="cursor:pointer;color:white;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
+                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
+                                :title="filter_flow">
                     </div>
                    
                 </div>
@@ -37,29 +42,7 @@
 
                 </div>
 
-                <div class="col-sm-7 ">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="md-form ">
-                                <select class="form-control" v-model="filter_by">
-                                    <option value="0" style="display:none;">Select Column : </option>
-                                    <option value="medicine_name">Medicine Name</option>
-                                    <option value="sale_date">Sale Date</option>
-                                    <option value="quantity_sold">Quantity Sold</option>
-                                    <option value="total_price">Total Price</option>
-                                </select>
-
-                            </div>
-
-                        </div>
-                        <div class="col-sm-2">
-                            <img style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
-                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
-                                :title="filter_flow">
-                        </div>
-                    </div>
-
-                </div>
+                
             </div>
 
             <table class="table table-striped table-hover">
@@ -72,20 +55,20 @@
 
 
 
-                        <th class="text-center" :class="(search_by== 'medicine_name')? 'select-search':''"
-                            @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'">Medicine
+                        <th class="text-center" :class="(selected_column.includes('medicine_name'))? 'select-search':''"
+                            @click="((selected_column.includes('medicine_name'))? selected_column=selected_column.filter(function(e) { return e !== 'medicine_name' }):selected_column.push('medicine_name'))">Medicine
                             Name</th>
-                        <th class="text-center" :class="(search_by== 'pharmacist')? 'select-search':''"
-                            @click="(search_by== 'pharmacist')? search_by= '':search_by= 'pharmacist'">Made By</th>
-                        <th class="text-center" :class="(search_by== 'sale_date')? 'select-search':''"
-                            @click="(search_by== 'sale_date')? search_by= '':search_by= 'sale_date'">Date</th>
-                        <th class="text-center" :class="(search_by== 'quantity_sold')? 'select-search':''"
-                            @click="(search_by== 'quantity_sold')? search_by= '':search_by= 'quantity_sold'">Quantity
+                        <th class="text-center" :class="(selected_column.includes('pharmacist'))? 'select-search':''"
+                            @click="((selected_column.includes('pharmacist'))? selected_column=selected_column.filter(function(e) { return e !== 'pharmacist' }):selected_column.push('pharmacist'))">Made By</th>
+                        <th class="text-center" :class="(selected_column.includes('sale_date'))? 'select-search':''"
+                            @click="((selected_column.includes('sale_date'))? selected_column=selected_column.filter(function(e) { return e !== 'sale_date' }):selected_column.push('sale_date'))">Date</th>
+                        <th class="text-center" :class="(selected_column.includes('quantity_sold'))? 'select-search':''"
+                            @click="((selected_column.includes('quantity_sold'))? selected_column=selected_column.filter(function(e) { return e !== 'quantity_sold' }):selected_column.push('quantity_sold'))">Quantity
                             Sold</th>
-                        <th class="text-center" :class="(search_by== 'unit_price')? 'select-search':''"
-                            @click="(search_by== 'unit_price')? search_by= '':search_by= 'unit_price'">Unit Price</th>
-                        <th class="text-center" :class="(search_by== 'total_price')? 'select-search':''"
-                            @click="(search_by== 'total_price')? search_by= '':search_by= 'total_price'">Total Price
+                        <th class="text-center" :class="(selected_column.includes('unit_price'))? 'select-search':''"
+                            @click="((selected_column.includes('unit_price'))? selected_column=selected_column.filter(function(e) { return e !== 'unit_price' }):selected_column.push('unit_price'))">Unit Price</th>
+                        <th class="text-center" :class="(selected_column.includes('total_price'))? 'select-search':''"
+                            @click="((selected_column.includes('total_price'))? selected_column=selected_column.filter(function(e) { return e !== 'total_price' }):selected_column.push('total_price'))">Total Price
                         </th>
                         <th class="text-center" style="width:170px;">Action</th>
                     </tr>
@@ -97,17 +80,17 @@
 
 
 
-                        <td class="text-center" :class="(search_by== 'medicine_name')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('medicine_name'))? 'select-search-data':''">
                             {{sale.medicine_name }}</td>
-                        <td class="text-center" :class="(search_by== 'pharmacist')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('pharmacist'))? 'select-search-data':''">
                             {{sale.pharmacist }}</td>
-                        <td class="text-center" :class="(search_by== 'sale_date')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('sale_date'))? 'select-search-data':''">
                             {{sale.sale_date }}</td>
-                        <td class="text-center" :class="(search_by== 'quantity_sold')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('quantity_sold'))? 'select-search-data':''">
                             {{sale.quantity_sold }}</td>
-                        <td class="text-center" :class="(search_by== 'unit_price')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('unit_price'))? 'select-search-data':''">
                             {{sale.unit_price }}</td>
-                        <td class="text-center" :class="(search_by== 'total_price')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('total_price'))? 'select-search-data':''">
                             {{sale.total_price }}</td>
 
 
@@ -212,17 +195,17 @@
 
                 selectedSale_Id: -1,
 
-                search_by: "",
+                selected_column: [],
 
                 filter_flow: 'Ascending',
-                filter_by: '0',
+                
 
                 //displayed sales 
                 sales: [{
                         Id: 1,
                         medicine_name: "DOLIPRANE",
                         pharmacist: "Nabi Zakaria",
-                        sale_date: "Nabi Zakaria",
+                        sale_date: "2019-01-07",
                         medicine_Id: 0,
                         dosage: 0.1,
                         form: "gélule",

@@ -4155,10 +4155,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
@@ -4169,7 +4165,7 @@ __webpack_require__.r(__webpack_exports__);
       medicineId: this.$attrs.medicineid,
       route: window.location.pathname,
       search: "",
-      search_by: "",
+      selected_column: [],
       filter_flow: 'Ascending',
       filter_by: '0',
       //batches in the cart are with no session ( that means if the page is refreshed the items will vanish)
@@ -4454,13 +4450,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4476,7 +4465,7 @@ __webpack_require__.r(__webpack_exports__);
       route: window.location.pathname,
       search: "",
       selectedMedicine_Id: -1,
-      search_by: "",
+      selected_column: [],
       filter_flow: 'Ascending',
       //displayed Users 
       medicines: [{
@@ -5072,23 +5061,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
@@ -5106,15 +5078,14 @@ __webpack_require__.r(__webpack_exports__);
       route: window.location.pathname,
       search: "",
       selectedSale_Id: -1,
-      search_by: "",
+      selected_column: [],
       filter_flow: 'Ascending',
-      filter_by: '0',
       //displayed sales 
       sales: [{
         Id: 1,
         medicine_name: "DOLIPRANE",
         pharmacist: "Nabi Zakaria",
-        sale_date: "Nabi Zakaria",
+        sale_date: "2019-01-07",
         medicine_Id: 0,
         dosage: 0.1,
         form: "gélule",
@@ -5320,6 +5291,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5330,21 +5313,23 @@ __webpack_require__.r(__webpack_exports__);
     return {
       search: "",
       selectedsupplier_Id: -1,
+      filter_flow: "Ascending",
+      selected_column: [],
       //displayed suppliers 
       suppliers: [{
-        supplierId: 1,
+        Id: 1,
         fullname: "nabi zakaria",
         address: "bensekrane - tlemcen",
         tel: "0555655100",
         email: "nabi@gmail.com"
       }, {
-        supplierId: 1,
+        Id: 2,
         fullname: "nabi zakaria",
         address: "bensekrane - tlemcen",
         tel: "0555655100",
         email: "nabi@gmail.com"
       }, {
-        supplierId: 1,
+        Id: 3,
         fullname: "nabi zakaria",
         address: "bensekrane - tlemcen",
         tel: "0555655100",
@@ -5624,18 +5609,16 @@ __webpack_require__.r(__webpack_exports__);
        * 
        * */
       this.fullname = "nabi zakaria";
-      this.birthday = "1995-08-07";
       this.tel = "0555655100";
-      this.role = "moderator";
+      this.address = "tlemcen- bensekrane";
       this.email = "nabizakaria";
     }
   },
   data: function data() {
     return {
       fullname: "",
-      birthday: "",
       tel: "",
-      role: "",
+      address: "",
       email: ""
     };
   },
@@ -5738,6 +5721,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5748,9 +5741,11 @@ __webpack_require__.r(__webpack_exports__);
     return {
       search: "",
       selectedUser_Id: -1,
+      selected_column: [],
+      filter_flow: 'Ascending',
       //displayed Users 
       users: [{
-        userId: 1,
+        Id: 1,
         avatarPath: "/img/avatars/nabi.jpg",
         fullname: "nabi zakaria",
         birthday: "07/29/1995",
@@ -5758,7 +5753,7 @@ __webpack_require__.r(__webpack_exports__);
         email: "nabi@gmail.com",
         role: "Admin"
       }, {
-        userId: 2,
+        Id: 2,
         avatarPath: "/img/avatars/nabi.jpg",
         fullname: "zakaria",
         birthday: "07/29/1995",
@@ -5766,7 +5761,7 @@ __webpack_require__.r(__webpack_exports__);
         email: "nabi@g.com",
         role: "employee"
       }, {
-        userId: 3,
+        Id: 3,
         avatarPath: "/img/avatars/nabi.jpg",
         fullname: "nabi zakaria",
         birthday: "07/29/1995",
@@ -18639,7 +18634,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-5ba73671] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-5ba73671] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-5ba73671] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-5ba73671] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-5ba73671] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-5ba73671]:hover,\n.table-title .btn[data-v-5ba73671]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-5ba73671] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-5ba73671] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-5ba73671],\ntable.table tr td[data-v-5ba73671] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-5ba73671]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-5ba73671]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-5ba73671]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-5ba73671] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-5ba73671] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-5ba73671] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-5ba73671]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-5ba73671] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-5ba73671] {\n    color: #F44336;\n}\ntable.table td i[data-v-5ba73671] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-5ba73671] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-5ba73671] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-5ba73671] {\n    color: #10c469;\n}\n.text-info[data-v-5ba73671] {\n    color: #62c9e8;\n}\n.text-warning[data-v-5ba73671] {\n    color: #FFC107;\n}\n.text-danger[data-v-5ba73671] {\n    color: #ff5b5b;\n}\n.pagination[data-v-5ba73671] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-5ba73671] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-5ba73671]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-5ba73671],\n.pagination li.active a.page-link[data-v-5ba73671] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-5ba73671]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-5ba73671] {\n    color: #ccc;\n}\n.pagination li i[data-v-5ba73671] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-5ba73671] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-5ba73671] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-5ba73671] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-5ba73671] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-5ba73671] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-5ba73671] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-5ba73671]:hover,\n.table-title .btn[data-v-5ba73671]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-5ba73671] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-5ba73671] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-5ba73671],\ntable.table tr td[data-v-5ba73671] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-5ba73671]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-5ba73671]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-5ba73671]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-5ba73671] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-5ba73671] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-5ba73671] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-5ba73671]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-5ba73671] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-5ba73671] {\n    color: #F44336;\n}\ntable.table td i[data-v-5ba73671] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-5ba73671] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-5ba73671] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-5ba73671] {\n    color: #10c469;\n}\n.text-info[data-v-5ba73671] {\n    color: #62c9e8;\n}\n.text-warning[data-v-5ba73671] {\n    color: #FFC107;\n}\n.text-danger[data-v-5ba73671] {\n    color: #ff5b5b;\n}\n.pagination[data-v-5ba73671] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-5ba73671] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-5ba73671]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-5ba73671],\n.pagination li.active a.page-link[data-v-5ba73671] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-5ba73671]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-5ba73671] {\n    color: #ccc;\n}\n.pagination li i[data-v-5ba73671] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-5ba73671] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-5ba73671] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-5ba73671] {\n    background-color: #4e9cda;\n}\n\n", ""]);
 
 // exports
 
@@ -18696,7 +18691,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-502a14d2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-502a14d2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-502a14d2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-502a14d2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-502a14d2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-502a14d2]:hover,\n.table-title .btn[data-v-502a14d2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-502a14d2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-502a14d2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-502a14d2],\ntable.table tr td[data-v-502a14d2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-502a14d2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-502a14d2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-502a14d2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-502a14d2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-502a14d2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-502a14d2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-502a14d2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-502a14d2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-502a14d2] {\n    color: #F44336;\n}\ntable.table td i[data-v-502a14d2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-502a14d2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-502a14d2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-502a14d2] {\n    color: #10c469;\n}\n.text-info[data-v-502a14d2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-502a14d2] {\n    color: #FFC107;\n}\n.text-danger[data-v-502a14d2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-502a14d2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-502a14d2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-502a14d2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-502a14d2],\n.pagination li.active a.page-link[data-v-502a14d2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-502a14d2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-502a14d2] {\n    color: #ccc;\n}\n.pagination li i[data-v-502a14d2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-502a14d2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-502a14d2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-502a14d2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-502a14d2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-502a14d2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-502a14d2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-502a14d2]:hover,\n.table-title .btn[data-v-502a14d2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-502a14d2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-502a14d2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-502a14d2],\ntable.table tr td[data-v-502a14d2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-502a14d2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-502a14d2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-502a14d2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-502a14d2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-502a14d2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-502a14d2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-502a14d2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-502a14d2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-502a14d2] {\n    color: #F44336;\n}\ntable.table td i[data-v-502a14d2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-502a14d2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-502a14d2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-502a14d2] {\n    color: #10c469;\n}\n.text-info[data-v-502a14d2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-502a14d2] {\n    color: #FFC107;\n}\n.text-danger[data-v-502a14d2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-502a14d2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-502a14d2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-502a14d2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-502a14d2],\n.pagination li.active a.page-link[data-v-502a14d2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-502a14d2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-502a14d2] {\n    color: #ccc;\n}\n.pagination li i[data-v-502a14d2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-502a14d2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-502a14d2] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-502a14d2] {\n    background-color: #4e9cda;\n}\n\n", ""]);
 
 // exports
 
@@ -63796,7 +63791,7 @@ var render = function() {
           _c("div", { staticClass: "row" }, [
             _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "col-sm-4" }, [
+            _c("div", { staticClass: "col-sm-3" }, [
               _c("input", {
                 directives: [
                   {
@@ -63819,6 +63814,24 @@ var render = function() {
                       return
                     }
                     _vm.search = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-sm-1  ml-0 pl-0" }, [
+              _c("img", {
+                staticStyle: { cursor: "pointer", color: "white" },
+                attrs: {
+                  src: "/img/icons/" + _vm.filter_flow + ".png",
+                  width: "38",
+                  title: _vm.filter_flow
+                },
+                on: {
+                  click: function($event) {
+                    _vm.filter_flow == "Ascending"
+                      ? (_vm.filter_flow = "Descending")
+                      : (_vm.filter_flow = "Ascending")
                   }
                 }
               })
@@ -63854,91 +63867,9 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "col-sm-7 " }, [
           _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-sm-1" }, [
-              _c("img", {
-                staticStyle: { cursor: "pointer" },
-                attrs: {
-                  src: "/img/icons/" + _vm.filter_flow + ".png",
-                  width: "38",
-                  title: _vm.filter_flow
-                },
-                on: {
-                  click: function($event) {
-                    _vm.filter_flow == "Ascending"
-                      ? (_vm.filter_flow = "Descending")
-                      : (_vm.filter_flow = "Ascending")
-                  }
-                }
-              })
-            ]),
+            _c("div", { staticClass: "col-sm-1" }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-sm-6" }, [
-              _c("div", { staticClass: "md-form " }, [
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.filter_by,
-                        expression: "filter_by"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.filter_by = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      }
-                    }
-                  },
-                  [
-                    _c(
-                      "option",
-                      {
-                        staticStyle: { display: "none" },
-                        attrs: { value: "0" }
-                      },
-                      [_vm._v("Select Column : ")]
-                    ),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "medicine_name" } }, [
-                      _vm._v("Medicine Name")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "fabrication_date" } }, [
-                      _vm._v("Fabrication Date ")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "expiry_date" } }, [
-                      _vm._v("Expiry Date ")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "unit_price" } }, [
-                      _vm._v("Unit Price ")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "batch_price" } }, [
-                      _vm._v("Batch Price ")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "quantity_stock" } }, [
-                      _vm._v("Quantity In Stock ")
-                    ])
-                  ]
-                )
-              ])
-            ]),
+            _vm._m(2),
             _vm._v(" "),
             _c(
               "div",
@@ -63986,12 +63917,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center ",
-                class: _vm.search_by == "medicine_name" ? "select-search" : "",
+                class: _vm.selected_column.includes("medicine_name")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "medicine_name"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "medicine_name")
+                    _vm.selected_column.includes("medicine_name")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "medicine_name"
+                          }
+                        ))
+                      : _vm.selected_column.push("medicine_name")
                   }
                 }
               },
@@ -64002,13 +63939,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class:
-                  _vm.search_by == "fabrication_date" ? "select-search" : "",
+                class: _vm.selected_column.includes("fabrication_date")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "fabrication_date"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "fabrication_date")
+                    _vm.selected_column.includes("fabrication_date")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "fabrication_date"
+                          }
+                        ))
+                      : _vm.selected_column.push("fabrication_date")
                   }
                 }
               },
@@ -64019,12 +63961,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "expiry_date" ? "select-search" : "",
+                class: _vm.selected_column.includes("expiry_date")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "expiry_date"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "expiry_date")
+                    _vm.selected_column.includes("expiry_date")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "expiry_date"
+                          }
+                        ))
+                      : _vm.selected_column.push("expiry_date")
                   }
                 }
               },
@@ -64035,12 +63983,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "unit_price" ? "select-search" : "",
+                class: _vm.selected_column.includes("unit_price")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "unit_price"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "unit_price")
+                    _vm.selected_column.includes("unit_price")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "unit_price"
+                          }
+                        ))
+                      : _vm.selected_column.push("unit_price")
                   }
                 }
               },
@@ -64051,12 +64005,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "batch_price" ? "select-search" : "",
+                class: _vm.selected_column.includes("batch_price")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "batch_price"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "batch_price")
+                    _vm.selected_column.includes("batch_price")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "batch_price"
+                          }
+                        ))
+                      : _vm.selected_column.push("batch_price")
                   }
                 }
               },
@@ -64067,12 +64027,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "quantity_stock" ? "select-search" : "",
+                class: _vm.selected_column.includes("quantity_stock")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "quantity_stock"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "quantity_stock")
+                    _vm.selected_column.includes("quantity_stock")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "quantity_stock"
+                          }
+                        ))
+                      : _vm.selected_column.push("quantity_stock")
                   }
                 }
               },
@@ -64083,12 +64049,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "refund" ? "select-search" : "",
+                class: _vm.selected_column.includes("refund")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "refund"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "refund")
+                    _vm.selected_column.includes("refund")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "refund"
+                          }
+                        ))
+                      : _vm.selected_column.push("refund")
                   }
                 }
               },
@@ -64111,8 +64083,9 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class:
-                    _vm.search_by == "medicine_name" ? "select-search-data" : ""
+                  class: _vm.selected_column.includes("medicine_name")
+                    ? "select-search-data"
+                    : ""
                 },
                 [
                   _vm._v(
@@ -64125,10 +64098,9 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class:
-                    _vm.search_by == "fabrication_date"
-                      ? "select-search-data"
-                      : ""
+                  class: _vm.selected_column.includes("fabrication_date")
+                    ? "select-search-data"
+                    : ""
                 },
                 [
                   _vm._v(
@@ -64142,8 +64114,9 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class:
-                    _vm.search_by == "expiry_date" ? "select-search-data" : ""
+                  class: _vm.selected_column.includes("expiry_date")
+                    ? "select-search-data"
+                    : ""
                 },
                 [
                   _vm._v(
@@ -64156,8 +64129,9 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class:
-                    _vm.search_by == "unit_price" ? "select-search-data" : ""
+                  class: _vm.selected_column.includes("unit_price")
+                    ? "select-search-data"
+                    : ""
                 },
                 [
                   _vm._v(
@@ -64170,8 +64144,9 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class:
-                    _vm.search_by == "batch_price" ? "select-search-data" : ""
+                  class: _vm.selected_column.includes("batch_price")
+                    ? "select-search-data"
+                    : ""
                 },
                 [
                   _vm._v(
@@ -64184,10 +64159,9 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class:
-                    _vm.search_by == "quantity_stock"
-                      ? "select-search-data"
-                      : "",
+                  class: _vm.selected_column.includes("quantity_stock")
+                    ? "select-search-data"
+                    : "",
                   style:
                     batch.quantity_stock < batch.quantity_min
                       ? "color:red;"
@@ -64217,7 +64191,9 @@ var render = function() {
                 "td",
                 {
                   staticClass: "d-flex justify-content-center",
-                  class: _vm.search_by == "refund" ? "select-search-data" : "",
+                  class: _vm.selected_column.includes("refund")
+                    ? "select-search-data"
+                    : "",
                   attrs: {
                     "data-tooltip": "tooltip",
                     "data-original-title": batch.refund + " %"
@@ -64282,7 +64258,7 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _vm._m(2, true)
+                _vm._m(3, true)
               ])
             ])
           }),
@@ -64400,7 +64376,7 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(3),
+    _vm._m(4),
     _vm._v(" "),
     _c(
       "div",
@@ -64429,7 +64405,7 @@ var render = function() {
                 }
               },
               [
-                _vm._m(4),
+                _vm._m(5),
                 _vm._v(" "),
                 _c("div", { staticClass: "modal-body mx-3" }, [
                   _c("div", { staticClass: "md-form " }, [
@@ -64634,7 +64610,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("hr"),
                         _vm._v(" "),
-                        _vm._m(5)
+                        _vm._m(6)
                       ]
                     )
                   ])
@@ -64673,7 +64649,7 @@ var render = function() {
                 }
               },
               [
-                _vm._m(6),
+                _vm._m(7),
                 _vm._v(" "),
                 _c("div", { staticClass: "modal-body mx-3" }, [
                   _c("div", { staticClass: "md-form " }, [
@@ -65006,7 +64982,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("hr"),
                         _vm._v(" "),
-                        _vm._m(7)
+                        _vm._m(8)
                       ]
                     )
                   ])
@@ -65036,14 +65012,14 @@ var render = function() {
                 }
               },
               [
-                _vm._m(8),
+                _vm._m(9),
                 _vm._v(" "),
                 _c("div", { staticClass: "modal-body" }, [
                   _c(
                     "table",
                     { staticClass: "table table-striped table-hover" },
                     [
-                      _vm._m(9),
+                      _vm._m(10),
                       _vm._v(" "),
                       _c(
                         "tbody",
@@ -65190,6 +65166,14 @@ var staticRenderFns = [
           )
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-6" }, [
+      _c("div", { staticClass: "md-form " })
     ])
   },
   function() {
@@ -65459,7 +65443,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _vm._m(0),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-4" }, [
+              _c("div", { staticClass: "col-sm-3" }, [
                 _c("input", {
                   directives: [
                     {
@@ -65487,21 +65471,9 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _vm._m(1)
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _vm._m(2),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-sm-7 " }, [
-            _c("div", { staticClass: "row" }, [
-              _vm._m(3),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-sm-2" }, [
+              _c("div", { staticClass: "col-sm-1  ml-0 pl-0" }, [
                 _c("img", {
-                  staticStyle: { cursor: "pointer" },
+                  staticStyle: { cursor: "pointer", color: "white" },
                   attrs: {
                     src: "/img/icons/" + _vm.filter_flow + ".png",
                     width: "38",
@@ -65515,10 +65487,14 @@ var render = function() {
                     }
                   }
                 })
-              ])
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
             ])
-          ])
-        ]),
+          ]
+        ),
+        _vm._v(" "),
+        _vm._m(2),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped table-hover" }, [
           _c("thead", [
@@ -65527,13 +65503,18 @@ var render = function() {
                 "th",
                 {
                   staticClass: "text-center ",
-                  class:
-                    _vm.search_by == "medicine_name" ? "select-search" : "",
+                  class: _vm.selected_column.includes("medicine_name")
+                    ? "select-search"
+                    : "",
                   on: {
                     click: function($event) {
-                      _vm.search_by == "medicine_name"
-                        ? (_vm.search_by = "")
-                        : (_vm.search_by = "medicine_name")
+                      _vm.selected_column.includes("medicine_name")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "medicine_name"
+                            }
+                          ))
+                        : _vm.selected_column.push("medicine_name")
                     }
                   }
                 },
@@ -65543,13 +65524,19 @@ var render = function() {
               _c(
                 "th",
                 {
-                  staticClass: "text-center",
-                  class: _vm.search_by == "dosage" ? "select-search" : "",
+                  staticClass: "text-center ",
+                  class: _vm.selected_column.includes("dosage")
+                    ? "select-search"
+                    : "",
                   on: {
                     click: function($event) {
-                      _vm.search_by == "dosage"
-                        ? (_vm.search_by = "")
-                        : (_vm.search_by = "dosage")
+                      _vm.selected_column.includes("dosage")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "dosage"
+                            }
+                          ))
+                        : _vm.selected_column.push("dosage")
                     }
                   }
                 },
@@ -65559,13 +65546,19 @@ var render = function() {
               _c(
                 "th",
                 {
-                  staticClass: "text-center",
-                  class: _vm.search_by == "form" ? "select-search" : "",
+                  staticClass: "text-center ",
+                  class: _vm.selected_column.includes("form")
+                    ? "select-search"
+                    : "",
                   on: {
                     click: function($event) {
-                      _vm.search_by == "form"
-                        ? (_vm.search_by = "")
-                        : (_vm.search_by = "form")
+                      _vm.selected_column.includes("form")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "form"
+                            }
+                          ))
+                        : _vm.selected_column.push("form")
                     }
                   }
                 },
@@ -65575,13 +65568,19 @@ var render = function() {
               _c(
                 "th",
                 {
-                  staticClass: "text-center",
-                  class: _vm.search_by == "family" ? "select-search" : "",
+                  staticClass: "text-center ",
+                  class: _vm.selected_column.includes("family")
+                    ? "select-search"
+                    : "",
                   on: {
                     click: function($event) {
-                      _vm.search_by == "family"
-                        ? (_vm.search_by = "")
-                        : (_vm.search_by = "family")
+                      _vm.selected_column.includes("family")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "family"
+                            }
+                          ))
+                        : _vm.selected_column.push("family")
                     }
                   }
                 },
@@ -65607,10 +65606,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center ",
-                    class:
-                      _vm.search_by == "medicine_name"
-                        ? "select-search-data"
-                        : ""
+                    class: _vm.selected_column.includes("medicine_name")
+                      ? "select-search-data"
+                      : ""
                   },
                   [_vm._v(_vm._s(medicine.name))]
                 ),
@@ -65619,7 +65617,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class: _vm.search_by == "dosage" ? "select-search-data" : ""
+                    class: _vm.selected_column.includes("dosage")
+                      ? "select-search-data"
+                      : ""
                   },
                   [_vm._v(_vm._s(medicine.dosage))]
                 ),
@@ -65628,7 +65628,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class: _vm.search_by == "form" ? "select-search-data" : ""
+                    class: _vm.selected_column.includes("form")
+                      ? "select-search-data"
+                      : ""
                   },
                   [_vm._v(_vm._s(medicine.form))]
                 ),
@@ -65637,7 +65639,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class: _vm.search_by == "family" ? "select-search-data" : ""
+                    class: _vm.selected_column.includes("family")
+                      ? "select-search-data"
+                      : ""
                   },
                   [_vm._v(_vm._s(medicine.family))]
                 ),
@@ -65684,7 +65688,7 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(4, true)
+                  _vm._m(3, true)
                 ])
               ])
             }),
@@ -65845,58 +65849,36 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-5" }, [
-      _c("ul", { staticClass: "nav nav-tabs" }, [
-        _c("li", { staticClass: "nav-item" }, [
-          _c("a", { staticClass: "nav-link active", attrs: { href: "#" } }, [
-            _vm._v("Medicines")
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-5" }, [
+        _c("ul", { staticClass: "nav nav-tabs" }, [
+          _c("li", { staticClass: "nav-item" }, [
+            _c("a", { staticClass: "nav-link active", attrs: { href: "#" } }, [
+              _vm._v("Medicines")
+            ])
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link ",
+                attrs: { href: "/dashboard/medicines/batches" }
+              },
+              [_vm._v("Batches")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link ",
+                attrs: { href: "/dashboard/medicines/sales" }
+              },
+              [_vm._v("Sales")]
+            )
           ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item" }, [
-          _c(
-            "a",
-            {
-              staticClass: "nav-link ",
-              attrs: { href: "/dashboard/medicines/batches" }
-            },
-            [_vm._v("Batches")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item" }, [
-          _c(
-            "a",
-            {
-              staticClass: "nav-link ",
-              attrs: { href: "/dashboard/medicines/sales" }
-            },
-            [_vm._v("Sales")]
-          )
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-6" }, [
-      _c("div", { staticClass: "md-form " }, [
-        _c("select", { staticClass: "form-control" }, [
-          _c("option", { staticStyle: { display: "none" } }, [
-            _vm._v("Select Column : ")
-          ]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "medicine_name" } }, [
-            _vm._v("Medicine Name")
-          ]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "dosage" } }, [_vm._v("Dosage")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "form" } }, [_vm._v("Form")]),
-          _vm._v(" "),
-          _c("option", { attrs: { value: "family" } }, [_vm._v("Family")])
         ])
       ])
     ])
@@ -66796,7 +66778,7 @@ var render = function() {
           _c("div", { staticClass: "row" }, [
             _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "col-sm-4" }, [
+            _c("div", { staticClass: "col-sm-3" }, [
               _c("input", {
                 directives: [
                   {
@@ -66822,79 +66804,11 @@ var render = function() {
                   }
                 }
               })
-            ])
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _vm._m(1),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-sm-7 " }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-sm-6" }, [
-              _c("div", { staticClass: "md-form " }, [
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.filter_by,
-                        expression: "filter_by"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.filter_by = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      }
-                    }
-                  },
-                  [
-                    _c(
-                      "option",
-                      {
-                        staticStyle: { display: "none" },
-                        attrs: { value: "0" }
-                      },
-                      [_vm._v("Select Column : ")]
-                    ),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "medicine_name" } }, [
-                      _vm._v("Medicine Name")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "sale_date" } }, [
-                      _vm._v("Sale Date")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "quantity_sold" } }, [
-                      _vm._v("Quantity Sold")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", { attrs: { value: "total_price" } }, [
-                      _vm._v("Total Price")
-                    ])
-                  ]
-                )
-              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-sm-2" }, [
+            _c("div", { staticClass: "col-sm-1 ml-0 pl-0" }, [
               _c("img", {
-                staticStyle: { cursor: "pointer" },
+                staticStyle: { cursor: "pointer", color: "white" },
                 attrs: {
                   src: "/img/icons/" + _vm.filter_flow + ".png",
                   width: "38",
@@ -66910,8 +66824,10 @@ var render = function() {
               })
             ])
           ])
-        ])
-      ]),
+        ]
+      ),
+      _vm._v(" "),
+      _vm._m(1),
       _vm._v(" "),
       _c("table", { staticClass: "table table-striped table-hover" }, [
         _c("thead", [
@@ -66920,12 +66836,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "medicine_name" ? "select-search" : "",
+                class: _vm.selected_column.includes("medicine_name")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "medicine_name"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "medicine_name")
+                    _vm.selected_column.includes("medicine_name")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "medicine_name"
+                          }
+                        ))
+                      : _vm.selected_column.push("medicine_name")
                   }
                 }
               },
@@ -66936,12 +66858,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "pharmacist" ? "select-search" : "",
+                class: _vm.selected_column.includes("pharmacist")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "pharmacist"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "pharmacist")
+                    _vm.selected_column.includes("pharmacist")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "pharmacist"
+                          }
+                        ))
+                      : _vm.selected_column.push("pharmacist")
                   }
                 }
               },
@@ -66952,12 +66880,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "sale_date" ? "select-search" : "",
+                class: _vm.selected_column.includes("sale_date")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "sale_date"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "sale_date")
+                    _vm.selected_column.includes("sale_date")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "sale_date"
+                          }
+                        ))
+                      : _vm.selected_column.push("sale_date")
                   }
                 }
               },
@@ -66968,12 +66902,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "quantity_sold" ? "select-search" : "",
+                class: _vm.selected_column.includes("quantity_sold")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "quantity_sold"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "quantity_sold")
+                    _vm.selected_column.includes("quantity_sold")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "quantity_sold"
+                          }
+                        ))
+                      : _vm.selected_column.push("quantity_sold")
                   }
                 }
               },
@@ -66984,12 +66924,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "unit_price" ? "select-search" : "",
+                class: _vm.selected_column.includes("unit_price")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "unit_price"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "unit_price")
+                    _vm.selected_column.includes("unit_price")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "unit_price"
+                          }
+                        ))
+                      : _vm.selected_column.push("unit_price")
                   }
                 }
               },
@@ -67000,12 +66946,18 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.search_by == "total_price" ? "select-search" : "",
+                class: _vm.selected_column.includes("total_price")
+                  ? "select-search"
+                  : "",
                 on: {
                   click: function($event) {
-                    _vm.search_by == "total_price"
-                      ? (_vm.search_by = "")
-                      : (_vm.search_by = "total_price")
+                    _vm.selected_column.includes("total_price")
+                      ? (_vm.selected_column = _vm.selected_column.filter(
+                          function(e) {
+                            return e !== "total_price"
+                          }
+                        ))
+                      : _vm.selected_column.push("total_price")
                   }
                 }
               },
@@ -67038,10 +66990,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class:
-                      _vm.search_by == "medicine_name"
-                        ? "select-search-data"
-                        : ""
+                    class: _vm.selected_column.includes("medicine_name")
+                      ? "select-search-data"
+                      : ""
                   },
                   [
                     _vm._v(
@@ -67054,8 +67005,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class:
-                      _vm.search_by == "pharmacist" ? "select-search-data" : ""
+                    class: _vm.selected_column.includes("pharmacist")
+                      ? "select-search-data"
+                      : ""
                   },
                   [
                     _vm._v(
@@ -67068,8 +67020,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class:
-                      _vm.search_by == "sale_date" ? "select-search-data" : ""
+                    class: _vm.selected_column.includes("sale_date")
+                      ? "select-search-data"
+                      : ""
                   },
                   [
                     _vm._v(
@@ -67082,10 +67035,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class:
-                      _vm.search_by == "quantity_sold"
-                        ? "select-search-data"
-                        : ""
+                    class: _vm.selected_column.includes("quantity_sold")
+                      ? "select-search-data"
+                      : ""
                   },
                   [
                     _vm._v(
@@ -67098,8 +67050,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class:
-                      _vm.search_by == "unit_price" ? "select-search-data" : ""
+                    class: _vm.selected_column.includes("unit_price")
+                      ? "select-search-data"
+                      : ""
                   },
                   [
                     _vm._v(
@@ -67112,8 +67065,9 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class:
-                      _vm.search_by == "total_price" ? "select-search-data" : ""
+                    class: _vm.selected_column.includes("total_price")
+                      ? "select-search-data"
+                      : ""
                   },
                   [
                     _vm._v(
@@ -67341,33 +67295,35 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-5" }, [
-      _c("ul", { staticClass: "nav nav-tabs" }, [
-        _c("li", { staticClass: "nav-item" }, [
-          _c(
-            "a",
-            {
-              staticClass: "nav-link",
-              attrs: { href: "/dashboard/medicines" }
-            },
-            [_vm._v("Medicines")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item" }, [
-          _c(
-            "a",
-            {
-              staticClass: "nav-link ",
-              attrs: { href: "/dashboard/medicines/batches" }
-            },
-            [_vm._v("Batches")]
-          )
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item" }, [
-          _c("a", { staticClass: "nav-link active", attrs: { href: "#" } }, [
-            _vm._v("Sales")
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-sm-5" }, [
+        _c("ul", { staticClass: "nav nav-tabs" }, [
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link",
+                attrs: { href: "/dashboard/medicines" }
+              },
+              [_vm._v("Medicines")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link ",
+                attrs: { href: "/dashboard/medicines/batches" }
+              },
+              [_vm._v("Batches")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "nav-item" }, [
+            _c("a", { staticClass: "nav-link active", attrs: { href: "#" } }, [
+              _vm._v("Sales")
+            ])
           ])
         ])
       ])
@@ -67689,7 +67645,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _vm._m(0),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-4" }, [
+              _c("div", { staticClass: "col-sm-3" }, [
                 _c("input", {
                   directives: [
                     {
@@ -67717,31 +67673,169 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
+              _c("div", { staticClass: "col-sm-1 ml-0 pl-0" }, [
+                _c("img", {
+                  staticStyle: { cursor: "pointer", color: "white" },
+                  attrs: {
+                    src: "/img/icons/" + _vm.filter_flow + ".png",
+                    width: "38",
+                    title: _vm.filter_flow
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.filter_flow == "Ascending"
+                        ? (_vm.filter_flow = "Descending")
+                        : (_vm.filter_flow = "Ascending")
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
               _vm._m(1)
             ])
           ]
         ),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped table-hover" }, [
-          _vm._m(2),
+          _c("thead", [
+            _c("tr", { staticStyle: { cursor: "pointer" } }, [
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("fullname")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("fullname")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "fullname"
+                            }
+                          ))
+                        : _vm.selected_column.push("fullname")
+                    }
+                  }
+                },
+                [_vm._v("Full Name")]
+              ),
+              _vm._v(" "),
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("address")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("address")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "address"
+                            }
+                          ))
+                        : _vm.selected_column.push("address")
+                    }
+                  }
+                },
+                [_vm._v("Address")]
+              ),
+              _vm._v(" "),
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("tel")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("tel")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "tel"
+                            }
+                          ))
+                        : _vm.selected_column.push("tel")
+                    }
+                  }
+                },
+                [_vm._v("Phone Num")]
+              ),
+              _vm._v(" "),
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("email")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("email")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "email"
+                            }
+                          ))
+                        : _vm.selected_column.push("email")
+                    }
+                  }
+                },
+                [_vm._v("email")]
+              ),
+              _vm._v(" "),
+              _c("th", [_vm._v("Action")])
+            ])
+          ]),
           _vm._v(" "),
           _c(
             "tbody",
             _vm._l(_vm.suppliers, function(supplier, index) {
               return _c("tr", { key: index }, [
-                _c("td", [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(supplier.fullname) +
-                      "\n                    "
-                  )
-                ]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("fullname")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(supplier.fullname) +
+                        "\n                    "
+                    )
+                  ]
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(supplier.address))]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("address")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [_vm._v(_vm._s(supplier.address))]
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(supplier.tel))]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("tel")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [_vm._v(_vm._s(supplier.tel))]
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(supplier.email))]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("email")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [_vm._v(_vm._s(supplier.email))]
+                ),
                 _vm._v(" "),
                 _c("td", [
                   _c(
@@ -67767,7 +67861,7 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(3, true)
+                  _vm._m(2, true)
                 ])
               ])
             }),
@@ -67922,24 +68016,6 @@ var staticRenderFns = [
           _c("span", [_vm._v("Add New Supplier")])
         ]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Full Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Address")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Phone Num")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("email")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Action")])
-      ])
     ])
   },
   function() {
@@ -68494,7 +68570,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _vm._m(0),
               _vm._v(" "),
-              _c("div", { staticClass: "col-sm-4" }, [
+              _c("div", { staticClass: "col-sm-3" }, [
                 _c("input", {
                   directives: [
                     {
@@ -68522,37 +68598,204 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
+              _c("div", { staticClass: "col-sm-1 ml-0 pl-0" }, [
+                _c("img", {
+                  staticStyle: { cursor: "pointer", color: "white" },
+                  attrs: {
+                    src: "/img/icons/" + _vm.filter_flow + ".png",
+                    width: "38",
+                    title: _vm.filter_flow
+                  },
+                  on: {
+                    click: function($event) {
+                      _vm.filter_flow == "Ascending"
+                        ? (_vm.filter_flow = "Descending")
+                        : (_vm.filter_flow = "Ascending")
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
               _vm._m(1)
             ])
           ]
         ),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped table-hover" }, [
-          _vm._m(2),
+          _c("thead", [
+            _c("tr", { staticStyle: { cursor: "pointer" } }, [
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("fullname")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("fullname")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "fullname"
+                            }
+                          ))
+                        : _vm.selected_column.push("fullname")
+                    }
+                  }
+                },
+                [_vm._v("Full Name")]
+              ),
+              _vm._v(" "),
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("birthday")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("birthday")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "birthday"
+                            }
+                          ))
+                        : _vm.selected_column.push("birthday")
+                    }
+                  }
+                },
+                [_vm._v("Birthday")]
+              ),
+              _vm._v(" "),
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("tel")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("tel")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "tel"
+                            }
+                          ))
+                        : _vm.selected_column.push("tel")
+                    }
+                  }
+                },
+                [_vm._v("Phone Num")]
+              ),
+              _vm._v(" "),
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("email")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("email")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "email"
+                            }
+                          ))
+                        : _vm.selected_column.push("email")
+                    }
+                  }
+                },
+                [_vm._v("email")]
+              ),
+              _vm._v(" "),
+              _c(
+                "th",
+                {
+                  class: _vm.selected_column.includes("role")
+                    ? "select-search"
+                    : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column.includes("role")
+                        ? (_vm.selected_column = _vm.selected_column.filter(
+                            function(e) {
+                              return e !== "role"
+                            }
+                          ))
+                        : _vm.selected_column.push("role")
+                    }
+                  }
+                },
+                [_vm._v("Role")]
+              ),
+              _vm._v(" "),
+              _c("th", [_vm._v("Action")])
+            ])
+          ]),
           _vm._v(" "),
           _c(
             "tbody",
             _vm._l(_vm.users, function(user, index) {
               return _c("tr", { key: index }, [
-                _c("td", [
-                  _c("img", {
-                    staticClass: "avatar",
-                    attrs: { src: user.avatarPath, alt: "Avatar" }
-                  }),
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(user.fullname) +
-                      "\n                    "
-                  )
-                ]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("fullname")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "avatar",
+                      attrs: { src: user.avatarPath, alt: "Avatar" }
+                    }),
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(user.fullname) +
+                        "\n                    "
+                    )
+                  ]
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.birthday))]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("birthday")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [_vm._v(_vm._s(user.birthday))]
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.tel))]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("tel")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [_vm._v(_vm._s(user.tel))]
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.email))]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("email")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [_vm._v(_vm._s(user.email))]
+                ),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(user.role))]),
+                _c(
+                  "td",
+                  {
+                    class: _vm.selected_column.includes("role")
+                      ? "select-search-data"
+                      : ""
+                  },
+                  [_vm._v(_vm._s(user.role))]
+                ),
                 _vm._v(" "),
                 _c("td", [
                   _c(
@@ -68567,7 +68810,7 @@ var render = function() {
                       },
                       on: {
                         click: function($event) {
-                          return _vm.settings(_vm.users.Id)
+                          return _vm.settings(user.Id)
                         }
                       }
                     },
@@ -68578,7 +68821,7 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(3, true)
+                  _vm._m(2, true)
                 ])
               ])
             }),
@@ -68733,26 +68976,6 @@ var staticRenderFns = [
           _c("span", [_vm._v("Add New User")])
         ]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Full Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Birthday")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Phone Num")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("email")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Role")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Action")])
-      ])
     ])
   },
   function() {

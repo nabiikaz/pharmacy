@@ -7,10 +7,15 @@
                     <div class="col-sm-4">
                         <h2>Users <b>Manager</b></h2>
                     </div>
-                    <div class="col-sm-4">
-                        <input class="form-control form-control-dark w-100" type="text" 
-                                placeholder="Search" aria-label="Search" v-model="search">
+                    <div class="col-sm-3">
+                        <input class="form-control form-control-dark w-100" type="text" placeholder="Search"
+                            aria-label="Search" v-model="search">
 
+                    </div>
+                    <div class="col-sm-1 ml-0 pl-0">
+                        <img class="" style="cursor:pointer;color:white;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
+                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
+                                :title="filter_flow">
                     </div>
                     <div class="col-md-4">
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdUser">
@@ -22,31 +27,36 @@
             </div>
             <table class="table table-striped table-hover">
                 <thead>
-                    <tr>
+                    <tr style="cursor:pointer">
 
-                        <th>Full Name</th>
-                        <th>Birthday</th>
-                        <th>Phone Num</th>
-                        <th>email</th>
-                        <th>Role</th>
-                        <th>Action</th>
+                        <th :class="(selected_column.includes('fullname'))? 'select-search':''"
+                            @click="((selected_column.includes('fullname'))? selected_column=selected_column.filter(function(e) { return e !== 'fullname' }):selected_column.push('fullname')) ">Full Name</th>
+                        <th :class="(selected_column.includes('birthday'))? 'select-search':''"
+                            @click="((selected_column.includes('birthday'))? selected_column=selected_column.filter(function(e) { return e !== 'birthday' }):selected_column.push('birthday')) ">Birthday</th>
+                        <th :class="(selected_column.includes('tel'))? 'select-search':''"
+                            @click="((selected_column.includes('tel'))? selected_column=selected_column.filter(function(e) { return e !== 'tel' }):selected_column.push('tel')) ">Phone Num</th>
+                        <th :class="(selected_column.includes('email'))? 'select-search':''"
+                            @click="((selected_column.includes('email'))? selected_column=selected_column.filter(function(e) { return e !== 'email' }):selected_column.push('email')) ">email</th>
+                        <th :class="(selected_column.includes('role'))? 'select-search':''"
+                            @click="((selected_column.includes('role'))? selected_column=selected_column.filter(function(e) { return e !== 'role' }):selected_column.push('role')) ">Role</th>
+                        <th >Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(user,index) in users" :key="index">
 
                         
-                        <td>
+                        <td  :class="(selected_column.includes('fullname'))? 'select-search-data':''">
                             <img v-bind:src="user.avatarPath" class="avatar" alt="Avatar">
                             {{user.fullname}}
                         </td>
-                        <td>{{user.birthday}}</td>
-                        <td>{{user.tel}}</td>
-                        <td>{{user.email}}</td>
-                        <td>{{user.role}}</td>
+                        <td :class="(selected_column.includes('birthday'))? 'select-search-data':''">{{user.birthday}}</td>
+                        <td :class="(selected_column.includes('tel'))? 'select-search-data':''">{{user.tel}}</td>
+                        <td :class="(selected_column.includes('email'))? 'select-search-data':''">{{user.email}}</td>
+                        <td :class="(selected_column.includes('role'))? 'select-search-data':''">{{user.role}}</td>
                         <td>
                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
-                                v-on:click="settings(users.Id)"><img src="/img/icons/settings.png" width="22" ></a>
+                                v-on:click="settings(user.Id)"><img src="/img/icons/settings.png" width="22" ></a>
                             <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
                                 <img src="/img/icons/trash.png" width="24" ></a>
                         </td>
@@ -94,9 +104,13 @@
             return {
                 search:"",
                 selectedUser_Id: -1,
+
+                selected_column: [],
+
+                filter_flow: 'Ascending',
                 //displayed Users 
                 users: [{
-                        userId: 1,
+                        Id: 1,
                         avatarPath: "/img/avatars/nabi.jpg",
                         fullname: "nabi zakaria",
                         birthday: "07/29/1995",
@@ -105,7 +119,7 @@
                         role: "Admin"
                     },
                     {
-                        userId: 2,
+                        Id: 2,
                         avatarPath: "/img/avatars/nabi.jpg",
                         fullname: "zakaria",
                         birthday: "07/29/1995",
@@ -114,7 +128,7 @@
                         role: "employee"
                     },
                     {
-                        userId: 3,
+                        Id: 3,
                         avatarPath: "/img/avatars/nabi.jpg",
                         fullname: "nabi zakaria",
                         birthday: "07/29/1995",
@@ -362,6 +376,16 @@
         float: left;
         margin-top: 10px;
         font-size: 13px;
+    }
+
+     .select-search-data {
+
+        background-color: #c5e4b254;
+    }
+
+    .select-search {
+        background-color: #4e9cda;
+
     }
 
 </style>

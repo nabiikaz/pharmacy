@@ -7,10 +7,15 @@
                     <div class="col-sm-4">
                         <h2>Medicines <b>Manager</b></h2>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <input class="form-control form-control-dark w-100" type="text" 
                             placeholder="Search" aria-label="Search" v-model="search">
 
+                    </div>
+                    <div class="col-sm-1  ml-0 pl-0">
+                        <img class="" style="cursor:pointer;color:white;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
+                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
+                                :title="filter_flow">
                     </div>
                     <div class="col-md-4">
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdMedicine">
@@ -42,37 +47,25 @@
                         
                     </div>
 
-                    <div class="col-sm-7 ">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="md-form ">
-                                    <select class="form-control">
-                                        <option  style="display:none;">Select Column : </option>
-                                        <option value="medicine_name">Medicine Name</option>
-                                        <option value="dosage">Dosage</option>
-                                        <option value="form">Form</option>
-                                        <option value="family">Family</option>
-                                    </select>
-                                    
-                                </div>
-                                
-                            </div>
-                            <div class="col-sm-2">
-                                <img style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38" @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'" :title="filter_flow">
-                            </div>
-                        </div>
-                        
-                    </div>
+                  
                 </div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr style="cursor:pointer">
+                        <th class="text-center " :class="(selected_column.includes('medicine_name'))? 'select-search':''"
+                            @click="(selected_column.includes('medicine_name'))? selected_column=selected_column.filter(function(e) { return e !== 'medicine_name' }):selected_column.push('medicine_name')">Name</th>
 
-                        <th class="text-center " :class="(search_by== 'medicine_name')? 'select-search':''" @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'" >Name</th>
-                        <th class="text-center" :class="(search_by== 'dosage')? 'select-search':''" @click="(search_by== 'dosage')? search_by= '':search_by= 'dosage'">Dosage</th>
-                        <th class="text-center" :class="(search_by== 'form')? 'select-search':''" @click="(search_by== 'form')? search_by= '':search_by= 'form'">Form</th>
-                        <th class="text-center" :class="(search_by== 'family')? 'select-search':''" @click="(search_by== 'family')? search_by= '':search_by= 'family'">Family</th>
+                        <th class="text-center " :class="(selected_column.includes('dosage'))? 'select-search':''"
+                            @click="(selected_column.includes('dosage'))? selected_column=selected_column.filter(function(e) { return e !== 'dosage' }):selected_column.push('dosage')">Dosage</th>
                         
+                        <th class="text-center " :class="(selected_column.includes('form'))? 'select-search':''"
+                            @click="(selected_column.includes('form'))? selected_column=selected_column.filter(function(e) { return e !== 'form' }):selected_column.push('form')">Form</th>
+                        
+                        <th class="text-center " :class="(selected_column.includes('family'))? 'select-search':''"
+                            @click="(selected_column.includes('family'))? selected_column=selected_column.filter(function(e) { return e !== 'family' }):selected_column.push('family')">Family</th>
+                            
+
+                      
                         <th class="text-center " style="width:170px">Action</th>
                     </tr>
                 </thead>
@@ -81,10 +74,10 @@
 
                         
                         
-                        <td class="text-center " :class="(search_by== 'medicine_name')? 'select-search-data':''"  >{{medicine.name}}</td>
-                        <td class="text-center"  :class="(search_by== 'dosage')? 'select-search-data':''">{{medicine.dosage}}</td>
-                        <td class="text-center"  :class="(search_by== 'form')? 'select-search-data':''">{{medicine.form}}</td>
-                        <td class="text-center"  :class="(search_by== 'family')? 'select-search-data':''">{{medicine.family}}</td>
+                        <td class="text-center " :class="(selected_column.includes('medicine_name'))? 'select-search-data':''"  >{{medicine.name}}</td>
+                        <td class="text-center"  :class="(selected_column.includes('dosage'))? 'select-search-data':''">{{medicine.dosage}}</td>
+                        <td class="text-center"  :class="(selected_column.includes('form'))? 'select-search-data':''">{{medicine.form}}</td>
+                        <td class="text-center"  :class="(selected_column.includes('family'))? 'select-search-data':''">{{medicine.family}}</td>
                         
                        
                         
@@ -161,7 +154,7 @@
                 search : "",
                 selectedMedicine_Id: -1,
 
-                search_by: "",
+                selected_column: [],
 
                 filter_flow : 'Ascending',
                 //displayed Users 

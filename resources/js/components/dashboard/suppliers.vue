@@ -7,10 +7,15 @@
                     <div class="col-sm-4">
                         <h2>Suppliers <b>Manager</b></h2>
                     </div>
-                    <div class="col-sm-4">
-                        <input class="form-control form-control-dark w-100" type="text" 
-                                placeholder="Search" aria-label="Search" v-model="search">
+                    <div class="col-sm-3">
+                        <input class="form-control form-control-dark w-100" type="text" placeholder="Search"
+                            aria-label="Search" v-model="search">
 
+                    </div>
+                    <div class="col-sm-1 ml-0 pl-0">
+                        <img class="" style="cursor:pointer;color:white;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
+                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
+                                :title="filter_flow">
                     </div>
                     <div class="col-md-4">
                         <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdsupplier">
@@ -22,12 +27,19 @@
             </div>
             <table class="table table-striped table-hover">
                 <thead>
-                    <tr>
+                    <tr style="cursor:pointer">
 
-                        <th>Full Name</th>
-                        <th>Address</th>
-                        <th>Phone Num</th>
-                        <th>email</th>
+                        <th :class="(selected_column.includes('fullname'))? 'select-search':''"
+                            @click="((selected_column.includes('fullname'))? selected_column=selected_column.filter(function(e) { return e !== 'fullname' }):selected_column.push('fullname')) ">Full Name</th>
+                       
+                        <th :class="(selected_column.includes('address'))? 'select-search':''"
+                            @click="((selected_column.includes('address'))? selected_column=selected_column.filter(function(e) { return e !== 'address' }):selected_column.push('address')) ">Address</th>
+                       
+                        <th :class="(selected_column.includes('tel'))? 'select-search':''"
+                            @click="((selected_column.includes('tel'))? selected_column=selected_column.filter(function(e) { return e !== 'tel' }):selected_column.push('tel')) ">Phone Num</th>
+                       
+                        <th :class="(selected_column.includes('email'))? 'select-search':''"
+                            @click="((selected_column.includes('email'))? selected_column=selected_column.filter(function(e) { return e !== 'email' }):selected_column.push('email')) ">email</th>
                         
                         <th>Action</th>
                     </tr>
@@ -36,13 +48,13 @@
                     <tr v-for="(supplier,index) in suppliers" :key="index">
 
                         
-                        <td>
+                        <td  :class="(selected_column.includes('fullname'))? 'select-search-data':''">
                             {{supplier.fullname}}
                         </td>
-                        <td>{{supplier.address}}</td>
-                        <td>{{supplier.tel}}</td>
-                        <td>{{supplier.email}}</td>
-                        <td>
+                        <td  :class="(selected_column.includes('address'))? 'select-search-data':''">{{supplier.address}}</td>
+                        <td  :class="(selected_column.includes('tel'))? 'select-search-data':''">{{supplier.tel}}</td>
+                        <td  :class="(selected_column.includes('email'))? 'select-search-data':''">{{supplier.email}}</td>
+                        <td  >
                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
                                 v-on:click="settings(supplier.Id)"><img src="/img/icons/edit.png" width="22" ></a>
                             <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
@@ -92,23 +104,26 @@
             return {
                 search:"",
                 selectedsupplier_Id: -1,
+                filter_flow:"Ascending",
+                selected_column:[], 
+
                 //displayed suppliers 
                 suppliers: [{
-                        supplierId: 1,
+                        Id: 1,
                         fullname: "nabi zakaria",
                         address: "bensekrane - tlemcen",
                         tel: "0555655100",
                         email: "nabi@gmail.com",
                     },
                     {
-                        supplierId: 1,
+                        Id: 2,
                         fullname: "nabi zakaria",
                         address: "bensekrane - tlemcen",
                         tel: "0555655100",
                         email: "nabi@gmail.com",
                     },
                     {
-                        supplierId: 1,
+                        Id: 3,
                         fullname: "nabi zakaria",
                         address: "bensekrane - tlemcen",
                         tel: "0555655100",
@@ -356,6 +371,16 @@
         float: left;
         margin-top: 10px;
         font-size: 13px;
+    }
+
+       .select-search-data {
+
+        background-color: #c5e4b254;
+    }
+
+    .select-search {
+        background-color: #4e9cda;
+
     }
 
 </style>

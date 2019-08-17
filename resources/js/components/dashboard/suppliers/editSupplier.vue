@@ -91,9 +91,8 @@
 
 
                 this.fullname = "nabi zakaria"
-                this.birthday = "1995-08-07"
                 this.tel = "0555655100"
-                this.role = "moderator"
+                this.address = "tlemcen- bensekrane"
                 this.email = "nabizakaria"
 
             }
@@ -103,9 +102,8 @@
             return {
 
                 fullname: "",
-                birthday: "",
                 tel: "",
-                role: "",
+                address: "",
                 email: "",
 
 

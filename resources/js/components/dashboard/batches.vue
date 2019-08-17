@@ -7,10 +7,17 @@
                     <div class="col-sm-4">
                         <h2>Medicines / Batches </h2>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <input class="form-control form-control-dark w-100" type="text" placeholder="Search"
                             aria-label="Search" v-model="search">
 
+                        
+
+                    </div>
+                    <div class="col-sm-1  ml-0 pl-0">
+                        <img class="" style="cursor:pointer;color:white;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
+                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
+                                :title="filter_flow">
                     </div>
                     <div class="col-md-4">
                         <a href="#" class="btn btn-primary" data-toggle="modal"
@@ -46,24 +53,13 @@
                 <div class="col-sm-7 ">
                     <div class="row">
                         <div class="col-sm-1">
-                            <img class="" style="cursor:pointer;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
-                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
-                                :title="filter_flow">
+                            
 
 
                         </div>
                         <div class="col-sm-6">
                             <div class="md-form ">
-                                <select class="form-control" v-model="filter_by">
-                                    <option value="0" style="display:none;">Select Column : </option>
-                                    <option value="medicine_name">Medicine Name</option>
-                                    <option value="fabrication_date">Fabrication Date </option>
-                                    <option value="expiry_date">Expiry Date </option>
-                                    <option value="unit_price">Unit Price </option>
-                                    <option value="batch_price">Batch Price </option>
-                                    <option value="quantity_stock">Quantity In Stock </option>
-
-                                </select>
+                               
 
                             </div>
 
@@ -94,24 +90,24 @@
 
 
 
-                        <th class="text-center " :class="(search_by== 'medicine_name')? 'select-search':''"
-                            @click="(search_by== 'medicine_name')? search_by= '':search_by= 'medicine_name'">Name</th>
-                        <th class="text-center" :class="(search_by== 'fabrication_date')? 'select-search':''"
-                            @click="(search_by== 'fabrication_date')? search_by= '':search_by= 'fabrication_date'">
+                        <th class="text-center " :class="(selected_column.includes('medicine_name'))? 'select-search':''"
+                            @click="(selected_column.includes('medicine_name'))? selected_column=selected_column.filter(function(e) { return e !== 'medicine_name' }):selected_column.push('medicine_name')">Name</th>
+                        <th class="text-center" :class="(selected_column.includes('fabrication_date'))? 'select-search':''"
+                            @click="(selected_column.includes('fabrication_date'))? selected_column=selected_column.filter(function(e) { return e !== 'fabrication_date' }):selected_column.push('fabrication_date')">
                             Fabrication Date</th>
-                        <th class="text-center" :class="(search_by== 'expiry_date')? 'select-search':''"
-                            @click="(search_by== 'expiry_date')? search_by= '':search_by= 'expiry_date'">Expiry Date
+                        <th class="text-center" :class="(selected_column.includes('expiry_date'))? 'select-search':''"
+                            @click="(selected_column.includes('expiry_date'))? selected_column=selected_column.filter(function(e) { return e !== 'expiry_date' }):selected_column.push('expiry_date')">Expiry Date
                         </th>
-                        <th class="text-center" :class="(search_by== 'unit_price')? 'select-search':''"
-                            @click="(search_by== 'unit_price')? search_by= '':search_by= 'unit_price'">Unit Price</th>
-                        <th class="text-center" :class="(search_by== 'batch_price')? 'select-search':''"
-                            @click="(search_by== 'batch_price')? search_by= '':search_by= 'batch_price'">Batch Price
+                        <th class="text-center" :class="(selected_column.includes('unit_price'))? 'select-search':''"
+                            @click="(selected_column.includes('unit_price'))? selected_column=selected_column.filter(function(e) { return e !== 'unit_price' }):selected_column.push('unit_price')">Unit Price</th>
+                        <th class="text-center" :class="(selected_column.includes('batch_price'))? 'select-search':''"
+                            @click="(selected_column.includes('batch_price'))? selected_column=selected_column.filter(function(e) { return e !== 'batch_price' }):selected_column.push('batch_price')">Batch Price
                         </th>
-                        <th class="text-center" :class="(search_by== 'quantity_stock')? 'select-search':''"
-                            @click="(search_by== 'quantity_stock')? search_by= '':search_by= 'quantity_stock'">Quantity
+                        <th class="text-center" :class="(selected_column.includes('quantity_stock'))? 'select-search':''"
+                            @click="(selected_column.includes('quantity_stock'))? selected_column=selected_column.filter(function(e) { return e !== 'quantity_stock' }):selected_column.push('quantity_stock')">Quantity
                         </th>
-                        <th class="text-center" :class="(search_by== 'refund')? 'select-search':''"
-                         @click="(search_by== 'refund')? search_by= '':search_by= 'refund'"  >Refund</th>
+                        <th class="text-center" :class="(selected_column.includes('refund'))? 'select-search':''"
+                         @click="(selected_column.includes('refund'))? selected_column=selected_column.filter(function(e) { return e !== 'refund' }):selected_column.push('refund')"  >Refund</th>
 
 
                         <th class="text-center" style="width:170px;">Action</th>
@@ -122,23 +118,23 @@
 
 
 
-                        <td class="text-center" :class="(search_by== 'medicine_name')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('medicine_name'))? 'select-search-data':''">
                             {{batch.medicine_name }}</td>
-                        <td class="text-center" :class="(search_by== 'fabrication_date')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('fabrication_date'))? 'select-search-data':''">
                             {{batch.fabrication_date }}</td>
-                        <td class="text-center" :class="(search_by== 'expiry_date')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('expiry_date'))? 'select-search-data':''">
                             {{batch.expiry_date }}</td>
-                        <td class="text-center" :class="(search_by== 'unit_price')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('unit_price'))? 'select-search-data':''">
                             {{batch.unit_price }}</td>
-                        <td class="text-center" :class="(search_by== 'batch_price')? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column.includes('batch_price'))? 'select-search-data':''">
                             {{batch.batch_price }}</td>
-                        <td class="text-center" :class="(search_by== 'quantity_stock')? 'select-search-data':''"
+                        <td class="text-center" :class="(selected_column.includes('quantity_stock'))? 'select-search-data':''"
                             :style="(batch.quantity_stock<batch.quantity_min)? 'color:red;':'color:green;'"
                             data-tooltip="tooltip"
                             :data-original-title="(batch.quantity_stock<batch.quantity_min)?'Quantity en Stock < min( '+batch.quantity_min+' )       risk of rupture':'' ">
                             {{batch.quantity_stock }} <strong>/</strong> {{batch.quantity_bought }}</td>
 
-                         <td class="d-flex justify-content-center" :class="(search_by== 'refund')? 'select-search-data':''"
+                         <td class="d-flex justify-content-center" :class="(selected_column.includes('refund'))? 'select-search-data':''"
                                                              data-tooltip="tooltip" :data-original-title="batch.refund+' %'" >
                             <img width="22" height="22" v-bind:src="(batch.refund > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
                         </td>
@@ -478,7 +474,7 @@
                 medicineId: this.$attrs.medicineid,
                 route: window.location.pathname,
                 search: "",
-                search_by: "",
+                selected_column: [],
 
                 filter_flow: 'Ascending',
                 filter_by: '0',
