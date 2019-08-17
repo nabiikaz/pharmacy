@@ -25,7 +25,7 @@ Route::get('dashboard/medicines',function(){
     return view('medicines');
 });
 
-
+//batches --------------------------------------------------------
 Route::get('dashboard/medicines/batches/{id}',function($id){
     return view('batches',compact('id'));
 });
@@ -35,7 +35,7 @@ Route::get('dashboard/medicines/batches',function(){
     return view('batches')->with('id',$id);
 });
 
-
+//sales --------------------------------------------------
 Route::get('dashboard/medicines/sales',function(){
     $id= -1;    
     return view('sales')->with('id',$id);
@@ -44,4 +44,16 @@ Route::get('dashboard/medicines/sales',function(){
 
 Route::get('dashboard/medicines/sales/{id}',function($id){
     return view('sales')->with('id',$id);
+});
+
+//suppliers  --------------------------------------------------
+
+Route::get('dashboard/suppliers',function(){
+    $id= -1;    
+    return view('suppliers')->with('id',$id);
+});
+
+
+Route::get('dashboard/suppliers/{id}',function($id){
+    return view('suppliers')->with('id',$id);
 });

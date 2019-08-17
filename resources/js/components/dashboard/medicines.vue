@@ -124,6 +124,8 @@
         
         
     <addMedicine ></addMedicine>
+   
+   
     <editMedicine :medicineId="selectedMedicine_Id"> </editMedicine>
 
     </div>
@@ -131,12 +133,19 @@
 
 
 <script>
+  
+    import editMedicine from './medicines/editMedicine.vue'
     
     import addMedicine from './medicines/addMedicine.vue'
-    import editMedicine from './medicines/editMedicine.vue'
     
 
     export default {
+         components: {
+            
+            'addMedicine': addMedicine,
+            'editMedicine' : editMedicine,
+            
+        },
         mounted() {
             $('[data-tooltip="tooltip"]').tooltip();
 
@@ -214,12 +223,7 @@
             },
           
         },
-        components: {
-            
-            'addMedicine': addMedicine,
-            'editMedicine' : editMedicine,
-            
-        }
+       
 
     }
 

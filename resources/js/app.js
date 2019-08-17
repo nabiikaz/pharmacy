@@ -31,6 +31,9 @@ Vue.component("dashboard_medicines",require('./components/dashboard/medicines.vu
 Vue.component("dashboard_batches",require('./components/dashboard/batches.vue').default);
 Vue.component("dashboard_sales",require('./components/dashboard/sales.vue').default);
 
+
+Vue.component("dashboard_suppliers",require('./components/dashboard/suppliers.vue').default);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
