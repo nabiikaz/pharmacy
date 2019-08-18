@@ -19,6 +19,7 @@ class CreateMedicinesTable extends Migration
             $table->string('dosage');
             $table->string('form');
             $table->string('family');
+            $table->string('Img');
             $table->text('description');
             $table->timestamps();
         });
