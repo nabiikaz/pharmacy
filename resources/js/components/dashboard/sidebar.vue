@@ -13,7 +13,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/dashboard/medicines">
+                <a class="nav-link " href="/dashboard/medicines">
                   <img src="/img/icons/medicine.png" width="24" height="24">
                  
                   Pharmaceuticals
