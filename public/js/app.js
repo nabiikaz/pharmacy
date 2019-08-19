@@ -4917,9 +4917,28 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    //delete medicines 
+    deleteMedicine: function deleteMedicine(medicineId) {
+      var _this = this;
+
+      axios["delete"]('/api/medicines/' + medicineId).then(function (response) {
+        _this.getMedicines();
+      })["catch"](function (error) {
+        switch (error.response.status) {
+          case 404:
+            //if the medicine is already deleted then refresh current medicines view 
+            _this.getMedicines();
+
+            break;
+
+          default:
+            break;
+        }
+      });
+    },
     //get users in the current page 
     getMedicines: function getMedicines() {
-      var _this = this;
+      var _this2 = this;
 
       /** get users in the current page using the server's API with (axios)
        * 
@@ -4934,7 +4953,7 @@ __webpack_require__.r(__webpack_exports__);
           page: this.paginationCurrent
         }
       }).then(function (response) {
-        _this.medicines = response.data.data;
+        _this2.medicines = response.data.data;
       }, function (error) {
         console.log(error);
       });
@@ -67131,7 +67150,28 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(3, true)
+                  _c(
+                    "a",
+                    {
+                      staticClass: "delete",
+                      attrs: {
+                        href: "#",
+                        title: "",
+                        "data-tooltip": "tooltip",
+                        "data-original-title": "Delete"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteMedicine(medicine.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        attrs: { src: "/img/icons/trash.png", width: "24" }
+                      })
+                    ]
+                  )
                 ])
               ])
             }),
@@ -67325,24 +67365,6 @@ var staticRenderFns = [
         ])
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "delete",
-        attrs: {
-          href: "#",
-          title: "",
-          "data-tooltip": "tooltip",
-          "data-original-title": "Delete"
-        }
-      },
-      [_c("img", { attrs: { src: "/img/icons/trash.png", width: "24" } })]
-    )
   }
 ]
 render._withStripped = true

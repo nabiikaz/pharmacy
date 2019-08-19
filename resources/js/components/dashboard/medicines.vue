@@ -90,7 +90,7 @@
                             
 
 
-                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
+                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete" @click="deleteMedicine(medicine.id)">
                                 <img src="/img/icons/trash.png" width="24" ></a>
                         </td>
 
@@ -187,6 +187,29 @@
 
 
         methods: {
+            //delete medicines 
+            deleteMedicine: function(medicineId){
+                 axios.delete('/api/medicines/'+medicineId).then((response)=>{
+                                this.getMedicines()
+
+                 })
+                    .catch(error => {
+                        
+                        switch (error.response.status) {
+                            case 404:
+
+                                //if the medicine is already deleted then refresh current medicines view 
+                                this.getMedicines()
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    });
+
+            },
             //get users in the current page 
         getMedicines: function(){
             /** get users in the current page using the server's API with (axios)
