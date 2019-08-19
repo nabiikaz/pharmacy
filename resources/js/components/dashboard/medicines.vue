@@ -83,9 +83,9 @@
                         
                         <td class="text-center">
                             <a href="#" class="edit" title="" data-tooltip="tooltip" data-original-title="Edit Medicine"
-                                v-on:click="settings(medicine.Id)"><img src="/img/icons/edit.png" width="22" ></a>
+                                v-on:click="settings(medicine.id)"><img src="/img/icons/edit.png" width="22" ></a>
                             
-                            <a :href="'/dashboard/medicines/batches/'+medicine.Id" class="batch" title="" data-tooltip="tooltip" data-original-title="batches"
+                            <a :href="'/dashboard/medicines/batches/'+medicine.id" class="batch" title="" data-tooltip="tooltip" data-original-title="batches"
                             ><img src="/img/icons/batch.png" width="22" ></a>
                             
 
@@ -160,28 +160,7 @@
 
 
                 //displayed Users 
-                medicines: [{
-                    Id: 1,
-                    name : "DOLIPRANE",
-                    dosage : "500 mg",
-                    form : "gélule",
-                    family : "Antalgique et antipyrétique ",
-                    
-                    
-                    },
-                    {
-                    Id: 2,
-                    name : "DOLIPRANEE",
-                    dosage : "50 mg",
-                    form : "serop",
-                    family : "Antalgique et antipyrétique ",
-                   
-                    
-                    }
-
-                   
-
-                ],
+                medicines: [],
                 paginationCurrent : 1
 
             }
@@ -235,7 +214,7 @@
            
 
         },
-            settings(medicineId) {
+            settings: function(medicineId) {
                 this.selectedMedicine_Id = medicineId
 
                 $("#modaleditMedicine").modal("show")

@@ -4897,19 +4897,7 @@ __webpack_require__.r(__webpack_exports__);
       selected_column: '',
       filter_flow: 'Ascending',
       //displayed Users 
-      medicines: [{
-        Id: 1,
-        name: "DOLIPRANE",
-        dosage: "500 mg",
-        form: "gélule",
-        family: "Antalgique et antipyrétique "
-      }, {
-        Id: 2,
-        name: "DOLIPRANEE",
-        dosage: "50 mg",
-        form: "serop",
-        family: "Antalgique et antipyrétique "
-      }],
+      medicines: [],
       paginationCurrent: 1
     };
   },
@@ -5230,64 +5218,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['medicineId'],
   watch: {
-    medicineId: function medicineId(val) {
-      /* axios
-       *
-       *
-       * 
-       * 
-       * */
-      this.img = "/img/icons/pills.png";
-      this.name = "doliprane";
-      this.dosage = 0.5;
-      this.form = "serop";
-      this.family = "coco";
-      this.stock = 0;
-      this.stock_min = 15;
-      this.refund = 0; //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund 
+    medicineId: function medicineId(Id) {
+      this.getMedicine(Id);
     }
   },
   data: function data() {
     return {
-      img: "",
-      name: "",
-      dosage: 0.1,
-      form: "",
-      family: "",
-      stock: 0,
-      stock_min: 15,
-      refund: 0 //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
-
+      disable: false,
+      //this boolean variable is for disabling the inputs if an error occures
+      errorMsg: "",
+      img: "/img/icons/pills.png",
+      ImgFormData: null,
+      medicine: {}
     };
   },
   methods: {
     onFileSelected: function onFileSelected(event) {
       this.img = URL.createObjectURL(event.target.files[0]);
-      this.Img = new FormData();
-      this.Img.append("image", event.target.files[0], event.target.files[0].name);
+      this.medicine.ImgFormData = event.target.files[0], event.target.files[0].name;
+    },
+    getMedicine: function getMedicine(medicineId) {
+      var _this = this;
+
+      this.disable = false;
+      this.errorMsg = "";
+      axios.get('/api/medicines/' + this.medicineId).then(function (Response) {
+        _this.medicine = Response.data.data;
+        _this.img = _this.medicine.img;
+      })["catch"](function (error) {
+        switch (error.response.status) {
+          case 404:
+            _this.disable = true;
+            _this.errorMsg = "Medicine Of Id : " + medicineId + " Not Found.";
+            break;
+
+          default:
+            break;
+        }
+      });
     },
     editMedicine: function editMedicine() {
       /** edit the Medicine using Axios via the server's API
@@ -67131,7 +67102,7 @@ var render = function() {
                       },
                       on: {
                         click: function($event) {
-                          return _vm.settings(medicine.Id)
+                          return _vm.settings(medicine.id)
                         }
                       }
                     },
@@ -67147,7 +67118,7 @@ var render = function() {
                     {
                       staticClass: "batch",
                       attrs: {
-                        href: "/dashboard/medicines/batches/" + medicine.Id,
+                        href: "/dashboard/medicines/batches/" + medicine.id,
                         title: "",
                         "data-tooltip": "tooltip",
                         "data-original-title": "batches"
@@ -67845,8 +67816,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.name,
-                                expression: "name"
+                                value: _vm.medicine.medicine_name,
+                                expression: "medicine.medicine_name"
                               }
                             ],
                             staticClass: "form-control ",
@@ -67858,13 +67829,17 @@ var render = function() {
                               minlength: "8",
                               maxlength: "25"
                             },
-                            domProps: { value: _vm.name },
+                            domProps: { value: _vm.medicine.medicine_name },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.name = $event.target.value
+                                _vm.$set(
+                                  _vm.medicine,
+                                  "medicine_name",
+                                  $event.target.value
+                                )
                               }
                             }
                           })
@@ -67880,8 +67855,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.dosage,
-                                expression: "dosage"
+                                value: _vm.medicine.dosage,
+                                expression: "medicine.dosage"
                               }
                             ],
                             staticClass: "form-control ",
@@ -67893,13 +67868,17 @@ var render = function() {
                               min: "0.01",
                               step: "0.01"
                             },
-                            domProps: { value: _vm.dosage },
+                            domProps: { value: _vm.medicine.dosage },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.dosage = $event.target.value
+                                _vm.$set(
+                                  _vm.medicine,
+                                  "dosage",
+                                  $event.target.value
+                                )
                               }
                             }
                           })
@@ -67921,8 +67900,8 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.form,
-                                  expression: "form"
+                                  value: _vm.medicine.form,
+                                  expression: "medicine.form"
                                 }
                               ],
                               staticClass: "form-control",
@@ -67938,9 +67917,13 @@ var render = function() {
                                         "_value" in o ? o._value : o.value
                                       return val
                                     })
-                                  _vm.form = $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
+                                  _vm.$set(
+                                    _vm.medicine,
+                                    "form",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
                                 }
                               }
                             },
@@ -67974,8 +67957,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.family,
-                                expression: "family"
+                                value: _vm.medicine.family,
+                                expression: "medicine.family"
                               }
                             ],
                             staticClass: "form-control ",
@@ -67985,13 +67968,17 @@ var render = function() {
                               id: "Family",
                               required: ""
                             },
-                            domProps: { value: _vm.family },
+                            domProps: { value: _vm.medicine.family },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.family = $event.target.value
+                                _vm.$set(
+                                  _vm.medicine,
+                                  "family",
+                                  $event.target.value
+                                )
                               }
                             }
                           })
@@ -67999,81 +67986,22 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "md-form mb-2" }, [
-                      _c("div", { staticClass: "row" }, [
-                        _c("div", { staticClass: "col-6" }, [
-                          _c("label", { attrs: { for: "Stock" } }, [
-                            _vm._v("Stock")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.stock,
-                                expression: "stock"
-                              }
-                            ],
-                            staticClass: "form-control ",
-                            attrs: {
-                              name: "Stock",
-                              type: "text",
-                              id: "Stock",
-                              required: ""
-                            },
-                            domProps: { value: _vm.stock },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.stock = $event.target.value
-                              }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "col-6" }, [
-                          _c("label", { attrs: { for: "refund" } }, [
-                            _vm._v("Refund")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.refund,
-                                expression: "refund"
-                              }
-                            ],
-                            staticClass: "form-control ",
-                            attrs: {
-                              name: "refund",
-                              type: "number",
-                              id: "refund",
-                              required: "",
-                              min: "0",
-                              max: "100"
-                            },
-                            domProps: { value: _vm.refund },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.refund = $event.target.value
-                              }
-                            }
-                          })
-                        ])
-                      ])
+                    _c("span", { staticClass: "text-danger" }, [
+                      _vm._v(_vm._s(_vm.errorMsg))
                     ]),
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _vm._m(2)
+                    _c("div", { staticClass: "d-flex justify-content-end" }, [
+                      _c("input", {
+                        staticClass: "btn btn-primary next-btn pull-right ",
+                        attrs: {
+                          type: "submit",
+                          value: "Edit",
+                          disabled: _vm.disable
+                        }
+                      })
+                    ])
                   ]
                 )
               ])
@@ -68116,17 +68044,6 @@ var staticRenderFns = [
       _c("h3", { staticStyle: { color: "#6f6e6e" } }, [
         _vm._v("Enter New Medicine Information")
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "d-flex justify-content-end" }, [
-      _c("input", {
-        staticClass: "btn btn-primary next-btn pull-right ",
-        attrs: { type: "submit", value: "Edit" }
-      })
     ])
   }
 ]

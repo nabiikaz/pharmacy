@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::resource('medicines','MedicineController');
+Route::apiResource('medicines','MedicineController');

@@ -28,13 +28,13 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="name">Name</label>
-                                        <input name="name" type="text" id="name" class="form-control " v-model="name"
+                                        <input name="name" type="text" id="name" class="form-control " v-model="medicine.medicine_name"
                                             required minlength="8" maxlength="25">
                                     </div>
                                     <div class="col-6">
                                         <label for="dosage">Dosage (mg)</label>
                                         <input name="dosage" type="number" id="dosage" class="form-control "
-                                            v-model="dosage" required min="0.01" step="0.01">
+                                            v-model="medicine.dosage" required min="0.01" step="0.01">
 
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="form">Form </label>
-                                        <select name="form" id="form" class="form-control" v-model="form" required>
+                                        <select name="form" id="form" class="form-control" v-model="medicine.form" required>
                                             <option value="Comprime">Comprimé</option>
                                             <option value="gelule">gélule</option>
                                             <option value="collyre">collyre</option>
@@ -58,7 +58,7 @@
                                         <label for="Family">Family</label>
 
                                         <input name="Family" type="text" id="Family" class="form-control "
-                                            v-model="family" required>
+                                            v-model="medicine.family" required>
 
                                     </div>
                                 </div>
@@ -66,31 +66,11 @@
 
                             </div>
 
-                            <div class="md-form mb-2">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="Stock">Stock</label>
-
-                                        <input name="Stock" type="text" id="Stock" class="form-control "
-                                            v-model="stock" required>
-
-
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="refund">Refund</label>
-
-                                        <input name="refund" type="number" id="refund" class="form-control "
-                                            v-model="refund" required min="0" max="100">
-
-                                    </div>
-                                </div>
-
-
-                            </div>
+                           <span class="text-danger">{{errorMsg}}</span>
 
                             <hr>
                             <div class="d-flex justify-content-end">
-                                <input type="submit" class="btn btn-primary next-btn pull-right " value="Edit">
+                                <input type="submit" class="btn btn-primary next-btn pull-right " value="Edit" :disabled="disable">
 
                             </div>
 
@@ -113,44 +93,27 @@
 
 
         watch: {
-            medicineId: function (val) {
-                /* axios
-                 *
-                 *
-                 * 
-                 * 
-                 * */
-
-
-                this.img = "/img/icons/pills.png"
-                this.name = "doliprane"
-                this.dosage = 0.5
-                this.form = "serop"
-                this.family = "coco"
-                this.stock = 0
-                this.stock_min = 15
-                this.refund = 0 //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund 
+            medicineId: function (Id) {
+                
+                this.getMedicine(Id)
             }
 
         },
         data() {
             return {
+                disable:false,//this boolean variable is for disabling the inputs if an error occures
+                errorMsg: "",
+                img: "/img/icons/pills.png",
+                ImgFormData:null,
+                medicine:{
 
-                img :"",
-
-                name: "",
-                dosage: 0.1,
-                form: "",
-                family: "",
-                stock: 0,
-                stock_min: 15,
-                refund: 0, //pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
+                }
 
 
 
 
 
-            }
+            } 
 
 
         },
@@ -159,8 +122,41 @@
              onFileSelected : function(event){
                 this.img = URL.createObjectURL(event.target.files[0])
 
-                this.Img = new FormData()
-                this.Img.append("image",event.target.files[0],event.target.files[0].name)
+                this.medicine.ImgFormData =  event.target.files[0],event.target.files[0].name
+
+                
+
+                
+            },
+            getMedicine: function(medicineId){
+                    this.disable = false
+                    this.errorMsg = ""
+               
+                     axios.get('/api/medicines/'+this.medicineId)
+                    .then((Response)=>{
+                         this.medicine = Response.data.data
+                         this.img = this.medicine.img
+                         
+
+                    }).catch(error => {
+                        
+                        switch (error.response.status) {
+                            case 404:
+
+                                this.disable= true
+                                this.errorMsg = "Medicine Of Id : "+medicineId+" Not Found."
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    });
+               
+               
+
+                 
             },
 
             editMedicine: function () {
@@ -171,6 +167,7 @@
                  * 
                  * 
                  */
+              
 
             },
 
