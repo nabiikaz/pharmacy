@@ -52,17 +52,17 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr style="cursor:pointer">
-                        <th class="text-center " :class="(selected_column.includes('medicine_name'))? 'select-search':''"
-                            @click="(selected_column.includes('medicine_name'))? selected_column=selected_column.filter(function(e) { return e !== 'medicine_name' }):selected_column.push('medicine_name')">Name</th>
+                        <th class="text-center " :class="(selected_column == 'medicine_name')? 'select-search':''"
+                            @click="(selected_column == 'medicine_name')? selected_column='':selected_column = 'medicine_name'">Name</th>
 
-                        <th class="text-center " :class="(selected_column.includes('dosage'))? 'select-search':''"
-                            @click="(selected_column.includes('dosage'))? selected_column=selected_column.filter(function(e) { return e !== 'dosage' }):selected_column.push('dosage')">Dosage</th>
+                        <th class="text-center " :class="(selected_column == 'dosage')? 'select-search':''"
+                            @click="(selected_column == 'dosage')? selected_column='':selected_column = 'dosage'">Dosage</th>
                         
-                        <th class="text-center " :class="(selected_column.includes('form'))? 'select-search':''"
-                            @click="(selected_column.includes('form'))? selected_column=selected_column.filter(function(e) { return e !== 'form' }):selected_column.push('form')">Form</th>
+                        <th class="text-center " :class="(selected_column == 'form')? 'select-search':''"
+                            @click="(selected_column == 'form')? selected_column='':selected_column = 'form'">Form</th>
                         
-                        <th class="text-center " :class="(selected_column.includes('family'))? 'select-search':''"
-                            @click="(selected_column.includes('family'))? selected_column=selected_column.filter(function(e) { return e !== 'family' }):selected_column.push('family')">Family</th>
+                        <th class="text-center " :class="(selected_column == 'family')? 'select-search':''"
+                            @click="(selected_column == 'family')? selected_column='':selected_column = 'family'">Family</th>
                             
 
                       
@@ -74,10 +74,10 @@
 
                         
                         
-                        <td class="text-center " :class="(selected_column.includes('medicine_name'))? 'select-search-data':''"  >{{medicine.medicine_name}}</td>
-                        <td class="text-center"  :class="(selected_column.includes('dosage'))? 'select-search-data':''">{{medicine.dosage}}</td>
-                        <td class="text-center"  :class="(selected_column.includes('form'))? 'select-search-data':''">{{medicine.form}}</td>
-                        <td class="text-center"  :class="(selected_column.includes('family'))? 'select-search-data':''">{{medicine.family}}</td>
+                        <td class="text-center " :class="(selected_column == 'medicine_name')? 'select-search-data':''"  >{{medicine.medicine_name}}</td>
+                        <td class="text-center"  :class="(selected_column == 'dosage')? 'select-search-data':''">{{medicine.dosage}}</td>
+                        <td class="text-center"  :class="(selected_column == 'form')? 'select-search-data':''">{{medicine.form}}</td>
+                        <td class="text-center"  :class="(selected_column == 'family')? 'select-search-data':''">{{medicine.family}}</td>
                         
                        
                         
@@ -155,7 +155,7 @@
                 selectedMedicine_Id: -1,
                 
                 search : "",
-                selected_column: [],
+                selected_column: '',
                 filter_flow : 'Ascending',
 
 

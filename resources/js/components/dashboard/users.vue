@@ -29,16 +29,16 @@
                 <thead>
                     <tr style="cursor:pointer">
 
-                        <th :class="(selected_column.includes('fullname'))? 'select-search':''"
-                            @click="((selected_column.includes('fullname'))? selected_column=selected_column.filter(function(e) { return e !== 'fullname' }):selected_column.push('fullname')) ">Full Name</th>
-                        <th :class="(selected_column.includes('birthday'))? 'select-search':''"
-                            @click="((selected_column.includes('birthday'))? selected_column=selected_column.filter(function(e) { return e !== 'birthday' }):selected_column.push('birthday')) ">Birthday</th>
-                        <th :class="(selected_column.includes('tel'))? 'select-search':''"
-                            @click="((selected_column.includes('tel'))? selected_column=selected_column.filter(function(e) { return e !== 'tel' }):selected_column.push('tel')) ">Phone Num</th>
-                        <th :class="(selected_column.includes('email'))? 'select-search':''"
-                            @click="((selected_column.includes('email'))? selected_column=selected_column.filter(function(e) { return e !== 'email' }):selected_column.push('email')) ">email</th>
-                        <th :class="(selected_column.includes('role'))? 'select-search':''"
-                            @click="((selected_column.includes('role'))? selected_column=selected_column.filter(function(e) { return e !== 'role' }):selected_column.push('role')) ">Role</th>
+                        <th :class="(selected_column == 'fullname')? 'select-search':''"
+                            @click="((selected_column == 'fullname'))? selected_column='':selected_column = 'fullname' ">Full Name</th>
+                        <th :class="(selected_column == 'birthday')? 'select-search':''"
+                            @click="((selected_column == 'birthday'))? selected_column='':selected_column = 'birthday' ">Birthday</th>
+                        <th :class="(selected_column == 'tel')? 'select-search':''"
+                            @click="((selected_column == 'tel'))? selected_column='':selected_column = 'tel' ">Phone Num</th>
+                        <th :class="(selected_column == 'email')? 'select-search':''"
+                            @click="((selected_column == 'email'))? selected_column='':selected_column = 'email' ">email</th>
+                        <th :class="(selected_column == 'role')? 'select-search':''"
+                            @click="((selected_column == 'role'))? selected_column='':selected_column = 'role' ">Role</th>
                         <th >Action</th>
                     </tr>
                 </thead>
@@ -46,14 +46,14 @@
                     <tr v-for="(user,index) in users" :key="index">
 
                         
-                        <td  :class="(selected_column.includes('fullname'))? 'select-search-data':''">
+                        <td  :class="(selected_column == 'fullname')? 'select-search-data':''">
                             <img v-bind:src="user.avatarPath" class="avatar" alt="Avatar">
                             {{user.fullname}}
                         </td>
-                        <td :class="(selected_column.includes('birthday'))? 'select-search-data':''">{{user.birthday}}</td>
-                        <td :class="(selected_column.includes('tel'))? 'select-search-data':''">{{user.tel}}</td>
-                        <td :class="(selected_column.includes('email'))? 'select-search-data':''">{{user.email}}</td>
-                        <td :class="(selected_column.includes('role'))? 'select-search-data':''">{{user.role}}</td>
+                        <td :class="(selected_column == 'birthday')? 'select-search-data':''">{{user.birthday}}</td>
+                        <td :class="(selected_column == 'tel')? 'select-search-data':''">{{user.tel}}</td>
+                        <td :class="(selected_column == 'email')? 'select-search-data':''">{{user.email}}</td>
+                        <td :class="(selected_column == 'role')? 'select-search-data':''">{{user.role}}</td>
                         <td>
                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
                                 v-on:click="settings(user.Id)"><img src="/img/icons/settings.png" width="22" ></a>
@@ -105,7 +105,7 @@
                 search:"",
                 selectedUser_Id: -1,
 
-                selected_column: [],
+                selected_column: '',
 
                 filter_flow: 'Ascending',
                 //displayed Users 

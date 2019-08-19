@@ -15,17 +15,20 @@ class MedicineController extends Controller
      */
     public function index(Request $request)
     {
-        $selected_column_count = 0;
-        if($request->has("selected_column"))
-            $selected_column_count = count($request->get("selected_column"));
-        $selected_column  = ( $selected_column_count == 0)? "medicine_name":$request->get("selected_column");
+        
+
+        $selected_column  = $request->get("selected_column");
+
+        if($selected_column=='')
+            $selected_column = 'medicine_name';
+
         $search = $request->get('search');
         $orderby = ($request->get('filter_flow') == "Descending")? "desc":"asc";
         
 
 
 
-        $medicines = Medicine::where("medicine_name","like", "%".$search."%")
+        $medicines = Medicine::where($selected_column,"like", "%".$search."%")
                     ->orderBy($selected_column,$orderby)
                     ->paginate(5);
 

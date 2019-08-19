@@ -56,18 +56,18 @@
 
 
                        
-                        <th  class="text-center" :class="(selected_column.includes('pharmacist'))? 'select-search':''"
-                            @click="((selected_column.includes('pharmacist'))? selected_column=selected_column.filter(function(e) { return e !== 'pharmacist' }):selected_column.push('pharmacist'))">Made By</th>
+                        <th  class="text-center" :class="(selected_column == 'pharmacist')? 'select-search':''"
+                            @click="((selected_column == 'pharmacist'))? selected_column='':selected_column = 'pharmacist'">Made By</th>
                         
-                        <th class="text-center" :class="(selected_column.includes('customer'))? 'select-search':''"
-                            @click="((selected_column.includes('customer'))? selected_column=selected_column.filter(function(e) { return e !== 'customer' }):selected_column.push('customer'))">Customer</th>
+                        <th class="text-center" :class="(selected_column == 'customer')? 'select-search':''"
+                            @click="((selected_column == 'customer'))? selected_column='':selected_column = 'customer'">Customer</th>
                         
                         
-                        <th class="text-center" :class="(selected_column.includes('sale_date'))? 'select-search':''"
-                            @click="((selected_column.includes('sale_date'))? selected_column=selected_column.filter(function(e) { return e !== 'sale_date' }):selected_column.push('sale_date'))">Date</th>
+                        <th class="text-center" :class="(selected_column == 'sale_date')? 'select-search':''"
+                            @click="((selected_column == 'sale_date'))? selected_column='':selected_column = 'sale_date'">Date</th>
                        
-                        <th class="text-center" :class="(selected_column.includes('total_price'))? 'select-search':''"
-                            @click="((selected_column.includes('total_price'))? selected_column=selected_column.filter(function(e) { return e !== 'total_price' }):selected_column.push('total_price'))">Total Price
+                        <th class="text-center" :class="(selected_column == 'total_price')? 'select-search':''"
+                            @click="((selected_column == 'total_price'))? selected_column='':selected_column = 'total_price'">Total Price
                         </th>
                         <th class="text-center" style="width:170px;">Action</th>
                     </tr>
@@ -78,16 +78,16 @@
 
 
                        
-                        <td class="text-center" :class="(selected_column.includes('pharmacist'))? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column == 'pharmacist')? 'select-search-data':''">
                             {{sale.pharmacist }}</td>
 
-                        <td class="text-center" :class="(selected_column.includes('customer'))? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column == 'customer')? 'select-search-data':''">
                             {{sale.customer }}</td>
 
-                        <td class="text-center" :class="(selected_column.includes('sale_date'))? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column == 'sale_date')? 'select-search-data':''">
                             {{sale.sale_date }}</td>
                        
-                        <td class="text-center" :class="(selected_column.includes('total_price'))? 'select-search-data':''">
+                        <td class="text-center" :class="(selected_column == 'total_price')? 'select-search-data':''">
                             {{sale.total_price }}</td>
 
 
@@ -190,7 +190,7 @@
 
                 selectedSale_Id: -1,
 
-                selected_column: [],
+                selected_column: '',
 
                 filter_flow: 'Ascending',
                 

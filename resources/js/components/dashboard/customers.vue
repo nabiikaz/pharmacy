@@ -29,17 +29,17 @@
                 <thead>
                     <tr style="cursor:pointer">
 
-                        <th :class="(selected_column.includes('fullname'))? 'select-search':''"
-                            @click="((selected_column.includes('fullname'))? selected_column=selected_column.filter(function(e) { return e !== 'fullname' }):selected_column.push('fullname')) ">Full Name</th>
+                        <th :class="(selected_column == 'fullname')? 'select-search':''"
+                            @click="((selected_column == 'fullname'))? selected_column='':selected_column = 'fullname' ">Full Name</th>
                        
-                        <th :class="(selected_column.includes('address'))? 'select-search':''"
-                            @click="((selected_column.includes('address'))? selected_column=selected_column.filter(function(e) { return e !== 'address' }):selected_column.push('address')) ">Address</th>
+                        <th :class="(selected_column == 'address')? 'select-search':''"
+                            @click="((selected_column == 'address'))? selected_column='':selected_column = 'address' ">Address</th>
                        
-                        <th :class="(selected_column.includes('tel'))? 'select-search':''"
-                            @click="((selected_column.includes('tel'))? selected_column=selected_column.filter(function(e) { return e !== 'tel' }):selected_column.push('tel')) ">Phone Num</th>
+                        <th :class="(selected_column == 'tel')? 'select-search':''"
+                            @click="((selected_column == 'tel'))? selected_column='':selected_column = 'tel' ">Phone Num</th>
                        
-                        <th :class="(selected_column.includes('email'))? 'select-search':''"
-                            @click="((selected_column.includes('email'))? selected_column=selected_column.filter(function(e) { return e !== 'email' }):selected_column.push('email')) ">email</th>
+                        <th :class="(selected_column == 'email')? 'select-search':''"
+                            @click="((selected_column == 'email'))? selected_column='':selected_column = 'email' ">email</th>
                         
                         <th>Action</th>
                     </tr>
@@ -48,12 +48,12 @@
                     <tr v-for="(customer,index) in customers" :key="index">
 
                         
-                        <td  :class="(selected_column.includes('fullname'))? 'select-search-data':''">
+                        <td  :class="(selected_column == 'fullname')? 'select-search-data':''">
                             {{customer.fullname}}
                         </td>
-                        <td  :class="(selected_column.includes('address'))? 'select-search-data':''">{{customer.address}}</td>
-                        <td  :class="(selected_column.includes('tel'))? 'select-search-data':''">{{customer.tel}}</td>
-                        <td  :class="(selected_column.includes('email'))? 'select-search-data':''">{{customer.email}}</td>
+                        <td  :class="(selected_column == 'address')? 'select-search-data':''">{{customer.address}}</td>
+                        <td  :class="(selected_column == 'tel')? 'select-search-data':''">{{customer.tel}}</td>
+                        <td  :class="(selected_column == 'email')? 'select-search-data':''">{{customer.email}}</td>
                         <td  >
                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
                                 v-on:click="settings(customer.Id)"><img src="/img/icons/edit.png" width="22" ></a>

@@ -4165,7 +4165,7 @@ __webpack_require__.r(__webpack_exports__);
       medicineId: this.$attrs.medicineid,
       route: window.location.pathname,
       search: "",
-      selected_column: [],
+      selected_column: '',
       filter_flow: 'Ascending',
       filter_by: '0',
       //batches in the cart are with no session ( that means if the page is refreshed the items will vanish)
@@ -4894,7 +4894,7 @@ __webpack_require__.r(__webpack_exports__);
       route: window.location.pathname,
       selectedMedicine_Id: -1,
       search: "",
-      selected_column: [],
+      selected_column: '',
       filter_flow: 'Ascending',
       //displayed Users 
       medicines: [{
@@ -5522,7 +5522,7 @@ __webpack_require__.r(__webpack_exports__);
       route: window.location.pathname,
       search: "",
       selectedSale_Id: -1,
-      selected_column: [],
+      selected_column: '',
       filter_flow: 'Ascending',
       //displayed sales 
       sales: [{
@@ -6209,7 +6209,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       search: "",
       selectedUser_Id: -1,
-      selected_column: [],
+      selected_column: '',
       filter_flow: 'Ascending',
       //displayed Users 
       users: [{
@@ -64532,18 +64532,13 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center ",
-                class: _vm.selected_column.includes("medicine_name")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "medicine_name" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("medicine_name")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "medicine_name"
-                          }
-                        ))
-                      : _vm.selected_column.push("medicine_name")
+                    _vm.selected_column == "medicine_name"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "medicine_name")
                   }
                 }
               },
@@ -64554,18 +64549,15 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("fabrication_date")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "fabrication_date"
+                    ? "select-search"
+                    : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("fabrication_date")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "fabrication_date"
-                          }
-                        ))
-                      : _vm.selected_column.push("fabrication_date")
+                    _vm.selected_column == "fabrication_date"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "fabrication_date")
                   }
                 }
               },
@@ -64576,18 +64568,13 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("expiry_date")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "expiry_date" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("expiry_date")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "expiry_date"
-                          }
-                        ))
-                      : _vm.selected_column.push("expiry_date")
+                    _vm.selected_column == "expiry_date"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "expiry_date")
                   }
                 }
               },
@@ -64598,18 +64585,13 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("unit_price")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "unit_price" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("unit_price")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "unit_price"
-                          }
-                        ))
-                      : _vm.selected_column.push("unit_price")
+                    _vm.selected_column == "unit_price"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "unit_price")
                   }
                 }
               },
@@ -64620,18 +64602,13 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("batch_price")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "batch_price" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("batch_price")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "batch_price"
-                          }
-                        ))
-                      : _vm.selected_column.push("batch_price")
+                    _vm.selected_column == "batch_price"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "batch_price")
                   }
                 }
               },
@@ -64642,18 +64619,15 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("quantity_stock")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "quantity_stock"
+                    ? "select-search"
+                    : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("quantity_stock")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "quantity_stock"
-                          }
-                        ))
-                      : _vm.selected_column.push("quantity_stock")
+                    _vm.selected_column == "quantity_stock"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "quantity_stock")
                   }
                 }
               },
@@ -64664,18 +64638,12 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("refund")
-                  ? "select-search"
-                  : "",
+                class: _vm.selected_column == "refund" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("refund")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "refund"
-                          }
-                        ))
-                      : _vm.selected_column.push("refund")
+                    _vm.selected_column == "refund"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "refund")
                   }
                 }
               },
@@ -64698,9 +64666,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("medicine_name")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "medicine_name"
+                      ? "select-search-data"
+                      : ""
                 },
                 [
                   _vm._v(
@@ -64713,9 +64682,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("fabrication_date")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "fabrication_date"
+                      ? "select-search-data"
+                      : ""
                 },
                 [
                   _vm._v(
@@ -64729,9 +64699,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("expiry_date")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "expiry_date"
+                      ? "select-search-data"
+                      : ""
                 },
                 [
                   _vm._v(
@@ -64744,9 +64715,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("unit_price")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "unit_price"
+                      ? "select-search-data"
+                      : ""
                 },
                 [
                   _vm._v(
@@ -64759,9 +64731,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("batch_price")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "batch_price"
+                      ? "select-search-data"
+                      : ""
                 },
                 [
                   _vm._v(
@@ -64774,9 +64747,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("quantity_stock")
-                    ? "select-search-data"
-                    : "",
+                  class:
+                    _vm.selected_column == "quantity_stock"
+                      ? "select-search-data"
+                      : "",
                   style:
                     batch.quantity_stock < batch.quantity_min
                       ? "color:red;"
@@ -64806,9 +64780,8 @@ var render = function() {
                 "td",
                 {
                   staticClass: "d-flex justify-content-center",
-                  class: _vm.selected_column.includes("refund")
-                    ? "select-search-data"
-                    : "",
+                  class:
+                    _vm.selected_column == "refund" ? "select-search-data" : "",
                   attrs: {
                     "data-tooltip": "tooltip",
                     "data-original-title": batch.refund + " %"
@@ -66115,18 +66088,13 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("fullname")
-                    ? "select-search"
-                    : "",
+                  class:
+                    _vm.selected_column == "fullname" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("fullname")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "fullname"
-                            }
-                          ))
-                        : _vm.selected_column.push("fullname")
+                      _vm.selected_column == "fullname"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "fullname")
                     }
                   }
                 },
@@ -66136,18 +66104,13 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("address")
-                    ? "select-search"
-                    : "",
+                  class:
+                    _vm.selected_column == "address" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("address")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "address"
-                            }
-                          ))
-                        : _vm.selected_column.push("address")
+                      _vm.selected_column == "address"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "address")
                     }
                   }
                 },
@@ -66157,18 +66120,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("tel")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "tel" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("tel")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "tel"
-                            }
-                          ))
-                        : _vm.selected_column.push("tel")
+                      _vm.selected_column == "tel"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "tel")
                     }
                   }
                 },
@@ -66178,18 +66135,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("email")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "email" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("email")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "email"
-                            }
-                          ))
-                        : _vm.selected_column.push("email")
+                      _vm.selected_column == "email"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "email")
                     }
                   }
                 },
@@ -66207,9 +66158,10 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("fullname")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "fullname"
+                        ? "select-search-data"
+                        : ""
                   },
                   [
                     _vm._v(
@@ -66223,9 +66175,10 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("address")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "address"
+                        ? "select-search-data"
+                        : ""
                   },
                   [_vm._v(_vm._s(customer.address))]
                 ),
@@ -66233,9 +66186,8 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("tel")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "tel" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(customer.tel))]
                 ),
@@ -66243,9 +66195,8 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("email")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "email" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(customer.email))]
                 ),
@@ -67043,18 +66994,15 @@ var render = function() {
                 "th",
                 {
                   staticClass: "text-center ",
-                  class: _vm.selected_column.includes("medicine_name")
-                    ? "select-search"
-                    : "",
+                  class:
+                    _vm.selected_column == "medicine_name"
+                      ? "select-search"
+                      : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("medicine_name")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "medicine_name"
-                            }
-                          ))
-                        : _vm.selected_column.push("medicine_name")
+                      _vm.selected_column == "medicine_name"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "medicine_name")
                     }
                   }
                 },
@@ -67065,18 +67013,12 @@ var render = function() {
                 "th",
                 {
                   staticClass: "text-center ",
-                  class: _vm.selected_column.includes("dosage")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "dosage" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("dosage")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "dosage"
-                            }
-                          ))
-                        : _vm.selected_column.push("dosage")
+                      _vm.selected_column == "dosage"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "dosage")
                     }
                   }
                 },
@@ -67087,18 +67029,12 @@ var render = function() {
                 "th",
                 {
                   staticClass: "text-center ",
-                  class: _vm.selected_column.includes("form")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "form" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("form")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "form"
-                            }
-                          ))
-                        : _vm.selected_column.push("form")
+                      _vm.selected_column == "form"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "form")
                     }
                   }
                 },
@@ -67109,18 +67045,12 @@ var render = function() {
                 "th",
                 {
                   staticClass: "text-center ",
-                  class: _vm.selected_column.includes("family")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "family" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("family")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "family"
-                            }
-                          ))
-                        : _vm.selected_column.push("family")
+                      _vm.selected_column == "family"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "family")
                     }
                   }
                 },
@@ -67146,9 +67076,10 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center ",
-                    class: _vm.selected_column.includes("medicine_name")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "medicine_name"
+                        ? "select-search-data"
+                        : ""
                   },
                   [_vm._v(_vm._s(medicine.medicine_name))]
                 ),
@@ -67157,9 +67088,10 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class: _vm.selected_column.includes("dosage")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "dosage"
+                        ? "select-search-data"
+                        : ""
                   },
                   [_vm._v(_vm._s(medicine.dosage))]
                 ),
@@ -67168,9 +67100,8 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class: _vm.selected_column.includes("form")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "form" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(medicine.form))]
                 ),
@@ -67179,9 +67110,10 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class: _vm.selected_column.includes("family")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "family"
+                        ? "select-search-data"
+                        : ""
                   },
                   [_vm._v(_vm._s(medicine.family))]
                 ),
@@ -68376,18 +68308,13 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("pharmacist")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "pharmacist" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("pharmacist")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "pharmacist"
-                          }
-                        ))
-                      : _vm.selected_column.push("pharmacist")
+                    _vm.selected_column == "pharmacist"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "pharmacist")
                   }
                 }
               },
@@ -68398,18 +68325,12 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("customer")
-                  ? "select-search"
-                  : "",
+                class: _vm.selected_column == "customer" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("customer")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "customer"
-                          }
-                        ))
-                      : _vm.selected_column.push("customer")
+                    _vm.selected_column == "customer"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "customer")
                   }
                 }
               },
@@ -68420,18 +68341,13 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("sale_date")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "sale_date" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("sale_date")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "sale_date"
-                          }
-                        ))
-                      : _vm.selected_column.push("sale_date")
+                    _vm.selected_column == "sale_date"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "sale_date")
                   }
                 }
               },
@@ -68442,18 +68358,13 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column.includes("total_price")
-                  ? "select-search"
-                  : "",
+                class:
+                  _vm.selected_column == "total_price" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column.includes("total_price")
-                      ? (_vm.selected_column = _vm.selected_column.filter(
-                          function(e) {
-                            return e !== "total_price"
-                          }
-                        ))
-                      : _vm.selected_column.push("total_price")
+                    _vm.selected_column == "total_price"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "total_price")
                   }
                 }
               },
@@ -68476,9 +68387,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("pharmacist")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "pharmacist"
+                      ? "select-search-data"
+                      : ""
                 },
                 [_vm._v("\n                        " + _vm._s(sale.pharmacist))]
               ),
@@ -68487,9 +68399,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("customer")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "customer"
+                      ? "select-search-data"
+                      : ""
                 },
                 [_vm._v("\n                        " + _vm._s(sale.customer))]
               ),
@@ -68498,9 +68411,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("sale_date")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "sale_date"
+                      ? "select-search-data"
+                      : ""
                 },
                 [_vm._v("\n                        " + _vm._s(sale.sale_date))]
               ),
@@ -68509,9 +68423,10 @@ var render = function() {
                 "td",
                 {
                   staticClass: "text-center",
-                  class: _vm.selected_column.includes("total_price")
-                    ? "select-search-data"
-                    : ""
+                  class:
+                    _vm.selected_column == "total_price"
+                      ? "select-search-data"
+                      : ""
                 },
                 [
                   _vm._v(
@@ -69129,18 +69044,13 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("fullname")
-                    ? "select-search"
-                    : "",
+                  class:
+                    _vm.selected_column == "fullname" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("fullname")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "fullname"
-                            }
-                          ))
-                        : _vm.selected_column.push("fullname")
+                      _vm.selected_column == "fullname"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "fullname")
                     }
                   }
                 },
@@ -69150,18 +69060,13 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("address")
-                    ? "select-search"
-                    : "",
+                  class:
+                    _vm.selected_column == "address" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("address")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "address"
-                            }
-                          ))
-                        : _vm.selected_column.push("address")
+                      _vm.selected_column == "address"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "address")
                     }
                   }
                 },
@@ -69171,18 +69076,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("tel")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "tel" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("tel")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "tel"
-                            }
-                          ))
-                        : _vm.selected_column.push("tel")
+                      _vm.selected_column == "tel"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "tel")
                     }
                   }
                 },
@@ -69192,18 +69091,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("email")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "email" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("email")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "email"
-                            }
-                          ))
-                        : _vm.selected_column.push("email")
+                      _vm.selected_column == "email"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "email")
                     }
                   }
                 },
@@ -69221,9 +69114,10 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("fullname")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "fullname"
+                        ? "select-search-data"
+                        : ""
                   },
                   [
                     _vm._v(
@@ -69237,9 +69131,10 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("address")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "address"
+                        ? "select-search-data"
+                        : ""
                   },
                   [_vm._v(_vm._s(supplier.address))]
                 ),
@@ -69247,9 +69142,8 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("tel")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "tel" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(supplier.tel))]
                 ),
@@ -69257,9 +69151,8 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("email")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "email" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(supplier.email))]
                 ),
@@ -70054,18 +69947,13 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("fullname")
-                    ? "select-search"
-                    : "",
+                  class:
+                    _vm.selected_column == "fullname" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("fullname")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "fullname"
-                            }
-                          ))
-                        : _vm.selected_column.push("fullname")
+                      _vm.selected_column == "fullname"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "fullname")
                     }
                   }
                 },
@@ -70075,18 +69963,13 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("birthday")
-                    ? "select-search"
-                    : "",
+                  class:
+                    _vm.selected_column == "birthday" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("birthday")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "birthday"
-                            }
-                          ))
-                        : _vm.selected_column.push("birthday")
+                      _vm.selected_column == "birthday"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "birthday")
                     }
                   }
                 },
@@ -70096,18 +69979,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("tel")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "tel" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("tel")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "tel"
-                            }
-                          ))
-                        : _vm.selected_column.push("tel")
+                      _vm.selected_column == "tel"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "tel")
                     }
                   }
                 },
@@ -70117,18 +69994,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("email")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "email" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("email")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "email"
-                            }
-                          ))
-                        : _vm.selected_column.push("email")
+                      _vm.selected_column == "email"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "email")
                     }
                   }
                 },
@@ -70138,18 +70009,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class: _vm.selected_column.includes("role")
-                    ? "select-search"
-                    : "",
+                  class: _vm.selected_column == "role" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column.includes("role")
-                        ? (_vm.selected_column = _vm.selected_column.filter(
-                            function(e) {
-                              return e !== "role"
-                            }
-                          ))
-                        : _vm.selected_column.push("role")
+                      _vm.selected_column == "role"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "role")
                     }
                   }
                 },
@@ -70167,9 +70032,10 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("fullname")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "fullname"
+                        ? "select-search-data"
+                        : ""
                   },
                   [
                     _c("img", {
@@ -70187,9 +70053,10 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("birthday")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "birthday"
+                        ? "select-search-data"
+                        : ""
                   },
                   [_vm._v(_vm._s(user.birthday))]
                 ),
@@ -70197,9 +70064,8 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("tel")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "tel" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(user.tel))]
                 ),
@@ -70207,9 +70073,8 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("email")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "email" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(user.email))]
                 ),
@@ -70217,9 +70082,8 @@ var render = function() {
                 _c(
                   "td",
                   {
-                    class: _vm.selected_column.includes("role")
-                      ? "select-search-data"
-                      : ""
+                    class:
+                      _vm.selected_column == "role" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(user.role))]
                 ),
