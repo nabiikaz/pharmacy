@@ -13,10 +13,21 @@ class MedicineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $medicines = Medicine::paginate(10);
+        $selected_column_count = 0;
+        if($request->has("selected_column"))
+            $selected_column_count = count($request->get("selected_column"));
+        $selected_column  = ( $selected_column_count == 0)? "medicine_name":$request->get("selected_column");
+        $search = $request->get('search');
+        $orderby = ($request->get('filter_flow') == "Descending")? "desc":"asc";
+        
+
+
+
+        $medicines = Medicine::where("medicine_name","like", "%".$search."%")
+                    ->orderBy($selected_column,$orderby)
+                    ->paginate(5);
 
         return MedicineResource::collection($medicines);
     }
