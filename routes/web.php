@@ -70,3 +70,6 @@ Route::get('dashboard/customers',function(){
 Route::get('dashboard/customers/{id}',function($id){
     return view('customers')->with('id',$id);
 });
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
