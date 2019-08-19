@@ -4887,12 +4887,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
+    this.getMedicines();
   },
   data: function data() {
     return {
       route: window.location.pathname,
-      search: "",
       selectedMedicine_Id: -1,
+      search: "",
       selected_column: [],
       filter_flow: 'Ascending',
       //displayed Users 
@@ -4919,16 +4920,36 @@ __webpack_require__.r(__webpack_exports__);
     search: function search(val) {
       this.paginationCurrent = 1;
       this.getMedicines();
+    },
+    selected_column: function selected_column() {
+      this.getMedicines();
+    },
+    filter_flow: function filter_flow() {
+      this.getMedicines();
     }
   },
   methods: {
     //get users in the current page 
     getMedicines: function getMedicines() {
+      var _this = this;
+
       /** get users in the current page using the server's API with (axios)
        * 
        * 
        * 
        */
+      axios.get("/api/medicines", {
+        params: {
+          search: this.search,
+          selected_column: this.selected_column,
+          filter_flow: this.filter_flow,
+          page: this.paginationCurrent
+        }
+      }).then(function (response) {
+        _this.medicines = response.data.data;
+      }, function (error) {
+        console.log(error);
+      });
     },
     settings: function settings(medicineId) {
       this.selectedMedicine_Id = medicineId;
@@ -67129,7 +67150,7 @@ var render = function() {
                       ? "select-search-data"
                       : ""
                   },
-                  [_vm._v(_vm._s(medicine.name))]
+                  [_vm._v(_vm._s(medicine.medicine_name))]
                 ),
                 _vm._v(" "),
                 _c(

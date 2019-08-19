@@ -74,7 +74,7 @@
 
                         
                         
-                        <td class="text-center " :class="(selected_column.includes('medicine_name'))? 'select-search-data':''"  >{{medicine.name}}</td>
+                        <td class="text-center " :class="(selected_column.includes('medicine_name'))? 'select-search-data':''"  >{{medicine.medicine_name}}</td>
                         <td class="text-center"  :class="(selected_column.includes('dosage'))? 'select-search-data':''">{{medicine.dosage}}</td>
                         <td class="text-center"  :class="(selected_column.includes('form'))? 'select-search-data':''">{{medicine.form}}</td>
                         <td class="text-center"  :class="(selected_column.includes('family'))? 'select-search-data':''">{{medicine.family}}</td>
@@ -141,6 +141,7 @@
         },
         mounted() {
             $('[data-tooltip="tooltip"]').tooltip();
+            this.getMedicines()
 
             
 
@@ -151,12 +152,13 @@
         data() {
             return {
                 route : window.location.pathname,
-                search : "",
                 selectedMedicine_Id: -1,
-
+                
+                search : "",
                 selected_column: [],
-
                 filter_flow : 'Ascending',
+
+
                 //displayed Users 
                 medicines: [{
                     Id: 1,
@@ -193,6 +195,12 @@
 
                 this.getMedicines()
 
+            },
+            selected_column: function(){
+                this.getMedicines();
+            },
+            filter_flow : function(){
+                 this.getMedicines();
             }
         },
         
@@ -207,6 +215,24 @@
              * 
              * 
              */
+            axios.get("/api/medicines", {
+                params:{
+                        
+                    search:this.search,
+                    selected_column:this.selected_column,
+                    filter_flow:this.filter_flow,
+                    page:this.paginationCurrent
+                    }
+                   
+                })
+                    .then((response) => {
+                    this.medicines = response.data.data;
+                    
+                }, (error) => {
+                    console.log(error);
+                });
+
+           
 
         },
             settings(medicineId) {
