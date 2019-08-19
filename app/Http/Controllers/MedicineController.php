@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Medicine;
 use App\Http\Resources\Medicine as MedicineResource;
+use Illuminate\Support\Facades\Storage;
+
 class MedicineController extends Controller
 {
     /**
@@ -68,8 +70,36 @@ class MedicineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Medicine $medicine)
     {
+        //test if the request has the image : 
+            if ($request->has('image')){
+                //explode the image and get the extention and base64 
+                $exploded = explode(',',$request->get('image'));
+                if(str_contains($exploded[0],'jpeg'))
+                    $ext = '.jpg';
+                
+                $filename = str_random().$ext;
+                //change the image file name 
+                $request->merge(['Img' => $filename]);
+                
+                //the path in which the image will be saved into 
+                $path  = public_path()."/img/medicines/".$filename;
+
+                $decoded = base64_decode($exploded[1]);
+                file_put_contents($path,$decoded);
+            }
+
+
+
+
+
+        
+        //update the medicine
+        $medicine->update($request->except('image'));
+
+        return new MedicineResource($medicine);
+
         
     }
 

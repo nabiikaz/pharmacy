@@ -11,9 +11,9 @@
                         </button>
                     </div>
                     <div class="modal-body mx-3">
-                       <form method="post" @submit.prevent="editMedicine">
+                       <form method="post" @submit.prevent="editMedicine" id="editMedicineForm">
                             <div class="md-form mb-2 text-center">
-                                <input style="display:none;" type="file" ref="imgInput" @change="onFileSelected" >
+                                <input style="display:none;" type="file" name="image" ref="imgInput" @change="onFileSelected"  >
                                 <img class="shadow-sm p-3  bg-white rounded" v-bind:src="img" width="150"
                                     title="Upload the Medicine Image" style="cursor:pointer;"
                                     @click="$refs.imgInput.click()" />
@@ -28,7 +28,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="name">Name</label>
-                                        <input name="name" type="text" id="name" class="form-control " v-model="medicine.medicine_name"
+                                        <input name="medicine_name" type="text" id="name" class="form-control " v-model="medicine.medicine_name"
                                             required minlength="8" maxlength="25">
                                     </div>
                                     <div class="col-6">
@@ -57,7 +57,7 @@
                                     <div class="col-6">
                                         <label for="Family">Family</label>
 
-                                        <input name="Family" type="text" id="Family" class="form-control "
+                                        <input name="family" type="text" id="Family" class="form-control "
                                             v-model="medicine.family" required>
 
                                     </div>
@@ -69,8 +69,8 @@
                            <span class="text-danger">{{errorMsg}}</span>
 
                             <hr>
-                            <div class="d-flex justify-content-end">
-                                <input type="submit" class="btn btn-primary next-btn pull-right " value="Edit" :disabled="disable">
+                            <div class="d-flex justify-content-center ">
+                                <input type="submit" class="btn btn-primary next-btn w-100 " value="Edit" :disabled="disable">
 
                             </div>
 
@@ -96,7 +96,8 @@
             medicineId: function (Id) {
                 
                 this.getMedicine(Id)
-            }
+            },
+           
 
         },
         data() {
@@ -107,7 +108,7 @@
                 ImgFormData:null,
                 medicine:{
 
-                }
+                },
 
 
 
@@ -119,10 +120,21 @@
         },
 
         methods: {
-             onFileSelected : function(event){
-                this.img = URL.createObjectURL(event.target.files[0])
+             onFileSelected : function(e){
+                this.img = URL.createObjectURL(e.target.files[0])
 
-                this.medicine.ImgFormData =  event.target.files[0],event.target.files[0].name
+                var fileReader = new FileReader()
+
+                fileReader.readAsDataURL(e.target.files[0])
+
+                fileReader.onload = (e) => {
+                    this.medicine.image = e.target.result
+                }
+
+                console.log(this.medicine)
+
+                
+                
 
                 
 
@@ -132,10 +144,11 @@
                     this.disable = false
                     this.errorMsg = ""
                
-                     axios.get('/api/medicines/'+this.medicineId)
+                    axios.get('/api/medicines/'+this.medicineId)
                     .then((Response)=>{
                          this.medicine = Response.data.data
-                         this.img = this.medicine.img
+                         this.img = "/img/medicines/"+this.medicine.Img
+                         console.log(this.medicine)
                          
 
                     }).catch(error => {
@@ -159,7 +172,7 @@
                  
             },
 
-            editMedicine: function () {
+            editMedicine: function (event) {
                 /** edit the Medicine using Axios via the server's API
                  * 
                  * 
@@ -167,6 +180,33 @@
                  * 
                  * 
                  */
+                
+                
+              
+
+                axios.patch('/api/medicines/'+this.medicineId,this.medicine)
+                    .then((Response)=>{
+                        this.ImgFormData = null
+                        this.getMedicine(this.medicineId)
+                
+
+                         
+
+                    }).catch(error => {
+                        
+                        switch (error.response.status) {
+                            case 404:
+
+                                this.disable= true
+                                this.errorMsg = "Medicine Of Id : "+medicineId+" Not Found."
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    });
               
 
             },

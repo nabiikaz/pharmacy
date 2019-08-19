@@ -5255,23 +5255,33 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    onFileSelected: function onFileSelected(event) {
-      this.img = URL.createObjectURL(event.target.files[0]);
-      this.medicine.ImgFormData = event.target.files[0], event.target.files[0].name;
+    onFileSelected: function onFileSelected(e) {
+      var _this = this;
+
+      this.img = URL.createObjectURL(e.target.files[0]);
+      var fileReader = new FileReader();
+      fileReader.readAsDataURL(e.target.files[0]);
+
+      fileReader.onload = function (e) {
+        _this.medicine.image = e.target.result;
+      };
+
+      console.log(this.medicine);
     },
     getMedicine: function getMedicine(medicineId) {
-      var _this = this;
+      var _this2 = this;
 
       this.disable = false;
       this.errorMsg = "";
       axios.get('/api/medicines/' + this.medicineId).then(function (Response) {
-        _this.medicine = Response.data.data;
-        _this.img = _this.medicine.img;
+        _this2.medicine = Response.data.data;
+        _this2.img = "/img/medicines/" + _this2.medicine.Img;
+        console.log(_this2.medicine);
       })["catch"](function (error) {
         switch (error.response.status) {
           case 404:
-            _this.disable = true;
-            _this.errorMsg = "Medicine Of Id : " + medicineId + " Not Found.";
+            _this2.disable = true;
+            _this2.errorMsg = "Medicine Of Id : " + medicineId + " Not Found.";
             break;
 
           default:
@@ -5279,7 +5289,9 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    editMedicine: function editMedicine() {
+    editMedicine: function editMedicine(event) {
+      var _this3 = this;
+
       /** edit the Medicine using Axios via the server's API
        * 
        * 
@@ -5287,6 +5299,21 @@ __webpack_require__.r(__webpack_exports__);
        * 
        * 
        */
+      axios.patch('/api/medicines/' + this.medicineId, this.medicine).then(function (Response) {
+        _this3.ImgFormData = null;
+
+        _this3.getMedicine(_this3.medicineId);
+      })["catch"](function (error) {
+        switch (error.response.status) {
+          case 404:
+            _this3.disable = true;
+            _this3.errorMsg = "Medicine Of Id : " + medicineId + " Not Found.";
+            break;
+
+          default:
+            break;
+        }
+      });
     }
   }
 });
@@ -67791,7 +67818,7 @@ var render = function() {
                 _c(
                   "form",
                   {
-                    attrs: { method: "post" },
+                    attrs: { method: "post", id: "editMedicineForm" },
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
@@ -67804,7 +67831,7 @@ var render = function() {
                       _c("input", {
                         ref: "imgInput",
                         staticStyle: { display: "none" },
-                        attrs: { type: "file" },
+                        attrs: { type: "file", name: "image" },
                         on: { change: _vm.onFileSelected }
                       }),
                       _vm._v(" "),
@@ -67844,7 +67871,7 @@ var render = function() {
                             ],
                             staticClass: "form-control ",
                             attrs: {
-                              name: "name",
+                              name: "medicine_name",
                               type: "text",
                               id: "name",
                               required: "",
@@ -67985,7 +68012,7 @@ var render = function() {
                             ],
                             staticClass: "form-control ",
                             attrs: {
-                              name: "Family",
+                              name: "family",
                               type: "text",
                               id: "Family",
                               required: ""
@@ -68014,16 +68041,20 @@ var render = function() {
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),
-                    _c("div", { staticClass: "d-flex justify-content-end" }, [
-                      _c("input", {
-                        staticClass: "btn btn-primary next-btn pull-right ",
-                        attrs: {
-                          type: "submit",
-                          value: "Edit",
-                          disabled: _vm.disable
-                        }
-                      })
-                    ])
+                    _c(
+                      "div",
+                      { staticClass: "d-flex justify-content-center " },
+                      [
+                        _c("input", {
+                          staticClass: "btn btn-primary next-btn w-100 ",
+                          attrs: {
+                            type: "submit",
+                            value: "Edit",
+                            disabled: _vm.disable
+                          }
+                        })
+                      ]
+                    )
                   ]
                 )
               ])
