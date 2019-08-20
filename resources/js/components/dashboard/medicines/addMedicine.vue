@@ -14,9 +14,9 @@
                         
 
 
-                        <form method="post" @submit.prevent="addMedicine">
+                        <form  @submit.prevent="addMedicine" >
                             <div class="md-form mb-2 text-center">
-                                <input style="display:none;" type="file" ref="imgInput" @change="onFileSelected" >
+                                <input style="display:none;" type="file" id="image" ref="imgInput" @change="onFileSelected" required >
                                 <img class="shadow-sm p-3  bg-white rounded" v-bind:src="img" width="150"
                                     title="Upload the Medicine Image" style="cursor:pointer;"
                                     @click="$refs.imgInput.click()" />
@@ -31,13 +31,13 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="name">Name</label>
-                                        <input name="name" type="text" id="name" class="form-control " v-model="name"
+                                        <input name="name" type="text" id="name" class="form-control " v-model="medicine.medicine_name"
                                             required minlength="8" maxlength="25">
                                     </div>
                                     <div class="col-6">
                                         <label for="dosage">Dosage (mg)</label>
                                         <input name="dosage" type="number" id="dosage" class="form-control "
-                                            v-model="dosage" required min="0.01" step="0.01">
+                                            v-model="medicine.dosage" required min="0.01" step="0.01">
 
                                     </div>
                                 </div>
@@ -49,7 +49,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="form">Form </label>
-                                        <select name="form" id="form" class="form-control" v-model="form" required>
+                                        <select name="form" id="form" class="form-control" v-model="medicine.form" required>
                                             <option value="Comprime">Comprimé</option>
                                             <option value="gelule">gélule</option>
                                             <option value="collyre">collyre</option>
@@ -61,39 +61,21 @@
                                         <label for="Family">Family</label>
 
                                         <input name="Family" type="text" id="Family" class="form-control "
-                                            v-model="family" required>
+                                            v-model="medicine.family" required>
 
                                     </div>
                                 </div>
 
 
                             </div>
+                            <span :class="MessageClass">{{Message}}</span>
 
-                            <div class="md-form mb-2">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="Stock">Stock</label>
-
-                                        <input name="Stock" type="text" id="Stock" class="form-control "
-                                            v-model="stock" required>
-
-
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="refund">Refund</label>
-
-                                        <input name="refund" type="number" id="refund" class="form-control "
-                                            v-model="refund" required min="0" max="100">
-
-                                    </div>
-                                </div>
-
-
-                            </div>
+                            
 
                             <hr>
-                            <div class="d-flex justify-content-end">
-                                <input type="submit" class="btn btn-primary next-btn pull-right " value="Next">
+                            
+                            <div class="d-flex justify-content-center ">
+                                <input type="submit" class="btn btn-primary next-btn w-100 " value="Add Medicine" >
 
                             </div>
 
@@ -115,7 +97,6 @@
 
 
 <script>
-import { constants } from 'crypto';
     export default {
 
         props: ['medicineId'],
@@ -126,16 +107,18 @@ import { constants } from 'crypto';
             return {
 
                 img : "/img/icons/pills.png",
+                Message:"",
+                MessageClass:"text-success",
 
-                Img : null,
-                Id: "",
-                name: "",
+                
+                medicine:{
+                    
+                
+                medicine_name: "",
                 dosage: "",
                 form: "",
                 family: "",
-                stock: 0,
-                stock_min: 15,
-                refund: 0,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
+                }
 
 
 
@@ -143,13 +126,26 @@ import { constants } from 'crypto';
             }
         },
         methods: {
-            onFileSelected : function(event){
-                this.img = URL.createObjectURL(event.target.files[0])
+            onFileSelected : function(e){
+                this.img = URL.createObjectURL(e.target.files[0])
 
-                this.Img = new FormData()
-                this.Img.append("image",event.target.files[0],event.target.files[0].name)
+                var fileReader = new FileReader()
+
+                fileReader.readAsDataURL(e.target.files[0])
+
+                fileReader.onload = (e) => {
+                    this.medicine.image = e.target.result
+                }
+
+               // console.log(this.medicine)
+
+                
+                
+
+                
+
+                
             },
-
 
 
 
@@ -163,9 +159,70 @@ import { constants } from 'crypto';
                  * 
                  * 
                  * */
+                console.log(this.medicine)
+                
+                axios.post('/api/medicines',this.medicine)
+                    .then((response)=>{
+                        console.log(response)
+
+                        switch (response.status) {
+                            case 201:
+
+                                this.Message = "Medicine was created successfully ."
+                                this.MessageClass = "text-success"
+                                //clear all inputs 
+                                this.medicine = {}
+                                $("#image").val("")
+                                this.img = "/img/icons/pills.png"
+                                //emit back the created Medicine : 
+                                
+                                this.$emit('created', response.data.data)
 
 
-                alert("Medicine Added")
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                
+
+                         
+
+                    }).catch(error => {
+
+
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            this.Message = "Medicine Couldn't be created || Server Error : "+error.response.statusText
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 404:
+
+                                
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                        }else if (error.request) {
+                            /*
+                            * The request was made but no response was received, `error.request`
+                            * is an instance of XMLHttpRequest in the browser and an instance
+                            * of http.ClientRequest in Node.js
+                            */
+                            console.log(error.request);
+                        } else {
+                            // Something happened in setting up the request and triggered an Error
+                            console.log('Error', error.message);
+                        }
+                       
+                    });
             },
 
 

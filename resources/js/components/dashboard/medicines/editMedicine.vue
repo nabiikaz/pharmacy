@@ -66,7 +66,8 @@
 
                             </div>
 
-                           <span class="text-danger">{{errorMsg}}</span>
+                            <span :class="MessageClass">{{Message}}</span>
+                           
 
                             <hr>
                             <div class="d-flex justify-content-center ">
@@ -103,7 +104,8 @@
         data() {
             return {
                 disable:false,//this boolean variable is for disabling the inputs if an error occures
-                errorMsg: "",
+                Message:"",
+                MessageClass:"text-success",
                 img: "/img/icons/pills.png",
                 ImgFormData:null,
                 medicine:{
@@ -131,7 +133,7 @@
                     this.medicine.image = e.target.result
                 }
 
-                console.log(this.medicine)
+                //console.log(this.medicine)
 
                 
                 
@@ -149,23 +151,31 @@
                          this.medicine = Response.data.data
                          this.img = "/img/medicines/"+this.medicine.Img
                          console.log(this.medicine)
+
                          
 
                     }).catch(error => {
                         
-                        switch (error.response.status) {
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            this.Message = "Medicine Couldn't be created || Server Error : "+error.response.statusText
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
                             case 404:
 
-                                this.disable= true
-                                this.errorMsg = "Medicine Of Id : "+medicineId+" Not Found."
+                                
 
                                 
                                 break;
                         
                             default:
                                 break;
+                            }   
                         }
-                    });
+                    })
                
                
 
@@ -188,17 +198,20 @@
                     .then((Response)=>{
                         this.ImgFormData = null
                         this.getMedicine(this.medicineId)
-                
+                                console.log("here")
+                        switch (Response.status) {
+                            case 200:
 
-                         
+                                this.Message = "Medicine was updated successfully ."
+                                this.MessageClass = "text-success"
+                                //clear all inputs 
+                                this.medicine = {}
+                                $("#image").val("")
+                                this.img = "/img/icons/pills.png"
+                                //emit back the edited Medicine : 
+                                this.$emit('updated', Response.data.data)
+                                console.log("updated")
 
-                    }).catch(error => {
-                        
-                        switch (error.response.status) {
-                            case 404:
-
-                                this.disable= true
-                                this.errorMsg = "Medicine Of Id : "+medicineId+" Not Found."
 
                                 
                                 break;
@@ -206,6 +219,33 @@
                             default:
                                 break;
                         }
+                         
+                
+
+                         
+
+                    }).catch(error => {
+                        
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            this.Message = "Medicine Couldn't be created || Server Error : "+error.response.statusText
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 404:
+
+                                
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                        }
+                        
                     });
               
 

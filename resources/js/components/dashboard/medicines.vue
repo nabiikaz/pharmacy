@@ -70,7 +70,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(medicine,index) in medicines" :key="index">
+                    <tr :style="medicine.highlight" v-for="(medicine,index) in medicines" :key="index">
 
                         
                         
@@ -116,10 +116,10 @@
 
         
         
-    <addMedicine ></addMedicine>
+    <addMedicine @created="onMedicineCreated"></addMedicine>
    
    
-    <editMedicine :medicineId="selectedMedicine_Id"> </editMedicine>
+    <editMedicine :medicineId="selectedMedicine_Id" @updated="onMedicineUpdated"> </editMedicine>
 
     </div>
 </template>
@@ -151,6 +151,7 @@
 
         data() {
             return {
+                
                 route : window.location.pathname,
                 selectedMedicine_Id: -1,
                 
@@ -180,6 +181,9 @@
             },
             filter_flow : function(){
                  this.getMedicines();
+            },
+            selectedMedicine_Id: function(old_val,new_val){
+                this.getMedicines();
             }
         },
         
@@ -187,6 +191,40 @@
 
 
         methods: {
+            
+            //when a medicine is updated event is triggered from the editMedicine Child component            
+            onMedicineUpdated : function(medicine){
+                
+                medicine.highlight = "background-color:#2ec741"     
+                
+
+                $("#modaleditMedicine").modal("hide") // we first need to hide the "modaladdMedicine" modal
+                //we add the update the  medicine with the selectedMedicine_Id
+
+                for (let index = 0; index < this.medicines.length; index++) {
+                    if(this.medicines[index].id == this.selectedMedicine_Id){
+                                          
+                        this.medicines.splice(index,1)
+                        this.medicines.unshift(medicine)
+
+                        
+
+                    }
+                    
+                }
+                
+
+
+            },
+            //when a medicine is created event is triggered from the addMedicine Child component
+            onMedicineCreated: function(medicine){
+                medicine.highlight = "background-color:#2ec741"     
+
+                $("#modaladdMedicine").modal("hide") // we first need to hide the "modaladdMedicine" modal
+                //we add the new medicine in the start
+                this.medicines.unshift(medicine)
+                
+            },
             //delete medicines 
             deleteMedicine: function(medicineId){
                  axios.delete('/api/medicines/'+medicineId).then((response)=>{

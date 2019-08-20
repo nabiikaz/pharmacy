@@ -47,7 +47,43 @@ class MedicineController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         //test if the request has the image : 
+
+            if ($request->has('image')){
+                //explode the image and get the extention and base64 
+                $exploded = explode(',',$request->get('image'));
+                if(str_contains($exploded[0],'jpeg'))
+                    $ext = '.jpg';
+                
+                $filename = str_random().$ext;
+                //change the image file name 
+                $request->merge(['Img' => $filename]);
+                
+                //the path in which the image will be saved into 
+                $path  = public_path()."/img/medicines/".$filename;
+
+                $decoded = base64_decode($exploded[1]);
+                file_put_contents($path,$decoded);
+                 //update the medicine
+                $medicine = Medicine::create([
+                    'dosage' => $request->dosage,
+                    'family' => $request->family,
+                    'form' => $request->form,
+                    'medicine_name' => $request->medicine_name,
+                    'description' => "N/A",
+                    'Img' => $filename
+
+                ]);
+
+                return new MedicineResource($medicine);
+            }
+
+
+
+
+
+        
+       
     }
 
     /**
@@ -72,6 +108,7 @@ class MedicineController extends Controller
      */
     public function update(Request $request, Medicine $medicine)
     {
+        
         //test if the request has the image : 
             if ($request->has('image')){
                 //explode the image and get the extention and base64 
