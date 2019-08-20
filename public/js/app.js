@@ -3441,6 +3441,8 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     medicineId: function medicineId(Id) {
       this.getMedicine(Id);
+      this.Message = "";
+      this.MessageClass = "text-success";
     }
   },
   data: function data() {
@@ -3482,7 +3484,7 @@ __webpack_require__.r(__webpack_exports__);
            * the request was made and the server responded with  a
            * status code that falls out of the range of 2**
            *  */
-          _this2.Message = "Medicine Couldn't be created || Server Error : " + error.response.statusText;
+          _this2.Message = "Medicine : " + error.response.statusText;
           _this2.MessageClass = "text-danger";
 
           switch (error.response.status) {
@@ -3535,7 +3537,7 @@ __webpack_require__.r(__webpack_exports__);
            * the request was made and the server responded with  a
            * status code that falls out of the range of 2**
            *  */
-          _this3.Message = "Medicine Couldn't be created || Server Error : " + error.response.statusText;
+          _this3.Message = "Medicine : " + error.response.statusText;
           _this3.MessageClass = "text-danger";
 
           switch (error.response.status) {
@@ -4454,6 +4456,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
+    this.getUsers();
   },
   data: function data() {
     return {
@@ -4462,31 +4465,7 @@ __webpack_require__.r(__webpack_exports__);
       selected_column: '',
       filter_flow: 'Ascending',
       //displayed Users 
-      users: [{
-        Id: 1,
-        avatarPath: "/img/avatars/nabi.jpg",
-        fullname: "nabi zakaria",
-        birthday: "07/29/1995",
-        tel: "0555655100",
-        email: "nabi@gmail.com",
-        role: "Admin"
-      }, {
-        Id: 2,
-        avatarPath: "/img/avatars/nabi.jpg",
-        fullname: "zakaria",
-        birthday: "07/29/1995",
-        tel: "0555655100",
-        email: "nabi@g.com",
-        role: "employee"
-      }, {
-        Id: 3,
-        avatarPath: "/img/avatars/nabi.jpg",
-        fullname: "nabi zakaria",
-        birthday: "07/29/1995",
-        tel: "0555655100",
-        email: "nabi@gmail.com",
-        role: "Admin"
-      }],
+      users: [],
       paginationCurrent: 1
     };
   },
@@ -4497,17 +4476,79 @@ __webpack_require__.r(__webpack_exports__);
     search: function search(val) {
       this.paginationCurrent = 1;
       this.getUsers();
+    },
+    selected_column: function selected_column() {
+      this.getUsers();
+    },
+    filter_flow: function filter_flow() {
+      this.getUsers();
+    },
+    selectedUser_Id: function selectedUser_Id(old_val, new_val) {
+      this.getUsers();
     }
   },
   methods: {
+    //when a user is updated event is triggered from the editMedicine Child component            
+    onUserUpdated: function onUserUpdated(user) {
+      user.highlight = "background-color:#2ec741";
+      $("#modaleditMedicine").modal("hide"); // we first need to hide the "modaladdMedicine" modal
+      //we add the update the  user with the selectedMedicine_Id
+
+      for (var index = 0; index < this.users.length; index++) {
+        if (this.users[index].id == this.selectedMedicine_Id) {
+          this.users.splice(index, 1);
+          this.users.unshift(user);
+        }
+      }
+    },
+    //when a user is created event is triggered from the addMedicine Child component
+    onUserCreated: function onUserCreated(user) {
+      user.highlight = "background-color:#2ec741";
+      $("#modaladdMedicine").modal("hide"); // we first need to hide the "modaladdMedicine" modal
+      //we add the new user in the start
+
+      this.users.unshift(user);
+    },
+    //delete users 
+    deleteUser: function deleteUser(userId) {
+      var _this = this;
+
+      axios["delete"]('/api/pharmacists/' + userId).then(function (response) {
+        _this.getUsers();
+      })["catch"](function (error) {
+        switch (error.response.status) {
+          case 404:
+            //if the user is already deleted then refresh current users view 
+            _this.getUsers();
+
+            break;
+
+          default:
+            break;
+        }
+      });
+    },
     //get users in the current page 
-    getUsers: function getUsers() {//don't forget the search and paginationCurrent 
+    getUsers: function getUsers() {
+      var _this2 = this;
 
       /** get users in the current page using the server's API with (axios)
        * 
        * 
        * 
        */
+      axios.get("/api/pharmacists", {
+        params: {
+          search: this.search,
+          selected_column: this.selected_column,
+          filter_flow: this.filter_flow,
+          page: this.paginationCurrent
+        }
+      }).then(function (response) {
+        _this2.users = response.data.data;
+      }, function (error) {
+        console.log(error);
+      });
     },
     settings: function settings(UserId) {
       this.selectedUser_Id = UserId;
@@ -4629,94 +4670,95 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['userId'],
   mounted: function mounted() {},
   data: function data() {
     return {
-      img: "/img/icons/man.png",
+      img: "/img/icons/pills.png",
+      Message: "",
+      MessageClass: "text-success",
       Img: null,
-      fullname: "",
-      birthday: "",
-      tel: "",
-      email: "",
-      username: "",
-      password: "",
-      validationError: ""
+      user: {
+        name: "",
+        birthday: "",
+        tel: "",
+        email: "",
+        password: ""
+      }
     };
   },
   methods: {
-    onFileSelected: function onFileSelected(event) {
-      this.img = URL.createObjectURL(event.target.files[0]);
-      this.Img = new FormData();
-      this.Img.append("image", event.target.files[0], event.target.files[0].name);
+    onFileSelected: function onFileSelected(e) {
+      var _this = this;
+
+      this.img = URL.createObjectURL(e.target.files[0]);
+      var fileReader = new FileReader();
+      fileReader.readAsDataURL(e.target.files[0]);
+
+      fileReader.onload = function (e) {
+        _this.user.image = e.target.result;
+      };
     },
-    NextModal: function NextModal(id) {
-      //hide the current modal (the personal information modal)
-      $("#modaladdUser").modal('hide'); //show the second modal (the credentials modal)
+    addUser: function addUser(id) {
+      var _this2 = this;
 
-      $("#modaladdUser2").modal("show");
-    },
-    PreviousModal: function PreviousModal() {
-      this.validationError = ""; //hide the current modal (the credentials modal)
+      console.log(this.user);
+      axios.post('/api/pharmacists', this.user).then(function (response) {
+        console.log(response);
 
-      $("#modaladdUser2").modal('hide'); //show the first modal (the personal information modal)
+        switch (response.status) {
+          case 201:
+            _this2.Message = "Pharmacist was created successfully .";
+            _this2.MessageClass = "text-success"; //clear all inputs 
 
-      $("#modaladdUser").modal("show");
+            _this2.user = {};
+            $("#image").val("");
+            _this2.img = "/img/icons/pills.png"; //emit back the created Medicine : 
+
+            _this2.$emit('created', response.data.data);
+
+            break;
+
+          default:
+            break;
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          _this2.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 422:
+              _this2.Message = Object.values(error.response.data.errors)[0][0];
+              _this2.MessageClass = "text-danger";
+              return;
+              break;
+
+            default:
+              break;
+          }
+
+          _this2.Message = "User Couldn't be created || Server Error : " + error.response.statusText;
+        } else if (error.request) {
+          /*
+          * The request was made but no response was received, `error.request`
+          * is an instance of XMLHttpRequest in the browser and an instance
+          * of http.ClientRequest in Node.js
+          */
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request and triggered an Error
+          console.log('Error', error.message);
+        }
+      });
     },
     untoggle_modal: function untoggle_modal(id) {
       this.validationError = "";
       $("#" + id).modal('hide');
-    },
-    addUser: function addUser() {
-      //this method adds a user via the api 
-
-      /* we add new User using Axios 
-      *
-      *
-      * 
-      * 
-      * 
-      * 
-      * 
-      * */
-      alert("User Added");
     }
   },
   components: {}
@@ -44137,12 +44179,34 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _vm._m(1)
+              _c("div", { staticClass: "col-md-4" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: {
+                      href: "#",
+                      "data-toggle": "modal",
+                      "data-target": "#modaladdMedicine"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.getMedicines()
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Add New Medicine")])
+                  ]
+                )
+              ])
             ])
           ]
         ),
         _vm._v(" "),
-        _vm._m(2),
+        _vm._m(1),
         _vm._v(" "),
         _c("table", { staticClass: "table table-striped table-hover" }, [
           _c("thead", [
@@ -44473,29 +44537,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-sm-4" }, [
       _c("h2", [_vm._v("Medicines "), _c("b", [_vm._v("Manager")])])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-4" }, [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-primary",
-          attrs: {
-            href: "#",
-            "data-toggle": "modal",
-            "data-target": "#modaladdMedicine"
-          }
-        },
-        [
-          _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
-          _vm._v(" "),
-          _c("span", [_vm._v("Add New Medicine")])
-        ]
-      )
     ])
   },
   function() {
@@ -45942,7 +45983,7 @@ var staticRenderFns = [
     return _c("li", { staticClass: "nav-item" }, [
       _c(
         "a",
-        { staticClass: "nav-link", attrs: { href: "/dashboard/users" } },
+        { staticClass: "nav-link", attrs: { href: "/dashboard/pharmacists" } },
         [
           _c("img", {
             attrs: {
@@ -46996,7 +47037,29 @@ var render = function() {
                 })
               ]),
               _vm._v(" "),
-              _vm._m(1)
+              _c("div", { staticClass: "col-md-4" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: {
+                      href: "#",
+                      "data-toggle": "modal",
+                      "data-target": "#modaladdUser"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.getUsers()
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("Add New User")])
+                  ]
+                )
+              ])
             ])
           ]
         ),
@@ -47007,13 +47070,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class:
-                    _vm.selected_column == "fullname" ? "select-search" : "",
+                  class: _vm.selected_column == "name" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column == "fullname"
+                      _vm.selected_column == "name"
                         ? (_vm.selected_column = "")
-                        : (_vm.selected_column = "fullname")
+                        : (_vm.selected_column = "name")
                     }
                   }
                 },
@@ -47088,7 +47150,7 @@ var render = function() {
           _c(
             "tbody",
             _vm._l(_vm.users, function(user, index) {
-              return _c("tr", { key: index }, [
+              return _c("tr", { key: index, style: user.highlight }, [
                 _c(
                   "td",
                   {
@@ -47100,11 +47162,11 @@ var render = function() {
                   [
                     _c("img", {
                       staticClass: "avatar",
-                      attrs: { src: user.avatarPath, alt: "Avatar" }
+                      attrs: { src: "/img/avatars/" + user.Img, alt: "Avatar" }
                     }),
                     _vm._v(
                       "\n                        " +
-                        _vm._s(user.fullname) +
+                        _vm._s(user.name) +
                         "\n                    "
                     )
                   ]
@@ -47161,7 +47223,7 @@ var render = function() {
                       },
                       on: {
                         click: function($event) {
-                          return _vm.settings(user.Id)
+                          return _vm.settings(user.id)
                         }
                       }
                     },
@@ -47172,7 +47234,28 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(2, true)
+                  _c(
+                    "a",
+                    {
+                      staticClass: "delete",
+                      attrs: {
+                        href: "#",
+                        title: "",
+                        "data-tooltip": "tooltip",
+                        "data-original-title": "Delete"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteUser(user.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        attrs: { src: "/img/icons/trash.png", width: "24" }
+                      })
+                    ]
+                  )
                 ])
               ])
             }),
@@ -47290,9 +47373,12 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("editUser", { attrs: { userId: _vm.selectedUser_Id } }),
+      _c("editUser", {
+        attrs: { userId: _vm.selectedUser_Id },
+        on: { updated: _vm.onUserUpdated }
+      }),
       _vm._v(" "),
-      _c("addUser")
+      _c("addUser", { on: { created: _vm.onUserCreated } })
     ],
     1
   )
@@ -47305,47 +47391,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col-sm-4" }, [
       _c("h2", [_vm._v("Users "), _c("b", [_vm._v("Manager")])])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-4" }, [
-      _c(
-        "a",
-        {
-          staticClass: "btn btn-primary",
-          attrs: {
-            href: "#",
-            "data-toggle": "modal",
-            "data-target": "#modaladdUser"
-          }
-        },
-        [
-          _c("i", { staticClass: "material-icons" }, [_vm._v("")]),
-          _vm._v(" "),
-          _c("span", [_vm._v("Add New User")])
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "delete",
-        attrs: {
-          href: "#",
-          title: "",
-          "data-tooltip": "tooltip",
-          "data-original-title": "Delete"
-        }
-      },
-      [_c("img", { attrs: { src: "/img/icons/trash.png", width: "24" } })]
-    )
   }
 ]
 render._withStripped = true
@@ -47398,7 +47443,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.NextModal($event)
+                        return _vm.addUser($event)
                       }
                     }
                   },
@@ -47407,7 +47452,7 @@ var render = function() {
                       _c("input", {
                         ref: "imgInput",
                         staticStyle: { display: "none" },
-                        attrs: { type: "file" },
+                        attrs: { type: "file", id: "image", required: "" },
                         on: { change: _vm.onFileSelected }
                       }),
                       _vm._v(" "),
@@ -47445,8 +47490,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.fullname,
-                                expression: "fullname"
+                                value: _vm.user.name,
+                                expression: "user.name"
                               }
                             ],
                             staticClass: "form-control ",
@@ -47458,13 +47503,13 @@ var render = function() {
                               minlength: "8",
                               maxlength: "25"
                             },
-                            domProps: { value: _vm.fullname },
+                            domProps: { value: _vm.user.name },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.fullname = $event.target.value
+                                _vm.$set(_vm.user, "name", $event.target.value)
                               }
                             }
                           })
@@ -47480,8 +47525,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.birthday,
-                                expression: "birthday"
+                                value: _vm.user.birthday,
+                                expression: "user.birthday"
                               }
                             ],
                             staticClass: "form-control ",
@@ -47491,13 +47536,17 @@ var render = function() {
                               id: "birthday",
                               required: ""
                             },
-                            domProps: { value: _vm.birthday },
+                            domProps: { value: _vm.user.birthday },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.birthday = $event.target.value
+                                _vm.$set(
+                                  _vm.user,
+                                  "birthday",
+                                  $event.target.value
+                                )
                               }
                             }
                           })
@@ -47517,8 +47566,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.tel,
-                                expression: "tel"
+                                value: _vm.user.tel,
+                                expression: "user.tel"
                               }
                             ],
                             staticClass: "form-control ",
@@ -47529,13 +47578,13 @@ var render = function() {
                               required: "",
                               pattern: "[0-9]{9}|[0-9]{10}"
                             },
-                            domProps: { value: _vm.tel },
+                            domProps: { value: _vm.user.tel },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.tel = $event.target.value
+                                _vm.$set(_vm.user, "tel", $event.target.value)
                               }
                             }
                           })
@@ -47551,8 +47600,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.email,
-                                expression: "email"
+                                value: _vm.user.email,
+                                expression: "user.email"
                               }
                             ],
                             staticClass: "form-control ",
@@ -47562,18 +47611,57 @@ var render = function() {
                               id: "email",
                               required: ""
                             },
-                            domProps: { value: _vm.email },
+                            domProps: { value: _vm.user.email },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.email = $event.target.value
+                                _vm.$set(_vm.user, "email", $event.target.value)
                               }
                             }
                           })
                         ])
                       ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "md-form mb-2" }, [
+                      _c("label", { attrs: { for: "password" } }, [
+                        _vm._v("Password")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.password,
+                            expression: "user.password"
+                          }
+                        ],
+                        staticClass: "form-control ",
+                        attrs: {
+                          name: "password",
+                          type: "password",
+                          id: "password",
+                          required: "",
+                          minlength: "8",
+                          maxlength: "16"
+                        },
+                        domProps: { value: _vm.user.password },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.user, "password", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { class: _vm.MessageClass }, [
+                      _vm._v(_vm._s(_vm.Message))
                     ]),
                     _vm._v(" "),
                     _c("hr"),
@@ -47582,69 +47670,6 @@ var render = function() {
                   ]
                 )
               ])
-            ])
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "modaladdUser2",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "myModalLabel",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
-          [
-            _c("div", { staticClass: "modal-content" }, [
-              _vm._m(3),
-              _vm._v(" "),
-              _c(
-                "form",
-                {
-                  attrs: { method: "post" },
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.addUser($event)
-                    }
-                  }
-                },
-                [
-                  _vm._m(4),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "d-flex justify-content-end mb-2 mr-3" },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "btn btn-primary previous-btn mr-2 ",
-                          on: { click: _vm.PreviousModal }
-                        },
-                        [_vm._v("Previous")]
-                      ),
-                      _vm._v(" "),
-                      _c("input", {
-                        staticClass: "btn btn-success submit-btn mr-3",
-                        attrs: { type: "submit", value: "Add User" }
-                      })
-                    ]
-                  )
-                ]
-              )
             ])
           ]
         )
@@ -47690,78 +47715,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "d-flex justify-content-end" }, [
+    return _c("div", { staticClass: "d-flex justify-content-center " }, [
       _c("input", {
-        staticClass: "btn btn-primary next-btn pull-right ",
-        attrs: { type: "submit", value: "Next" }
+        staticClass: "btn btn-primary next-btn w-100 ",
+        attrs: { type: "submit", value: "Add Medicine" }
       })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header text-center" }, [
-      _c("h4", { staticClass: "modal-title w-100 font-weight-bold" }, [
-        _vm._v("Add New User")
-      ]),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-body mx-3" }, [
-      _c("div", { staticClass: "md-from mb-2 " }, [
-        _c("h3", { staticStyle: { color: "#6f6e6e" } }, [
-          _vm._v("Enter User Credentials")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "md-form mb-2" }, [
-        _c("label", { attrs: { for: "username" } }, [_vm._v("Login Username")]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: {
-            name: "username",
-            type: "text",
-            id: "username",
-            required: "",
-            minlength: "8",
-            maxlength: "16"
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "md-form mb-2" }, [
-        _c("label", { attrs: { for: "password" } }, [_vm._v("Password")]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control ",
-          attrs: {
-            name: "password",
-            type: "password",
-            id: "password",
-            required: "",
-            minlength: "8",
-            maxlength: "16"
-          }
-        })
-      ])
     ])
   }
 ]

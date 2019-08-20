@@ -18,7 +18,7 @@
                                 :title="filter_flow">
                     </div>
                     <div class="col-md-4">
-                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdMedicine">
+                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdMedicine" @click="getMedicines()">
                             <i class="material-icons"></i> <span>Add New Medicine</span>
 
                         </a>
@@ -218,6 +218,7 @@
             },
             //when a medicine is created event is triggered from the addMedicine Child component
             onMedicineCreated: function(medicine){
+                
                 medicine.highlight = "background-color:#2ec741"     
 
                 $("#modaladdMedicine").modal("hide") // we first need to hide the "modaladdMedicine" modal

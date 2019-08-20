@@ -14,6 +14,9 @@ return [
         'user' => [
             'profile' => 'r,u'
         ],
+        'moderator' => [
+            'profile' => 'r,u'
+        ],
     ],
     'permission_structure' => [
         'cru_user' => [

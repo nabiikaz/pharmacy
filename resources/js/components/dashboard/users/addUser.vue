@@ -14,9 +14,9 @@
                         
 
 
-                        <form method="post" @submit.prevent="NextModal">
+                        <form method="post" @submit.prevent="addUser">
                             <div class="md-form mb-2 text-center">
-                                <input style="display:none;" type="file" ref="imgInput" @change="onFileSelected" >
+                                <input style="display:none;" type="file" id="image" ref="imgInput" @change="onFileSelected" required >
                                 <img class=" avatar" alt="Avatar" v-bind:src="img" width="150"
                                     title="Upload the Medicine Image" style="cursor:pointer;border-radius:150px"
                                     @click="$refs.imgInput.click()" />
@@ -32,12 +32,12 @@
                                     <div class="col-6">
                                         <label for="fullname">Fullname</label>
                                         <input name="fullname" type="text" id="fullname" class="form-control "
-                                            v-model="fullname" required minlength="8" maxlength="25">
+                                            v-model="user.name" required minlength="8" maxlength="25">
                                     </div>
                                     <div class="col-6">
                                         <label for="birthday">Birthday</label>
                                         <input name="birthday" type="date" id="birthday" class="form-control " 
-                                            v-model="birthday" required>
+                                            v-model="user.birthday" required>
 
                                     </div>
                                 </div>
@@ -50,24 +50,32 @@
                                     <div class="col-6">
                                         <label for="phone">Phone Number :</label>
                                         <input name="phone number" type="tel" id="phone" class="form-control " 
-                                                v-model="tel" required pattern="[0-9]{9}|[0-9]{10}">
+                                                v-model="user.tel" required pattern="[0-9]{9}|[0-9]{10}">
 
                                     </div>
                                     <div class="col-6">
                                         <label for="email">Email</label>
 
                                         <input name="email" type="email" id="email" class="form-control " 
-                                        v-model="email" required>
+                                        v-model="user.email" required>
 
                                     </div>
                                 </div>
 
 
                             </div>
+
+                            <div class="md-form mb-2">
+                                <label for="password">Password</label>
+                                <input name="password" type="password" id="password" class="form-control " 
+                                            required minlength="8" maxlength="16" v-model="user.password">
+                            </div>
+                            <span :class="MessageClass">{{Message}}</span>
+
                             
                             <hr>
-                            <div class="d-flex justify-content-end">
-                                <input type="submit" class="btn btn-primary next-btn pull-right " value="Next">
+                            <div class="d-flex justify-content-center ">
+                                <input type="submit" class="btn btn-primary next-btn w-100 " value="Add Medicine" >
 
                             </div>
 
@@ -82,51 +90,7 @@
 
 
 
-        <div class="modal fade" id="modaladdUser2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header text-center">
-                        <h4 class="modal-title w-100 font-weight-bold">Add New User</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form method="post" @submit.prevent="addUser">
-                        <div class="modal-body mx-3">
-                            <div class="md-from mb-2 ">
-                                <h3 style="color: #6f6e6e;">Enter User Credentials</h3>
-                            </div>
-                            
-                            <div class="md-form mb-2">
-                                <label for="username">Login Username</label>
-                                <input name="username" type="text" id="username" class="form-control"
-                                            required minlength="8" maxlength="16">
-                            </div>
-
-
-                            <div class="md-form mb-2">
-                                <label for="password">Password</label>
-                                <input name="password" type="password" id="password" class="form-control " 
-                                            required minlength="8" maxlength="16">
-                            </div>
-
-
-                            
-                        </div>
-
-
-                        <hr>
-                        <div class="d-flex justify-content-end mb-2 mr-3">
-                            <div  class="btn btn-primary previous-btn mr-2 "   @click="PreviousModal">Previous</div>
-                            <input type="submit" class="btn btn-success submit-btn mr-3" value="Add User" >
-
-                        </div>
-                    </form>
-                   
-                </div>
-            </div>
-        </div>
+       
     </div>
 
 </template>
@@ -143,15 +107,21 @@
         data() {
             return {
 
-                img: "/img/icons/man.png",
-                Img: null,
-                fullname: "",
-                birthday: "",
-                tel: "",
-                email: "",
-                username: "",
-                password: "",
-                validationError : "",
+                img : "/img/icons/pills.png",
+                Message:"",
+                MessageClass:"text-success",
+                Img:null,
+                
+                user:{
+                    
+                    name: "",
+                    birthday: "",
+                    tel: "",
+                    email: "",
+                    password: "",
+                    
+
+                },
 
 
                
@@ -159,59 +129,100 @@
             }
         },
         methods: {
-            onFileSelected : function(event){
-                this.img = URL.createObjectURL(event.target.files[0])
+            onFileSelected : function(e){
+                 this.img = URL.createObjectURL(e.target.files[0])
 
-                this.Img = new FormData()
-                this.Img.append("image",event.target.files[0],event.target.files[0].name)
+                var fileReader = new FileReader()
+
+                fileReader.readAsDataURL(e.target.files[0])
+
+                fileReader.onload = (e) => {
+                    this.user.image = e.target.result
+                }
             },
 
-            NextModal: function (id) {
+            addUser: function (id) {
                 
-               //hide the current modal (the personal information modal)
-                $("#modaladdUser").modal('hide')
+                console.log(this.user)
                 
-                //show the second modal (the credentials modal)
-                $("#modaladdUser2").modal("show")
+                axios.post('/api/pharmacists',this.user)
+                    .then((response)=>{
+                        console.log(response)
+
+                        switch (response.status) {
+                            case 201:
+
+                                this.Message = "Pharmacist was created successfully ."
+                                this.MessageClass = "text-success"
+                                //clear all inputs 
+                                this.user = {}
+                                $("#image").val("")
+                                this.img = "/img/icons/pills.png"
+                                //emit back the created Medicine : 
+                                
+                                this.$emit('created', response.data.data)
+
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                
+
+                         
+
+                    }).catch(error => {
+
+
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 422 :                              
+                                this.Message  = Object.values(error.response.data.errors)[0][0]
+                                
+                                this.MessageClass = "text-danger"
+                                return
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                            this.Message = "User Couldn't be created || Server Error : "+error.response.statusText
+                        }else if (error.request) {
+                            /*
+                            * The request was made but no response was received, `error.request`
+                            * is an instance of XMLHttpRequest in the browser and an instance
+                            * of http.ClientRequest in Node.js
+                            */
+                            console.log(error.request);
+                        } else {
+                            // Something happened in setting up the request and triggered an Error
+                            console.log('Error', error.message);
+                        }
+                       
+                    });
+            
 
 
 
                 
 
             },
-            PreviousModal : function(){
-                
-                
-                this.validationError = ""
-
-                //hide the current modal (the credentials modal)
-                $("#modaladdUser2").modal('hide')
-                
-                //show the first modal (the personal information modal)
-                $("#modaladdUser").modal("show")
-
-
-
-                
-            },
+            
             untoggle_modal: function (id) {
                 this.validationError = ""
                 $("#" + id).modal('hide');
             },
-            addUser: function () { //this method adds a user via the api 
-                /* we add new User using Axios 
-                *
-                *
-                * 
-                * 
-                * 
-                * 
-                * 
-                * */
-
-
-                alert("User Added")
-            },
+           
 
 
         },

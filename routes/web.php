@@ -18,7 +18,7 @@ Route::prefix('dashboard')->middleware("role:superadministrator|administrator")-
 
     
 
-    Route::get('users',function(){
+    Route::get('pharmacists',function(){
         return view('users');
     });
 

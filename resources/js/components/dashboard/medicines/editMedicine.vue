@@ -97,6 +97,8 @@
             medicineId: function (Id) {
                 
                 this.getMedicine(Id)
+                this.Message = ""
+                this.MessageClass = "text-success"
             },
            
 
@@ -161,7 +163,7 @@
                              * the request was made and the server responded with  a
                              * status code that falls out of the range of 2**
                              *  */
-                            this.Message = "Medicine Couldn't be created || Server Error : "+error.response.statusText
+                            this.Message = "Medicine : "+error.response.statusText
                             this.MessageClass = "text-danger"
                              switch (error.response.status) {
                             case 404:
@@ -231,7 +233,7 @@
                              * the request was made and the server responded with  a
                              * status code that falls out of the range of 2**
                              *  */
-                            this.Message = "Medicine Couldn't be created || Server Error : "+error.response.statusText
+                            this.Message = "Medicine : "+error.response.statusText
                             this.MessageClass = "text-danger"
                              switch (error.response.status) {
                             case 404:

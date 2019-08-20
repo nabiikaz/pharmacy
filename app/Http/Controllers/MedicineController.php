@@ -94,7 +94,8 @@ class MedicineController extends Controller
      */
     public function show(Medicine $medicine)
     {
-        return new MedicineResource($medicine);
+        $Medicine = Medicine::findOrFail($medicine->id);
+        return new MedicineResource($Medicine);
     }
 
     

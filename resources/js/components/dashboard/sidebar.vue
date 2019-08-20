@@ -6,7 +6,7 @@
             <ul class="nav flex-column">
               
               <li class="nav-item">
-                <a class="nav-link" href="/dashboard/users">
+                <a class="nav-link" href="/dashboard/pharmacists">
                   <img src="/img/icons/pharmacist.png" width="24" height="24">
                  
                   pharmacists

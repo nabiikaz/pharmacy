@@ -18,7 +18,7 @@
                                 :title="filter_flow">
                     </div>
                     <div class="col-md-4">
-                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdUser">
+                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdUser" @click="getUsers()">
                             <i class="material-icons"></i> <span>Add New User</span>
 
                         </a>
@@ -29,8 +29,8 @@
                 <thead>
                     <tr style="cursor:pointer">
 
-                        <th :class="(selected_column == 'fullname')? 'select-search':''"
-                            @click="((selected_column == 'fullname'))? selected_column='':selected_column = 'fullname' ">Full Name</th>
+                        <th :class="(selected_column == 'name')? 'select-search':''"
+                            @click="((selected_column == 'name'))? selected_column='':selected_column = 'name' ">Full Name</th>
                         <th :class="(selected_column == 'birthday')? 'select-search':''"
                             @click="((selected_column == 'birthday'))? selected_column='':selected_column = 'birthday' ">Birthday</th>
                         <th :class="(selected_column == 'tel')? 'select-search':''"
@@ -43,12 +43,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(user,index) in users" :key="index">
+                    <tr :style="user.highlight" v-for="(user,index) in users" :key="index">
 
                         
                         <td  :class="(selected_column == 'fullname')? 'select-search-data':''">
-                            <img v-bind:src="user.avatarPath" class="avatar" alt="Avatar">
-                            {{user.fullname}}
+                            <img v-bind:src="'/img/avatars/'+user.Img" class="avatar" alt="Avatar">
+                            {{user.name}}
                         </td>
                         <td :class="(selected_column == 'birthday')? 'select-search-data':''">{{user.birthday}}</td>
                         <td :class="(selected_column == 'tel')? 'select-search-data':''">{{user.tel}}</td>
@@ -56,8 +56,8 @@
                         <td :class="(selected_column == 'role')? 'select-search-data':''">{{user.role}}</td>
                         <td>
                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
-                                v-on:click="settings(user.Id)"><img src="/img/icons/settings.png" width="22" ></a>
-                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
+                                v-on:click="settings(user.id)"><img src="/img/icons/settings.png" width="22" ></a>
+                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete" @click="deleteUser(user.id)">
                                 <img src="/img/icons/trash.png" width="24" ></a>
                         </td>
 
@@ -81,8 +81,8 @@
         </div>
 
 
-        <editUser :userId="selectedUser_Id" ></editUser>
-        <addUser></addUser>
+        <editUser :userId="selectedUser_Id" @updated="onUserUpdated" ></editUser>
+        <addUser @created="onUserCreated"></addUser>
 
 
     </div>
@@ -97,6 +97,7 @@
     export default {
         mounted() {
             $('[data-tooltip="tooltip"]').tooltip();
+            this.getUsers()
 
         },
 
@@ -109,35 +110,7 @@
 
                 filter_flow: 'Ascending',
                 //displayed Users 
-                users: [{
-                        Id: 1,
-                        avatarPath: "/img/avatars/nabi.jpg",
-                        fullname: "nabi zakaria",
-                        birthday: "07/29/1995",
-                        tel: "0555655100",
-                        email: "nabi@gmail.com",
-                        role: "Admin"
-                    },
-                    {
-                        Id: 2,
-                        avatarPath: "/img/avatars/nabi.jpg",
-                        fullname: "zakaria",
-                        birthday: "07/29/1995",
-                        tel: "0555655100",
-                        email: "nabi@g.com",
-                        role: "employee"
-                    },
-                    {
-                        Id: 3,
-                        avatarPath: "/img/avatars/nabi.jpg",
-                        fullname: "nabi zakaria",
-                        birthday: "07/29/1995",
-                        tel: "0555655100",
-                        email: "nabi@gmail.com",
-                        role: "Admin"
-                    },
-
-                ],
+                users: [],
                 paginationCurrent : 1
 
             }
@@ -151,6 +124,15 @@
 
                 this.getUsers()
 
+            } ,
+            selected_column: function(){
+                this.getUsers();
+            },
+            filter_flow : function(){
+                 this.getUsers();
+            },
+            selectedUser_Id: function(old_val,new_val){
+                this.getUsers();
             }
         },
         
@@ -158,17 +140,89 @@
 
 
         methods: {
-                //get users in the current page 
-            getUsers: function(){
+            //when a user is updated event is triggered from the editMedicine Child component            
+            onUserUpdated : function(user){
+                
+                user.highlight = "background-color:#2ec741"     
+                
 
-                //don't forget the search and paginationCurrent 
-                /** get users in the current page using the server's API with (axios)
-                 * 
-                 * 
-                 * 
-                 */
+                $("#modaleditMedicine").modal("hide") // we first need to hide the "modaladdMedicine" modal
+                //we add the update the  user with the selectedMedicine_Id
+
+                for (let index = 0; index < this.users.length; index++) {
+                    if(this.users[index].id == this.selectedMedicine_Id){
+                                          
+                        this.users.splice(index,1)
+                        this.users.unshift(user)
+
+                        
+
+                    }
+                    
+                }
+                
+
 
             },
+            //when a user is created event is triggered from the addMedicine Child component
+            onUserCreated: function(user){
+                user.highlight = "background-color:#2ec741"     
+
+                $("#modaladdMedicine").modal("hide") // we first need to hide the "modaladdMedicine" modal
+                //we add the new user in the start
+                this.users.unshift(user)
+                
+            },
+              //delete users 
+            deleteUser: function(userId){
+                 axios.delete('/api/pharmacists/'+userId).then((response)=>{
+                                this.getUsers()
+
+                 })
+                    .catch(error => {
+                        
+                        switch (error.response.status) {
+                            case 404:
+
+                                //if the user is already deleted then refresh current users view 
+                                this.getUsers()
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    });
+
+            },
+            //get users in the current page 
+        getUsers: function(){
+            /** get users in the current page using the server's API with (axios)
+             * 
+             * 
+             * 
+             */
+            axios.get("/api/pharmacists", {
+                params:{
+                        
+                    search:this.search,
+                    selected_column:this.selected_column,
+                    filter_flow:this.filter_flow,
+                    page:this.paginationCurrent
+                    }
+                   
+                })
+                    .then((response) => {
+                    this.users = response.data.data;
+                    
+                }, (error) => {
+                    console.log(error);
+                });
+
+           
+
+        },
             settings(UserId) {
                 this.selectedUser_Id = UserId
 
