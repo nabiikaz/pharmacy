@@ -12,7 +12,7 @@
 </head>
 <body>
     <div id="app">
-        <dashboard_nav></dashboard_nav>
+        <dashboard_nav :current_user="{{json_encode(array('name' => Auth::user()->name,'img' => Auth::user()->Img))}}"></dashboard_nav>
         <div class="container-fluid">
             <div class="row">
         <dashboard_sidebar></dashboard_sidebar>

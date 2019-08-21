@@ -8,10 +8,25 @@
                   Dashboard <span class="sr-only">(current)</span>
                </div>
             </a>
-            <ul class="navbar-nav px-3">
-                <li class="nav-item text-nowrap">
-                    <a class="nav-link" href="#">Sign out</a>
+            <ul class="navbar-nav px-3 dropdown">
+                <li class="nav-item text-nowrap ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                     
+                            <img :src="'/img/avatars/'+current_user.img" class="avatar" alt="Avatar">
+                       
+                      <span>{{current_user.name}}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right pb-0" style="position:absolute;" aria-labelledby="dropdownMenuButton">
+                      
+                      <hr style="margin:0px;">
+                      <a class="dropdown-item " href="/logout">Logout</a>
+
+                  </div>
                 </li>
+                
+                  
+                  
+                
             </ul>
       </nav>
     </div>
@@ -21,6 +36,12 @@
 
 <script>
 export default {
+  props:["current_user"],
+  mounted(){
+    $('.dropdown-toggle').dropdown()
+    console.log(this.current_user);
+
+  }
     
 }
 </script>
@@ -54,6 +75,12 @@ export default {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+.avatar {
+        border-radius: 50%;
+        vertical-align: middle;
+        margin-right: 10px;
+        width: 40px;
+    }
 
 </style>
 
