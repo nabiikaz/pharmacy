@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Medicine extends Model
 {
+
+    
     //
     /**
      * The attributes that are mass assignable.

@@ -3585,7 +3585,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["current_user"],
+  mounted: function mounted() {
+    $('.dropdown-toggle').dropdown();
+    console.log(this.current_user);
+  }
+});
 
 /***/ }),
 
@@ -4451,15 +4472,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
+    $(".alert").hide();
     $('[data-tooltip="tooltip"]').tooltip();
     this.getUsers();
   },
   data: function data() {
     return {
+      ErrorMessage: "",
       search: "",
       selectedUser_Id: -1,
       selected_column: '',
@@ -4488,6 +4519,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    hideAlert: function hideAlert() {
+      $('.alert').hide();
+    },
     //when a user is updated event is triggered from the editMedicine Child component            
     onUserUpdated: function onUserUpdated(user) {
       user.highlight = "background-color:#2ec741";
@@ -4495,9 +4529,10 @@ __webpack_require__.r(__webpack_exports__);
       //we add the update the  user with the selectedMedicine_Id
 
       for (var index = 0; index < this.users.length; index++) {
-        if (this.users[index].id == this.selectedMedicine_Id) {
+        if (this.users[index].id == this.selectedUser_Id) {
           this.users.splice(index, 1);
           this.users.unshift(user);
+          console.log("here");
         }
       }
     },
@@ -4517,6 +4552,11 @@ __webpack_require__.r(__webpack_exports__);
         _this.getUsers();
       })["catch"](function (error) {
         switch (error.response.status) {
+          case 403:
+            _this.ErrorMessage = error.response.statusText + " , " + error.response.data.message;
+            $(".alert").show();
+            break;
+
           case 404:
             //if the user is already deleted then refresh current users view 
             _this.getUsers();
@@ -4876,44 +4916,120 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['userId'],
   watch: {
-    userId: function userId(val) {
-      /* axios
-      *
-      *
-      * 
-      * 
-      * */
-      this.fullname = "nabi zakaria";
-      this.birthday = "1995-08-07";
-      this.tel = "0555655100";
-      this.role = "moderator";
-      this.email = "nabizakaria";
-      this.username = "ldlkjdlkdj";
-      this.password = "lkksjlfkjf";
+    userId: function userId(Id) {
+      this.getUser(Id);
+      this.Message = "";
+      this.MessageClass = "text-success";
     }
   },
   data: function data() {
     return {
-      fullname: "",
-      birthday: "",
-      tel: "",
-      role: "",
-      email: "",
-      username: "",
-      password: ""
+      img: "/img/avatars/man.png",
+      Message: "",
+      MessageClass: "text-success",
+      user: {}
     };
   },
   methods: {
-    editUser: function editUser() {}
+    onFileSelected: function onFileSelected(e) {
+      var _this = this;
+
+      this.img = URL.createObjectURL(e.target.files[0]);
+      var fileReader = new FileReader();
+      fileReader.readAsDataURL(e.target.files[0]);
+
+      fileReader.onload = function (e) {
+        _this.user.image = e.target.result;
+      };
+    },
+    getUser: function getUser(userId) {
+      var _this2 = this;
+
+      this.disable = false;
+      this.errorMsg = "";
+      axios.get('/api/pharmacists/' + this.userId).then(function (Response) {
+        _this2.user = Response.data.data;
+        _this2.img = "/img/avatars/" + _this2.user.Img;
+        console.log(_this2.user);
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          _this2.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 422:
+              _this2.Message = Object.values(error.response.data.errors)[0][0];
+              _this2.MessageClass = "text-danger";
+              return;
+
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+
+          _this2.Message = "Pharmacist : " + error.response.statusText;
+        }
+      });
+    },
+    editUser: function editUser(event) {
+      var _this3 = this;
+
+      /** edit the Medicine using Axios via the server's API
+       * 
+       * 
+       * 
+       * 
+       * 
+       */
+      axios.patch('/api/pharmacists/' + this.userId, this.user).then(function (Response) {
+        _this3.ImgFormData = null;
+
+        _this3.getUser(_this3.userId);
+
+        switch (Response.status) {
+          case 200:
+            _this3.Message = "Pharmacist was updated successfully .";
+            _this3.MessageClass = "text-success"; //clear all inputs 
+
+            _this3.user = {};
+            $("#image").val("");
+            _this3.img = "/img/icons/pills.png"; //emit back the edited Medicine : 
+
+            _this3.$emit('updated', Response.data.data);
+
+            break;
+
+          default:
+            break;
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          console.log(error.response);
+          _this3.Message = "Error : " + error.response.data.errors;
+          _this3.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
+    }
   }
 });
 
@@ -9509,7 +9625,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.navbar-brand[data-v-16bd34b6] {\r\n  padding-top: .75rem;\r\n  padding-bottom: .75rem;\r\n  font-size: 1rem;\r\n  background-color: rgba(0, 0, 0, .25);\r\n  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);\n}\n.navbar .form-control[data-v-16bd34b6] {\r\n  padding: .75rem 1rem;\r\n  border-width: 0;\r\n  border-radius: 0;\n}\n.form-control-dark[data-v-16bd34b6] {\r\n  color: #fff;\r\n  background-color: rgba(255, 255, 255, .1);\r\n  border-color: rgba(255, 255, 255, .1);\n}\n.form-control-dark[data-v-16bd34b6]:focus {\r\n  color:rgba(255, 255, 255, .1);\r\n  \r\n  border-color: transparent;\r\n  box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.navbar-brand[data-v-16bd34b6] {\r\n  padding-top: .75rem;\r\n  padding-bottom: .75rem;\r\n  font-size: 1rem;\r\n  background-color: rgba(0, 0, 0, .25);\r\n  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);\n}\n.navbar .form-control[data-v-16bd34b6] {\r\n  padding: .75rem 1rem;\r\n  border-width: 0;\r\n  border-radius: 0;\n}\n.form-control-dark[data-v-16bd34b6] {\r\n  color: #fff;\r\n  background-color: rgba(255, 255, 255, .1);\r\n  border-color: rgba(255, 255, 255, .1);\n}\n.form-control-dark[data-v-16bd34b6]:focus {\r\n  color:rgba(255, 255, 255, .1);\r\n  \r\n  border-color: transparent;\r\n  box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);\n}\n.avatar[data-v-16bd34b6] {\r\n        border-radius: 50%;\r\n        vertical-align: middle;\r\n        margin-right: 10px;\r\n        width: 40px;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -9623,7 +9739,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\nbody[data-v-502a14d2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-502a14d2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-502a14d2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-502a14d2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-502a14d2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-502a14d2]:hover,\n.table-title .btn[data-v-502a14d2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-502a14d2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-502a14d2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-502a14d2],\ntable.table tr td[data-v-502a14d2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-502a14d2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-502a14d2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-502a14d2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-502a14d2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-502a14d2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-502a14d2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-502a14d2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-502a14d2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-502a14d2] {\n    color: #F44336;\n}\ntable.table td i[data-v-502a14d2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-502a14d2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-502a14d2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-502a14d2] {\n    color: #10c469;\n}\n.text-info[data-v-502a14d2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-502a14d2] {\n    color: #FFC107;\n}\n.text-danger[data-v-502a14d2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-502a14d2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-502a14d2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-502a14d2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-502a14d2],\n.pagination li.active a.page-link[data-v-502a14d2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-502a14d2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-502a14d2] {\n    color: #ccc;\n}\n.pagination li i[data-v-502a14d2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-502a14d2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-502a14d2] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-502a14d2] {\n    background-color: #4e9cda;\n}\nth[data-v-502a14d2]{\n    border-left:  1px solid  #dee2e6;\n    border-right:  1px solid  #dee2e6;\n}\n\n", ""]);
+exports.push([module.i, "\nbody[data-v-502a14d2] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-502a14d2] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-502a14d2] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-502a14d2] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-502a14d2] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-502a14d2]:hover,\n.table-title .btn[data-v-502a14d2]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-502a14d2] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-502a14d2] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-502a14d2],\ntable.table tr td[data-v-502a14d2] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-502a14d2]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-502a14d2]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-502a14d2]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-502a14d2] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-502a14d2] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-502a14d2] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-502a14d2]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-502a14d2] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-502a14d2] {\n    color: #F44336;\n}\ntable.table td i[data-v-502a14d2] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-502a14d2] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-502a14d2] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-502a14d2] {\n    color: #10c469;\n}\n.text-info[data-v-502a14d2] {\n    color: #62c9e8;\n}\n.text-warning[data-v-502a14d2] {\n    color: #FFC107;\n}\n.text-danger[data-v-502a14d2] {\n    color: #ff5b5b;\n}\n.pagination[data-v-502a14d2] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-502a14d2] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-502a14d2]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-502a14d2],\n.pagination li.active a.page-link[data-v-502a14d2] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-502a14d2]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-502a14d2] {\n    color: #ccc;\n}\n.pagination li i[data-v-502a14d2] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-502a14d2] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-502a14d2] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-502a14d2] {\n    background-color: #4e9cda;\n}\nth[data-v-502a14d2]{\n    border-left:  1px solid  #dee2e6;\n    border-right:  1px solid  #dee2e6;\n}\n\n\n", ""]);
 
 // exports
 
@@ -45299,7 +45415,37 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(0)
+        _c("ul", { staticClass: "navbar-nav px-3 dropdown" }, [
+          _c("li", { staticClass: "nav-item text-nowrap " }, [
+            _c(
+              "a",
+              {
+                staticClass: "nav-link dropdown-toggle",
+                attrs: {
+                  href: "#",
+                  role: "button",
+                  id: "dropdownMenuLink",
+                  "data-toggle": "dropdown",
+                  "aria-haspopup": "true",
+                  "aria-expanded": "false"
+                }
+              },
+              [
+                _c("img", {
+                  staticClass: "avatar",
+                  attrs: {
+                    src: "/img/avatars/" + _vm.current_user.img,
+                    alt: "Avatar"
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", [_vm._v(_vm._s(_vm.current_user.name))])
+              ]
+            ),
+            _vm._v(" "),
+            _vm._m(0)
+          ])
+        ])
       ]
     )
   ])
@@ -45309,13 +45455,21 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "navbar-nav px-3" }, [
-      _c("li", { staticClass: "nav-item text-nowrap" }, [
-        _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-          _vm._v("Sign out")
+    return _c(
+      "div",
+      {
+        staticClass: "dropdown-menu dropdown-menu-right pb-0",
+        staticStyle: { position: "absolute" },
+        attrs: { "aria-labelledby": "dropdownMenuButton" }
+      },
+      [
+        _c("hr", { staticStyle: { margin: "0px" } }),
+        _vm._v(" "),
+        _c("a", { staticClass: "dropdown-item ", attrs: { href: "/logout" } }, [
+          _vm._v("Logout")
         ])
-      ])
-    ])
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -47373,6 +47527,24 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "alert alert-danger ", attrs: { role: "alert" } },
+        [
+          _c("strong", [_vm._v("Error : ")]),
+          _vm._v(" " + _vm._s(_vm.ErrorMessage) + "\n         "),
+          _c(
+            "button",
+            {
+              staticClass: "close",
+              attrs: { type: "button", "aria-label": "Close" },
+              on: { click: _vm.hideAlert }
+            },
+            [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+          )
+        ]
+      ),
+      _vm._v(" "),
       _c("editUser", {
         attrs: { userId: _vm.selectedUser_Id },
         on: { updated: _vm.onUserUpdated }
@@ -47778,6 +47950,34 @@ var render = function() {
                     }
                   },
                   [
+                    _c("div", { staticClass: "md-form mb-2 text-center" }, [
+                      _c("input", {
+                        ref: "imgInput",
+                        staticStyle: { display: "none" },
+                        attrs: { type: "file", id: "image" },
+                        on: { change: _vm.onFileSelected }
+                      }),
+                      _vm._v(" "),
+                      _c("img", {
+                        staticClass: " avatar",
+                        staticStyle: {
+                          cursor: "pointer",
+                          "border-radius": "150px"
+                        },
+                        attrs: {
+                          alt: "Avatar",
+                          src: _vm.img,
+                          width: "150",
+                          title: "Upload the Medicine Image"
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.$refs.imgInput.click()
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
                     _c("div", { staticClass: "md-form mb-2" }, [
                       _c("div", { staticClass: "row" }, [
                         _c("div", { staticClass: "col-6" }, [
@@ -47790,8 +47990,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.fullname,
-                                expression: "fullname"
+                                value: _vm.user.name,
+                                expression: "user.name"
                               }
                             ],
                             staticClass: "form-control ",
@@ -47803,13 +48003,13 @@ var render = function() {
                               minlength: "8",
                               maxlength: "25"
                             },
-                            domProps: { value: _vm.fullname },
+                            domProps: { value: _vm.user.name },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.fullname = $event.target.value
+                                _vm.$set(_vm.user, "name", $event.target.value)
                               }
                             }
                           })
@@ -47825,8 +48025,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.birthday,
-                                expression: "birthday"
+                                value: _vm.user.birthday,
+                                expression: "user.birthday"
                               }
                             ],
                             staticClass: "form-control ",
@@ -47836,13 +48036,17 @@ var render = function() {
                               id: "birthday",
                               required: ""
                             },
-                            domProps: { value: _vm.birthday },
+                            domProps: { value: _vm.user.birthday },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.birthday = $event.target.value
+                                _vm.$set(
+                                  _vm.user,
+                                  "birthday",
+                                  $event.target.value
+                                )
                               }
                             }
                           })
@@ -47862,8 +48066,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.tel,
-                                expression: "tel"
+                                value: _vm.user.tel,
+                                expression: "user.tel"
                               }
                             ],
                             staticClass: "form-control ",
@@ -47874,13 +48078,13 @@ var render = function() {
                               required: "",
                               pattern: "[0-9]{9}|[0-9]{10}"
                             },
-                            domProps: { value: _vm.tel },
+                            domProps: { value: _vm.user.tel },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.tel = $event.target.value
+                                _vm.$set(_vm.user, "tel", $event.target.value)
                               }
                             }
                           })
@@ -47898,8 +48102,8 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.role,
-                                  expression: "role"
+                                  value: _vm.user.role,
+                                  expression: "user.role"
                                 }
                               ],
                               staticClass: "form-control",
@@ -47915,9 +48119,13 @@ var render = function() {
                                         "_value" in o ? o._value : o.value
                                       return val
                                     })
-                                  _vm.role = $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
+                                  _vm.$set(
+                                    _vm.user,
+                                    "role",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
                                 }
                               }
                             },
@@ -47945,8 +48153,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.email,
-                            expression: "email"
+                            value: _vm.user.email,
+                            expression: "user.email"
                           }
                         ],
                         staticClass: "form-control ",
@@ -47956,13 +48164,13 @@ var render = function() {
                           id: "email",
                           required: ""
                         },
-                        domProps: { value: _vm.email },
+                        domProps: { value: _vm.user.email },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.email = $event.target.value
+                            _vm.$set(_vm.user, "email", $event.target.value)
                           }
                         }
                       })
@@ -47971,80 +48179,44 @@ var render = function() {
                     _c("hr"),
                     _vm._v(" "),
                     _c("div", { staticClass: "md-form mb-2" }, [
-                      _c("div", { staticClass: "row" }, [
-                        _c("div", { staticClass: "col-6" }, [
-                          _c("label", { attrs: { for: "login" } }, [
-                            _vm._v("Login Username")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.username,
-                                expression: "username"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              name: "username",
-                              type: "text",
-                              id: "login",
-                              required: "",
-                              minlength: "8",
-                              maxlength: "16"
-                            },
-                            domProps: { value: _vm.username },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.username = $event.target.value
-                              }
+                      _c("label", { attrs: { for: "password" } }, [
+                        _vm._v("Password")
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.user.password,
+                            expression: "user.password"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          name: "password",
+                          type: "password",
+                          id: "password",
+                          minlength: "8",
+                          maxlength: "16"
+                        },
+                        domProps: { value: _vm.user.password },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
                             }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "col-6" }, [
-                          _c("label", { attrs: { for: "password" } }, [
-                            _vm._v("Password")
-                          ]),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.password,
-                                expression: "password"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              name: "password",
-                              type: "password",
-                              id: "password",
-                              required: "",
-                              minlength: "8",
-                              maxlength: "16"
-                            },
-                            domProps: { value: _vm.password },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.password = $event.target.value
-                              }
-                            }
-                          })
-                        ])
-                      ])
+                            _vm.$set(_vm.user, "password", $event.target.value)
+                          }
+                        }
+                      })
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "md-form mb-2" }),
+                    _vm._v(" "),
+                    _c("span", { class: _vm.MessageClass }, [
+                      _vm._v(_vm._s(_vm.Message))
+                    ]),
                     _vm._v(" "),
                     _c("hr"),
                     _vm._v(" "),

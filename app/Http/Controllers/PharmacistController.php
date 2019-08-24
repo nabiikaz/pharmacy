@@ -1,13 +1,22 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\User as Pharmacist;
 use App\Http\Resources\Pharmacist as PharmacistResource;
 
 class PharmacistController extends Controller
 {
+    public $model = "users";
+    function __construct()
+    {
+        
+        
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -48,6 +57,7 @@ class PharmacistController extends Controller
      */
     public function store(Request $request)
     {
+        
         //test if the request has the image : 
 
             if ($request->has('image')){
@@ -81,7 +91,7 @@ class PharmacistController extends Controller
                     'email' => $request->email,
                     'tel' => $request->tel,
                     'birthday' => $request->birthday,
-                    'password' => $request->password,
+                    'password' => Hash::make($request->password),
                     'Img' => $filename,
 
                 ]);
@@ -104,8 +114,9 @@ class PharmacistController extends Controller
     public function show(Pharmacist $pharmacist)
     {
         $Pharmacist = Pharmacist::findOrFail($pharmacist->id);
+        $Pharmacist->role = $Pharmacist->roles()->first()->name;
 
-        return PharmacistResource($Pharmacist);
+        return new PharmacistResource($Pharmacist);
     }
 
     /**
@@ -115,9 +126,61 @@ class PharmacistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Pharmacist $pharmacist)
     {
-        //
+        if (Auth::user()->hasRole("admin") && Auth::user()->id == $pharmacist->id && $request->get("role") == "moderator" )
+            return  response()->json(['errors' => 'You cannot change Your Role To moderator'],403);
+
+        //test if the request has the image : 
+            if ($request->has('image')){
+                //explode the image and get the extention and base64 
+                $exploded = explode(',',$request->get('image'));
+                if(str_contains($exploded[0],'jpeg'))
+                    $ext = '.jpg';
+                
+                $filename = str_random().$ext;
+                //change the image file name 
+                $request->merge(['Img' => $filename]);
+                
+                //the path in which the image will be saved into 
+                $path  = public_path()."/img/avatars/".$filename;
+
+                $decoded = base64_decode($exploded[1]);
+                file_put_contents($path,$decoded);
+            }
+
+            if($request->email != $pharmacist->email)
+                $request->validate(['email' => 'email|unique:users,email']);
+
+
+            $request->validate([
+                
+                'password' => 'min:8|max:16'
+
+            ]);
+            
+
+            
+
+            if($request->has("password"))
+                $pharmacist->password = Hash::make($request->get("password"));
+
+
+            
+
+        
+        
+        //update the medicine
+        $pharmacist->update($request->except('image'));
+       
+        if(Auth::user()->hasRole("admin") ){
+            $pharmacist->detachRole($pharmacist->Roles()->first());
+            $pharmacist->attachRole($request->get("role"));
+        }
+
+        $pharmacist->role = $pharmacist->Roles()->first()->name;
+
+        return new PharmacistResource($pharmacist);
     }
 
     /**
@@ -128,6 +191,11 @@ class PharmacistController extends Controller
      */
     public function destroy(Pharmacist $pharmacist)
     {
+        if(Auth::user()->id == $pharmacist->id)
+            abort(403,"You Cannot Delete Your Own Account");
+        if(!Auth::user()->hasRole("admin"))
+            abort(403,"Non Admin Users Cannot Delete Accounts");
+
         $pharmacist->delete();
     }
 }

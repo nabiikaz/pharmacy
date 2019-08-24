@@ -16,6 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MedicinesTableSeeder::class);
 
 
-        $this->call(LaratrustSeeder::class);
+        //$this->call(LaratrustSeeder::class);
     }
 }

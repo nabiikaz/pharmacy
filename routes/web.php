@@ -11,7 +11,24 @@
 |
 */
 
-Route::prefix('dashboard')->middleware("role:superadministrator|administrator")->group(function(){
+
+Route::apiResource('pharmacists','PharmacistController');
+
+Route::get("/init","RoleController@index");
+
+
+
+Route::get("/",function(){
+    return "index page";
+})->name("index");
+
+
+Route::get("logout",function(){
+    Auth::logout();
+    return redirect()->route("index");
+});
+//->middleware("role:admin|moderator")
+Route::prefix('dashboard')->group(function(){
     Route::get('/',function(){
         return view('layouts.dashboard');
     });

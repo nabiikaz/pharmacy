@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class MedicineController extends Controller
 {
+    public $model = "medicines";
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +19,6 @@ class MedicineController extends Controller
     public function index(Request $request)
     {
         
-
         $selected_column  = $request->get("selected_column");
 
         if($selected_column=='')

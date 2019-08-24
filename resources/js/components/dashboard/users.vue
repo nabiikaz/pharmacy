@@ -80,6 +80,14 @@
             </div>
         </div>
 
+        <div class="alert alert-danger " role="alert">
+            <strong>Error : </strong> {{ErrorMessage}}
+             <button type="button" class="close" @click="hideAlert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            
+        </div>
+
 
         <editUser :userId="selectedUser_Id" @updated="onUserUpdated" ></editUser>
         <addUser @created="onUserCreated"></addUser>
@@ -96,6 +104,7 @@
 
     export default {
         mounted() {
+            $(".alert").hide()
             $('[data-tooltip="tooltip"]').tooltip();
             this.getUsers()
 
@@ -103,6 +112,7 @@
 
         data() {
             return {
+                ErrorMessage:"",
                 search:"",
                 selectedUser_Id: -1,
 
@@ -140,20 +150,26 @@
 
 
         methods: {
+            hideAlert: function(){
+                $('.alert').hide()
+            },
             //when a user is updated event is triggered from the editMedicine Child component            
             onUserUpdated : function(user){
                 
                 user.highlight = "background-color:#2ec741"     
                 
-
+                
+                
                 $("#modaleditMedicine").modal("hide") // we first need to hide the "modaladdMedicine" modal
                 //we add the update the  user with the selectedMedicine_Id
 
                 for (let index = 0; index < this.users.length; index++) {
-                    if(this.users[index].id == this.selectedMedicine_Id){
+                    if(this.users[index].id == this.selectedUser_Id){
                                           
                         this.users.splice(index,1)
                         this.users.unshift(user)
+                        console.log("here")
+
 
                         
 
@@ -182,6 +198,11 @@
                     .catch(error => {
                         
                         switch (error.response.status) {
+                            case 403:
+                                this.ErrorMessage = error.response.statusText + " , " + error.response.data.message
+                                $(".alert").show();
+                                
+                                break;
                             case 404:
 
                                 //if the user is already deleted then refresh current users view 
@@ -197,32 +218,35 @@
 
             },
             //get users in the current page 
-        getUsers: function(){
-            /** get users in the current page using the server's API with (axios)
-             * 
-             * 
-             * 
-             */
-            axios.get("/api/pharmacists", {
-                params:{
-                        
-                    search:this.search,
-                    selected_column:this.selected_column,
-                    filter_flow:this.filter_flow,
-                    page:this.paginationCurrent
-                    }
-                   
-                })
-                    .then((response) => {
-                    this.users = response.data.data;
+            getUsers: function(){
+                /** get users in the current page using the server's API with (axios)
+                 * 
+                 * 
+                 * 
+                 */
+                axios.get("/api/pharmacists", {
+                    params:{
+                            
+                        search:this.search,
+                        selected_column:this.selected_column,
+                        filter_flow:this.filter_flow,
+                        page:this.paginationCurrent
+                        }
                     
-                }, (error) => {
-                    console.log(error);
-                });
+                    })
+                        .then((response) => {
+                        this.users = response.data.data;
+                        
+                    }, (error) => {
+                        console.log(error);
+                    });
 
-           
 
-        },
+                    
+
+            
+
+            },
             settings(UserId) {
                 this.selectedUser_Id = UserId
 
@@ -446,5 +470,6 @@
         border-right:  1px solid  #dee2e6;
 
     }
+    
 
 </style>
