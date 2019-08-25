@@ -3799,13 +3799,13 @@ __webpack_require__.r(__webpack_exports__);
       sales: [{
         Id: 1,
         pharmacist: "Nabi Zakaria",
-        customer: "N/A",
+        supplier: "N/A",
         sale_date: "2019-01-07",
         total_price: 25
       }, {
         Id: 2,
         pharmacist: "Ahmed Nabi",
-        customer: "N/A",
+        supplier: "N/A",
         sale_date: "2019-01-07",
         total_price: 25
       }],
@@ -3835,7 +3835,7 @@ __webpack_require__.r(__webpack_exports__);
       return {
         Id: 1,
         pharmacist: "Nabi Zakaria",
-        customer: "N/A",
+        supplier: "N/A",
         sale_date: "2019-01-07",
         total_price: 25,
         medicines: [{
@@ -46060,16 +46060,16 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column == "customer" ? "select-search" : "",
+                class: _vm.selected_column == "supplier" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column == "customer"
+                    _vm.selected_column == "supplier"
                       ? (_vm.selected_column = "")
-                      : (_vm.selected_column = "customer")
+                      : (_vm.selected_column = "supplier")
                   }
                 }
               },
-              [_vm._v("Customer")]
+              [_vm._v("Supplier")]
             ),
             _vm._v(" "),
             _c(
@@ -46135,11 +46135,11 @@ var render = function() {
                 {
                   staticClass: "text-center",
                   class:
-                    _vm.selected_column == "customer"
+                    _vm.selected_column == "supplier"
                       ? "select-search-data"
                       : ""
                 },
-                [_vm._v("\n                        " + _vm._s(sale.customer))]
+                [_vm._v("\n                        " + _vm._s(sale.supplier))]
               ),
               _vm._v(" "),
               _c(

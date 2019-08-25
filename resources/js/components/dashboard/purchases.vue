@@ -57,8 +57,8 @@
                         <th  class="text-center" :class="(selected_column == 'pharmacist')? 'select-search':''"
                             @click="((selected_column == 'pharmacist'))? selected_column='':selected_column = 'pharmacist'">Made By</th>
                         
-                        <th class="text-center" :class="(selected_column == 'customer')? 'select-search':''"
-                            @click="((selected_column == 'customer'))? selected_column='':selected_column = 'customer'">Customer</th>
+                        <th class="text-center" :class="(selected_column == 'supplier')? 'select-search':''"
+                            @click="((selected_column == 'supplier'))? selected_column='':selected_column = 'supplier'">Supplier</th>
                         
                         
                         <th class="text-center" :class="(selected_column == 'sale_date')? 'select-search':''"
@@ -79,8 +79,8 @@
                         <td class="text-center" :class="(selected_column == 'pharmacist')? 'select-search-data':''">
                             {{sale.pharmacist }}</td>
 
-                        <td class="text-center" :class="(selected_column == 'customer')? 'select-search-data':''">
-                            {{sale.customer }}</td>
+                        <td class="text-center" :class="(selected_column == 'supplier')? 'select-search-data':''">
+                            {{sale.supplier }}</td>
 
                         <td class="text-center" :class="(selected_column == 'sale_date')? 'select-search-data':''">
                             {{sale.sale_date }}</td>
@@ -197,7 +197,7 @@
                 sales: [{
                         Id: 1,
                         pharmacist: "Nabi Zakaria",
-                        customer: "N/A",
+                        supplier: "N/A",
                         sale_date: "2019-01-07",
                         total_price: 25,
 
@@ -208,7 +208,7 @@
                     {
                         Id: 2,
                         pharmacist: "Ahmed Nabi",
-                        customer: "N/A",
+                        supplier: "N/A",
                         sale_date: "2019-01-07",
                         total_price: 25,
 
@@ -263,7 +263,7 @@
                     
                         Id: 1,
                         pharmacist: "Nabi Zakaria",
-                        customer: "N/A",
+                        supplier: "N/A",
                         sale_date: "2019-01-07",
                         total_price: 25,
                         medicines:[
