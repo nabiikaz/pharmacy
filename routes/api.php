@@ -16,8 +16,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::prefix("/")->middleware("role:admin|moderator,api")->group(function(){
 
-    Route::apiResource('pharmacists','PharmacistController')->middleware('role:admin,api');
-    Route::apiResource('medicines','MedicineController')->middleware('role:admin,api');
+    Route::apiResource('pharmacists','PharmacistController');
+    Route::apiResource('medicines','MedicineController');
+});
 
 

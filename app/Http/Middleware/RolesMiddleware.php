@@ -52,14 +52,20 @@ class RolesMiddleware
         $this->getModel();
         $Role = $this->userHasRole();
         
+
         //if the route does not have a controller ( only a closure ) then return the $request
         if($this->controller == null)
+        return $next($request);
+
+
+        //if this controller is found then continue to the controller without any permisssions check because it only need to be an admin
+        if(strpos($this->controller,"RoleController")) 
         return $next($request);
         
         
         //test if the selected role has the Needed Permission ;
         if(!$Role->hasPermission($this->getPermissionNeeded()))
-             return $this->ErrorResponse(403,"1You don't have the Necessary Permissions.");
+             return $this->ErrorResponse(403,"You don't have the Necessary Permissions.");
         
 
             
@@ -67,6 +73,8 @@ class RolesMiddleware
        
         return $next($request);
     }
+
+    
 
     public function ErrorResponse($status,$errorMessage){
         if($this->route_type == "api")

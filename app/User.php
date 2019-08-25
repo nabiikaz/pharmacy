@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+
     use Notifiable;
 
     /**
@@ -15,6 +16,7 @@ class User extends Authenticatable
      *
      * @var array
      */
+
     protected $fillable = [
         'name', 'email', 'password','Img','birthday','address','tel','api_token'
     ];
@@ -36,6 +38,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function boot(){
+
+        parent::boot();
+
+        /*self::created(function($created_user){
+            
+            $created_user->attachRole("moderator");
+        });*/
+
+    }
 
 
      /**

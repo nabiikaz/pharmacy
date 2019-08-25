@@ -13,26 +13,40 @@ class RoleController extends Controller
     private $Roles = [
         //admin Role : 
         "admin"=> [
-            "users" => ["read","edit"],
-            "medicines" => ["read"]
+            "users" => ["create","read","edit","delete"],
+            "medicines" => ["create","read","edit","delete"],
+            
         ], 
         "moderator"=> [
-            "users" => ["read"],
+            "users" => ["read","edit"],
             "medicines" => ["create","read","edit","delete"]
         ]
         
     ];
     function index() {
-        //create and attach permissions and roles if not exist
+
+        
         $this->attachPermissionsToRoles();
-        $this->createAdmin();
+
+    }
+
+    /**
+     * this function reset all permissions from all roles to the new permissions of each role old and new 
+     */
+    public function reset(){
+
+        //first we detach all permissions from each Role in $this->Roles
+        foreach ($this->Roles as  $roleName => $models) {
+            $role = $this->validateRole($roleName);
+
+            $role  = $this->validateRole($roleName);
+            $role->detachPermission();
+        }
+
+        //secondly we reattach all the permissions registered in the $this->Roles variable above 
+        $this->attachPermissionsToRoles();
 
 
-        
-        
-
-        
-        
 
     }
 
@@ -121,6 +135,32 @@ class RoleController extends Controller
         }
         
 
+    }
+
+
+     /**
+     * validate the input $role whether it is the name of a role that it exist in the the database or an object of the Role class;
+     */
+    public function validateRole($role){
+
+        if(is_string($role))
+            $Role = Role::where("name","like",$role)->first();
+        else 
+            $Role = Role::find($role);
+
+        return $Role;
+       
+    }
+
+    public function validatePermission($permission){
+
+        if(is_string($permission))
+            $Permission = Permission::where("name","like",$permission)->first();
+        else 
+            $Permission = Permission::find($permission);
+
+        return $Permission;
+       
     }
 
 

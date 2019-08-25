@@ -32,10 +32,13 @@ class Role extends Model
      /**
      * detachPermission to role
      */
-    public function detachPermission($permission){
+    public function detachPermission($permission=null){
         //if($this->hasPermission($this->validatePermission($permission)))
-            $this->Permissions()->detach($this->validatePermission($permission)); 
+        ($permission == null)? $this->Permissions()->detach() : $this->Permissions()->detach($this->validatePermission($permission)); 
      }
+
+    
+
      /**
       * 
       */

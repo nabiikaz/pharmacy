@@ -12,9 +12,14 @@
 */
 
 
-Route::apiResource('pharmacists','PharmacistController');
-
-Route::get("/init","RoleController@index");
+Route::prefix("permissions")->middleware("auth","role:admin")->group(function(){
+    
+    //this route is for initiating registred  roles  and permissions into the system 
+    Route::get("init","RoleController@index");
+    
+    //this route is for reseting all roles and permissions to the new permissions and roles configuration
+    Route::get("reset","RoleController@reset");
+});
 
 
 
@@ -28,7 +33,7 @@ Route::get("logout",function(){
     return redirect()->route("index");
 });
 //->middleware("role:admin|moderator")
-Route::prefix('dashboard')->group(function(){
+Route::prefix('dashboard')->middleware("auth")->group(function(){
     Route::get('/',function(){
         return view('layouts.dashboard');
     });
