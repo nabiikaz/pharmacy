@@ -15,9 +15,9 @@
                            <div class="md-form mb-2">
 
 
-                               <label for="fullname">Fullname</label>
-                                        <input name="fullname" type="text" id="fullname" class="form-control "
-                                            v-model="fullname" required minlength="8" maxlength="25">
+                               <label for="supplier_name">Supplier Name :</label>
+                                        <input name="supplier_name" type="text" id="supplier_name" class="form-control "
+                                            v-model="supplier.supplier_name" required minlength="8" maxlength="25">
                             </div>
 
                              <div class="md-form mb-2">
@@ -25,7 +25,7 @@
 
                                <label for="phone">Phone Number :</label>
                                         <input name="phone number" type="tel" id="phone" class="form-control " 
-                                                v-model="tel" required pattern="[0-9]{9}|[0-9]{10}">
+                                                v-model="supplier.tel" required pattern="[0-9]{9}|[0-9]{10}">
                             </div>
 
                              <div class="md-form mb-2">
@@ -33,7 +33,7 @@
 
                                <label for="address">Address</label>
                                         <input name="address" type="text" id="address" class="form-control "
-                                            v-model="address" required minlength="8" maxlength="25">
+                                            v-model="supplier.address" required minlength="8" maxlength="25">
                             </div>
 
                              <div class="md-form mb-2">
@@ -42,7 +42,7 @@
                               <label for="email">Email</label>
 
                                         <input name="email" type="email" id="email" class="form-control " 
-                                        v-model="email" required>
+                                        v-model="supplier.email" required>
                             </div>
 
 
@@ -81,32 +81,28 @@
 
 
         watch: {
-            supplierId: function (val) {
-                /* axios
-                 *
-                 *
-                 * 
-                 * 
-                 * */
-
-
-                this.fullname = "nabi zakaria"
-                this.tel = "0555655100"
-                this.address = "tlemcen- bensekrane"
-                this.email = "nabizakaria"
-
+            supplierId:function(Id){
+                this.getSupplier(Id)
+                this.Message = ""
+                this.MessageClass = "text-success"
             }
 
         },
         data() {
             return {
 
-                fullname: "",
-                tel: "",
-                address: "",
-                email: "",
+                Message:"",
+                MessageClass:"text-success",
+                Img:null,
+                
+                supplier:{
+                    
+                    supplier_name: "",
+                    tel: "",
+                    email: "",
+                    
 
-
+                },
 
 
 
@@ -117,8 +113,111 @@
         },
 
         methods: {
+            getSupplier: function(supplierId){
+                    this.disable = false
+                    this.errorMsg = ""
+               
+                    axios.get('/api/suppliers/'+this.supplierId)
+                    .then((Response)=>{
+                         this.supplier = Response.data.data
+                         
 
-            editSupplier: function () {
+                         
+
+                    }).catch(error => {
+                        
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                                case 422 :                              
+                                    this.Message  = Object.values(error.response.data.errors)[0][0]
+                                    
+                                    this.MessageClass = "text-danger"
+                                    return
+                                case 404:
+                                    break;
+                        
+                            default:
+                                break;
+                            }   
+                            this.Message = "Pharmacist : "+error.response.statusText
+                        }
+                    })
+               
+               
+
+                 
+            },
+
+           editSupplier: function (event) {
+                /** edit the Supplier using Axios via the server's API
+                 * 
+                 * 
+                 * 
+                 * 
+                 * 
+                 */
+                
+                
+
+                axios.patch('/api/suppliers/'+this.supplierId,this.supplier)
+                    .then((Response)=>{
+                        this.ImgFormData = null
+                        this.getSupplier(this.supplierId)
+                        switch (Response.status) {
+                            case 200:
+
+
+                                this.Message = "Supplier was updated successfully ."
+                                this.MessageClass = "text-success"
+                                //clear all inputs 
+                                this.supplier = {}
+                               
+                                //emit back the edited Medicine : 
+                                this.$emit('updated', Response.data.data)
+
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                         
+                
+
+                         
+
+                    }).catch(error => {
+                        
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            console.log(error.response)
+                            this.Message = "Error : "+ error.response.data.errors
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 404:
+
+                                
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                        }
+                        
+                    });
+              
 
             },
 

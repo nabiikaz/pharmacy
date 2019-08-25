@@ -18,19 +18,40 @@
                                 :title="filter_flow">
                     </div>
                     <div class="col-md-4">
-                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdsupplier">
+                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modaladdsupplier" @click="getSuppliers()">
                             <i class="material-icons"></i> <span>Add New Supplier</span>
 
                         </a>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Suppliers</a>
+                        </li>
+
+                       
+
+                        <li class="nav-item">
+                            <a class="nav-link " href="/dashboard/purchases">Purchases</a>
+                        </li>
+
+
+
+                    </ul>
+
+                </div>
+
+                
+            </div>
             <table class="table table-striped table-hover">
                 <thead>
                     <tr style="cursor:pointer">
 
-                        <th :class="(selected_column == 'fullname')? 'select-search':''"
-                            @click="((selected_column == 'fullname'))? selected_column='':selected_column = 'fullname' ">Full Name</th>
+                        <th :class="(selected_column == 'supplier_name')? 'select-search':''"
+                            @click="((selected_column == 'supplier_name'))? selected_column='':selected_column = 'supplier_name' ">Full Name</th>
                        
                         <th :class="(selected_column == 'address')? 'select-search':''"
                             @click="((selected_column == 'address'))? selected_column='':selected_column = 'address' ">Address</th>
@@ -45,19 +66,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(supplier,index) in suppliers" :key="index">
+                    <tr :style="supplier.highlight" v-for="(supplier,index) in suppliers" :key="index">
 
                         
-                        <td  :class="(selected_column == 'fullname')? 'select-search-data':''">
-                            {{supplier.fullname}}
+                        <td  :class="(selected_column == 'supplier_name')? 'select-search-data':''">
+                            {{supplier.supplier_name}}
                         </td>
                         <td  :class="(selected_column == 'address')? 'select-search-data':''">{{supplier.address}}</td>
                         <td  :class="(selected_column == 'tel')? 'select-search-data':''">{{supplier.tel}}</td>
                         <td  :class="(selected_column == 'email')? 'select-search-data':''">{{supplier.email}}</td>
                         <td  >
                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
-                                v-on:click="settings(supplier.Id)"><img src="/img/icons/edit.png" width="22" ></a>
-                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
+                                v-on:click="settings(supplier.id)"><img src="/img/icons/edit.png" width="22" ></a>
+                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete" @click="deleteSupplier(supplier.id)">
                                 <img src="/img/icons/trash.png" width="24" ></a>
                         </td>
 
@@ -81,8 +102,8 @@
         </div>
 
 
-        <editsupplier  ></editsupplier>
-        <addsupplier></addsupplier>
+        <editsupplier :supplierId="selectedSupplier_Id" @updated="onSupplierUpdated" ></editsupplier>
+        <addsupplier @created="onSupplierCreated"></addsupplier>
 
 
     </div>
@@ -96,56 +117,44 @@
 
     export default {
         mounted() {
+                
             $('[data-tooltip="tooltip"]').tooltip();
+
+            this.getSuppliers();
 
         },
 
         data() {
             return {
                 search:"",
-                selectedsupplier_Id: -1,
+                selectedSupplier_Id: -1,
                 filter_flow:"Ascending",
                 selected_column:[], 
 
                 //displayed suppliers 
-                suppliers: [{
-                        Id: 1,
-                        fullname: "nabi zakaria",
-                        address: "bensekrane - tlemcen",
-                        tel: "0555655100",
-                        email: "nabi@gmail.com",
-                    },
-                    {
-                        Id: 2,
-                        fullname: "nabi zakaria",
-                        address: "bensekrane - tlemcen",
-                        tel: "0555655100",
-                        email: "nabi@gmail.com",
-                    },
-                    {
-                        Id: 3,
-                        fullname: "nabi zakaria",
-                        address: "bensekrane - tlemcen",
-                        tel: "0555655100",
-                        email: "nabi@gmail.com",
-                    },
-
-                    
-
-                ],
+                suppliers: [],
                 paginationCurrent : 1
 
             }
         },
         watch:{
             paginationCurrent : function(val){
-                    this.getsuppliers();
+                    this.getSuppliers();
             },
              search : function(val){
             this.paginationCurrent = 1
 
-                this.getsuppliers()
+                this.getSuppliers()
 
+            },
+            selected_column: function(){
+                this.getSuppliers();
+            },
+            filter_flow : function(){
+                 this.getSuppliers();
+            },
+            selectedSupplier_Id: function(old_val,new_val){
+                this.getSuppliers();
             }
         },
         
@@ -153,19 +162,107 @@
 
 
         methods: {
-                //get suppliers in the current page 
-            getsuppliers: function(){
+            hideAlert: function(){
+                $('.alert').hide()
+            },
+            //when a supplier is updated event is triggered from the editMedicine Child component            
+            onSupplierUpdated : function(supplier){
+                
+                supplier.highlight = "background-color:#2ec741"     
+                
+                
+                
+                $("#modaleditSupplier").modal("hide") // we first need to hide the "modaladdMedicine" modal
+                //we add the update the  supplier with the selectedMedicine_Id
 
-                //don't forget the search and paginationCurrent 
-                /** get suppliers in the current page using the server's API with (axios)
+                for (let index = 0; index < this.suppliers.length; index++) {
+                    if(this.suppliers[index].id == this.selectedSupplier_Id){
+                                          
+                        this.suppliers.splice(index,1)
+                        this.suppliers.unshift(supplier)
+                        console.log("here")
+
+
+                        
+
+                    }
+                    
+                }
+                
+
+
+            },
+            //when a supplier is created event is triggered from the addMedicine Child component
+            onSupplierCreated: function(supplier){
+                
+                supplier.highlight = "background-color:#2ec741"     
+
+                $("#modaladdSupplier").modal("hide") // we first need to hide the "modaladdMedicine" modal
+                //we add the new supplier in the start
+                this.suppliers.unshift(supplier)
+                
+            },
+              //delete suppliers 
+            deleteSupplier: function(supplierId){
+                 axios.delete('/api/suppliers/'+supplierId).then((response)=>{
+                                this.getSuppliers()
+
+                 })
+                    .catch(error => {
+                        
+                        switch (error.response.status) {
+                            case 403:
+                                this.ErrorMessage = error.response.statusText + " , " + error.response.data.message
+                                $(".alert").show();
+                                
+                                break;
+                            case 404:
+
+                                //if the supplier is already deleted then refresh current suppliers view 
+                                this.getSuppliers()
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    });
+
+            },
+            //get Suppliers in the current page 
+            getSuppliers: function(){
+                /** get Suppliers in the current page using the server's API with (axios)
                  * 
                  * 
                  * 
                  */
+                axios.get("/api/suppliers", {
+                    params:{
+                            
+                        search:this.search,
+                        selected_column:this.selected_column,
+                        filter_flow:this.filter_flow,
+                        page:this.paginationCurrent
+                        }
+                    
+                    })
+                        .then((response) => {
+                        this.suppliers = response.data.data;
+                        
+                    }, (error) => {
+                        console.log(error);
+                    });
+
+
+                    
+
+            
 
             },
+           
             settings(supplierId) {
-                this.selectedsupplier_Id = supplierId
+                this.selectedSupplier_Id = supplierId
 
                 $("#modaleditsupplier").modal("show")
             },

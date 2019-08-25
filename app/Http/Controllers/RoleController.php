@@ -15,19 +15,21 @@ class RoleController extends Controller
         "admin"=> [
             "users" => ["create","read","edit","delete"],
             "medicines" => ["create","read","edit","delete"],
+
+            "suppliers" => ["create","read","edit","delete"]
             
         ], 
         "moderator"=> [
             "users" => ["read","edit"],
-            "medicines" => ["create","read","edit","delete"]
+            "medicines" => ["create","read","edit","delete"],
+            "suppliers" => ["create","read","edit","delete"]
         ]
         
     ];
     function index() {
 
         
-        $this->attachPermissionsToRoles();
-
+        $this->createAdmin();
     }
 
     /**
@@ -128,6 +130,7 @@ class RoleController extends Controller
                 'password' => Hash::make("password"),
             
             ]);
+            $this->attachPermissionsToRoles();
             $admin->attachRole("admin");
         }else{
 

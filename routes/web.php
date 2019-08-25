@@ -12,13 +12,13 @@
 */
 
 
-Route::prefix("permissions")->middleware("auth","role:admin")->group(function(){
+Route::prefix("permissions")->group(function(){
     
     //this route is for initiating registred  roles  and permissions into the system 
     Route::get("init","RoleController@index");
     
     //this route is for reseting all roles and permissions to the new permissions and roles configuration
-    Route::get("reset","RoleController@reset");
+    Route::get("reset","RoleController@reset");//->middleware("role:admin");
 });
 
 
@@ -80,6 +80,19 @@ Route::prefix('dashboard')->middleware("auth")->group(function(){
 
     Route::get('suppliers/{id}',function($id){
         return view('suppliers')->with('id',$id);
+    });
+
+
+     //suppliers  --------------------------------------------------
+
+     Route::get('purchases',function(){
+        $id= -1;    
+        return view('purchases')->with('id',$id);
+    });
+
+
+    Route::get('purchases/{id}',function($id){
+        return view('purchases')->with('id',$id);
     });
 
 

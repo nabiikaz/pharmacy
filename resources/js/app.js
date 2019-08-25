@@ -33,6 +33,8 @@ Vue.component("dashboard_sales",require('./components/dashboard/sales.vue').defa
 
 
 Vue.component("dashboard_suppliers",require('./components/dashboard/suppliers.vue').default);
+Vue.component("dashboard_purchases",require('./components/dashboard/purchases.vue').default);
+
 
 Vue.component("dashboard_customers",require('./components/dashboard/customers.vue').default);
 
