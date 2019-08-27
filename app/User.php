@@ -49,10 +49,15 @@ class User extends Authenticatable
         });*/
 
     }
-
+    /**
+     * get all purchases that are attached to this user
+     */
+    public function Suppliers(){
+        return $this->belongsToMany(Supplier::class,"purchases")->withTimestamps();
+    }
 
      /**
-     * get all Roles that are attached to this Role
+     * get all Roles that are attached to this user
      */
 
     public function Roles(){

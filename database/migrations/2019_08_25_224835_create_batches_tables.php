@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePurchaseMedicineTable extends Migration
+class CreateBatchesTables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePurchaseMedicineTable extends Migration
      */
     public function up()
     {
-        Schema::create('purchase_medicine', function (Blueprint $table) {
+        Schema::create('batches', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('purchase_id')->unsigned();
             $table->integer('medicine_id')->unsigned();
@@ -32,7 +32,6 @@ class CreatePurchaseMedicineTable extends Migration
             
 
             
-            $table->timestamps();
         });
     }
 
@@ -43,6 +42,6 @@ class CreatePurchaseMedicineTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('purchase_medicine');
+        Schema::dropIfExists('batches');
     }
 }

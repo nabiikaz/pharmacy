@@ -22,6 +22,7 @@ class CreatePurchasesTable extends Migration
 
             $table->foreign("user_id")->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
+                
             $table->foreign('supplier_id')->references('id')->on('suppliers')
                 ->onUpdate('cascade')->onDelete('cascade');
 

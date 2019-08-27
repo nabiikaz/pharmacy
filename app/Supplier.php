@@ -10,4 +10,6 @@ class Supplier extends Model
     public $fillable = [
         "supplier_name","address","tel","email"
     ];
+
+    
 }

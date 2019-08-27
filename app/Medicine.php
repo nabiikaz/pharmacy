@@ -18,4 +18,8 @@ class Medicine extends Model
         'dosage', 'family', 'form','id','medicine_name','description','Img'
     ];
 
+    public function Batches(){
+        return $this->belongsToMany(Batche::class,"batches");
+    }
+
 }
