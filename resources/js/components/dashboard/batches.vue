@@ -485,25 +485,9 @@ import { constants } from 'crypto';
                 selected_supplier: null,
 
                 new_supplier: {
-                    id: null,
-                    name: "",
-                    address: "",
-                    tel: "",
-                    email: "",
+                    
                 },
-                suppliers: [{
-                        Id: 1,
-                        name: "ahmed"
-                    },
-                    {
-                        Id: 2,
-                        name: "zakaria"
-                    },
-                    {
-                        Id: 3,
-                        name: "ilyes"
-                    },
-                ],
+                suppliers: [],
                 newBatch: {},
 
                 paginationCurrent: 1

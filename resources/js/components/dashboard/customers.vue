@@ -29,8 +29,8 @@
                 <thead>
                     <tr style="cursor:pointer">
 
-                        <th :class="(selected_column == 'fullname')? 'select-search':''"
-                            @click="((selected_column == 'fullname'))? selected_column='':selected_column = 'fullname' ">Full Name</th>
+                        <th :class="(selected_column == 'name')? 'select-search':''"
+                            @click="((selected_column == 'name'))? selected_column='':selected_column = 'name' ">Full Name</th>
                        
                         <th :class="(selected_column == 'address')? 'select-search':''"
                             @click="((selected_column == 'address'))? selected_column='':selected_column = 'address' ">Address</th>
@@ -48,16 +48,16 @@
                     <tr v-for="(customer,index) in customers" :key="index">
 
                         
-                        <td  :class="(selected_column == 'fullname')? 'select-search-data':''">
-                            {{customer.fullname}}
+                        <td  :class="(selected_column == 'name')? 'select-search-data':''">
+                            {{customer.name}}
                         </td>
                         <td  :class="(selected_column == 'address')? 'select-search-data':''">{{customer.address}}</td>
                         <td  :class="(selected_column == 'tel')? 'select-search-data':''">{{customer.tel}}</td>
                         <td  :class="(selected_column == 'email')? 'select-search-data':''">{{customer.email}}</td>
                         <td  >
                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
-                                v-on:click="settings(customer.Id)"><img src="/img/icons/edit.png" width="22" ></a>
-                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
+                                v-on:click="settings(customer.id)"><img src="/img/icons/edit.png" width="22" ></a>
+                            <a href="#" @click="deleteCustomer(customer.id)" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
                                 <img src="/img/icons/trash.png" width="24" ></a>
                         </td>
 
@@ -81,8 +81,8 @@
         </div>
 
 
-        <editCustomer  ></editcustomer>
-        <addCustomer></addCustomer>
+        <editCustomer :customerId="selectedCustomer_Id" @updated="onCustomerUpdated" ></editcustomer>
+        <addCustomer @created="onCustomerCreated"></addCustomer>
 
 
     </div>
@@ -97,55 +97,42 @@
     export default {
         mounted() {
             $('[data-tooltip="tooltip"]').tooltip();
+            this.getCustomers();
 
         },
 
         data() {
             return {
+                ErrorMessage:"",
                 search:"",
-                selectedcustomer_Id: -1,
+                selectedCustomer_Id: -1,
                 filter_flow:"Ascending",
                 selected_column:[], 
 
                 //displayed customers 
-                customers: [{
-                        Id: 1,
-                        fullname: "nabi zakaria",
-                        address: "bensekrane - tlemcen",
-                        tel: "0555655100",
-                        email: "nabi@gmail.com",
-                    },
-                    {
-                        Id: 2,
-                        fullname: "nabi zakaria",
-                        address: "bensekrane - tlemcen",
-                        tel: "0555655100",
-                        email: "nabi@gmail.com",
-                    },
-                    {
-                        Id: 3,
-                        fullname: "nabi zakaria",
-                        address: "bensekrane - tlemcen",
-                        tel: "0555655100",
-                        email: "nabi@gmail.com",
-                    },
-
-                    
-
-                ],
+                customers: [],
                 paginationCurrent : 1
 
             }
         },
         watch:{
             paginationCurrent : function(val){
-                    this.getcustomers();
+                    this.getCustomers();
             },
              search : function(val){
             this.paginationCurrent = 1
 
-                this.getcustomers()
+                this.getCustomers()
 
+            },
+            selected_column: function(){
+                this.getCustomers();
+            },
+            filter_flow : function(){
+                 this.getCustomers();
+            },
+             selectedCustomer_Id: function(old_val,new_val){
+                this.getCustomers();
             }
         },
         
@@ -153,19 +140,102 @@
 
 
         methods: {
-                //get customers in the current page 
-            getcustomers: function(){
+            //when a customer is updated event is triggered from the editMedicine Child component            
+            onCustomerUpdated : function(customer){
+                
+                customer.highlight = "background-color:#2ec741"     
+                
+                
+                
+                $("#modaleditcustomer").modal("hide") // we first need to hide the "modaladdMedicine" modal
+                //we add the update the  customer with the selectedMedicine_Id
 
-                //don't forget the search and paginationCurrent 
+                for (let index = 0; index < this.customers.length; index++) {
+                    if(this.customers[index].id == this.selectedCustomer_Id){
+                                          
+                        this.customers.splice(index,1)
+                        this.customers.unshift(customer)
+
+
+                        
+
+                    }
+                    
+                }
+
+                
+
+
+            },
+            //when a customer is created event is triggered from the addMedicine Child component
+            onCustomerCreated: function(customer){
+                customer.highlight = "background-color:#2ec741"     
+
+                $("#modaladdMedicine").modal("hide") // we first need to hide the "modaladdMedicine" modal
+                //we add the new customer in the start
+                this.customers.unshift(customer)
+                
+            },
+            //delete customers 
+            deleteCustomer: function(customerId){
+                 axios.delete('/api/customers/'+customerId).then((response)=>{
+                                this.getCustomers()
+
+                 })
+                    .catch(error => {
+                        
+                        switch (error.response.status) {
+                            case 403:
+                                this.ErrorMessage = error.response.statusText + " , " + error.response.data.message
+                                $(".alert").show();
+                                
+                                break;
+                            case 404:
+
+                                //if the customer is already deleted then refresh current customers view 
+                                this.getCustomers()
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    });
+
+            },
+            //get customers in the current page 
+            getCustomers: function(){
                 /** get customers in the current page using the server's API with (axios)
                  * 
                  * 
                  * 
                  */
+                axios.get("/api/customers", {
+                    params:{
+                            
+                        search:this.search,
+                        selected_column:this.selected_column,
+                        filter_flow:this.filter_flow,
+                        page:this.paginationCurrent
+                        }
+                    
+                    })
+                        .then((response) => {
+                        this.customers = response.data.data;
+                        
+                    }, (error) => {
+                        console.log(error);
+                    });
+
+
+                    
+
+            
 
             },
             settings(customerId) {
-                this.selectedcustomer_Id = customerId
+                this.selectedCustomer_Id = customerId
 
                 $("#modaleditcustomer").modal("show")
             },

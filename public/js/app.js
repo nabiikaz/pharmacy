@@ -4171,23 +4171,8 @@ __webpack_require__.r(__webpack_exports__);
       //displayed batches
       batches: [],
       selected_supplier: null,
-      new_supplier: {
-        id: null,
-        name: "",
-        address: "",
-        tel: "",
-        email: ""
-      },
-      suppliers: [{
-        Id: 1,
-        name: "ahmed"
-      }, {
-        Id: 2,
-        name: "zakaria"
-      }, {
-        Id: 3,
-        name: "ilyes"
-      }],
+      new_supplier: {},
+      suppliers: [],
       newBatch: {},
       paginationCurrent: 1
     };
@@ -4425,57 +4410,108 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     $('[data-tooltip="tooltip"]').tooltip();
+    this.getCustomers();
   },
   data: function data() {
     return {
+      ErrorMessage: "",
       search: "",
-      selectedcustomer_Id: -1,
+      selectedCustomer_Id: -1,
       filter_flow: "Ascending",
       selected_column: [],
       //displayed customers 
-      customers: [{
-        Id: 1,
-        fullname: "nabi zakaria",
-        address: "bensekrane - tlemcen",
-        tel: "0555655100",
-        email: "nabi@gmail.com"
-      }, {
-        Id: 2,
-        fullname: "nabi zakaria",
-        address: "bensekrane - tlemcen",
-        tel: "0555655100",
-        email: "nabi@gmail.com"
-      }, {
-        Id: 3,
-        fullname: "nabi zakaria",
-        address: "bensekrane - tlemcen",
-        tel: "0555655100",
-        email: "nabi@gmail.com"
-      }],
+      customers: [],
       paginationCurrent: 1
     };
   },
   watch: {
     paginationCurrent: function paginationCurrent(val) {
-      this.getcustomers();
+      this.getCustomers();
     },
     search: function search(val) {
       this.paginationCurrent = 1;
-      this.getcustomers();
+      this.getCustomers();
+    },
+    selected_column: function selected_column() {
+      this.getCustomers();
+    },
+    filter_flow: function filter_flow() {
+      this.getCustomers();
+    },
+    selectedCustomer_Id: function selectedCustomer_Id(old_val, new_val) {
+      this.getCustomers();
     }
   },
   methods: {
+    //when a customer is updated event is triggered from the editMedicine Child component            
+    onCustomerUpdated: function onCustomerUpdated(customer) {
+      customer.highlight = "background-color:#2ec741";
+      $("#modaleditcustomer").modal("hide"); // we first need to hide the "modaladdMedicine" modal
+      //we add the update the  customer with the selectedMedicine_Id
+
+      for (var index = 0; index < this.customers.length; index++) {
+        if (this.customers[index].id == this.selectedCustomer_Id) {
+          this.customers.splice(index, 1);
+          this.customers.unshift(customer);
+        }
+      }
+    },
+    //when a customer is created event is triggered from the addMedicine Child component
+    onCustomerCreated: function onCustomerCreated(customer) {
+      customer.highlight = "background-color:#2ec741";
+      $("#modaladdMedicine").modal("hide"); // we first need to hide the "modaladdMedicine" modal
+      //we add the new customer in the start
+
+      this.customers.unshift(customer);
+    },
+    //delete customers 
+    deleteCustomer: function deleteCustomer(customerId) {
+      var _this = this;
+
+      axios["delete"]('/api/customers/' + customerId).then(function (response) {
+        _this.getCustomers();
+      })["catch"](function (error) {
+        switch (error.response.status) {
+          case 403:
+            _this.ErrorMessage = error.response.statusText + " , " + error.response.data.message;
+            $(".alert").show();
+            break;
+
+          case 404:
+            //if the customer is already deleted then refresh current customers view 
+            _this.getCustomers();
+
+            break;
+
+          default:
+            break;
+        }
+      });
+    },
     //get customers in the current page 
-    getcustomers: function getcustomers() {//don't forget the search and paginationCurrent 
+    getCustomers: function getCustomers() {
+      var _this2 = this;
 
       /** get customers in the current page using the server's API with (axios)
        * 
        * 
        * 
        */
+      axios.get("/api/customers", {
+        params: {
+          search: this.search,
+          selected_column: this.selected_column,
+          filter_flow: this.filter_flow,
+          page: this.paginationCurrent
+        }
+      }).then(function (response) {
+        _this2.customers = response.data.data;
+      }, function (error) {
+        console.log(error);
+      });
     },
     settings: function settings(customerId) {
-      this.selectedcustomer_Id = customerId;
+      this.selectedCustomer_Id = customerId;
       $("#modaleditcustomer").modal("show");
     }
   },
@@ -4575,53 +4611,79 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['customerId'],
   mounted: function mounted() {},
   data: function data() {
     return {
-      img: "/img/icons/man.png",
-      Img: null,
-      fullname: "",
+      Message: "",
+      MessageClass: "text-success",
+      name: "",
       address: "",
       tel: "",
-      email: ""
+      email: "",
+      customer: {}
     };
   },
   methods: {
-    onFileSelected: function onFileSelected(event) {
-      this.img = URL.createObjectURL(event.target.files[0]);
-      this.Img = new FormData();
-      this.Img.append("image", event.target.files[0], event.target.files[0].name);
-    },
-    NextModal: function NextModal(id) {
-      //hide the current modal (the personal information modal)
-      $("#modaladdcustomer").modal('hide'); //show the second modal (the credentials modal)
-
-      $("#modaladdcustomer2").modal("show");
-    },
-    PreviousModal: function PreviousModal() {
-      //hide the current modal (the credentials modal)
-      $("#modaladdcustomer2").modal('hide'); //show the first modal (the personal information modal)
-
-      $("#modaladdcustomer").modal("show");
-    },
     untoggle_modal: function untoggle_modal(id) {
       $("#" + id).modal('hide');
     },
-    addcustomer: function addcustomer() {
-      //this method adds a customer via the api 
+    addCustomer: function addCustomer() {
+      var _this = this;
 
-      /* we add new customer using Axios 
-      *
-      *
-      * 
-      * 
-      * 
-      * 
-      * 
-      * */
-      alert("customer Added");
+      //this method adds a customer via the api 
+      console.log(this.customer);
+      axios.post('/api/customers', this.customer).then(function (response) {
+        console.log(response);
+
+        switch (response.status) {
+          case 201:
+            _this.Message = "Pharmacist was created successfully .";
+            _this.MessageClass = "text-success"; //clear all inputs 
+
+            _this.customer = {}; //emit back the created Medicine : 
+
+            _this.$emit('created', response.data.data);
+
+            break;
+
+          default:
+            break;
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          _this.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 422:
+              _this.Message = Object.values(error.response.data.errors)[0][0];
+              _this.MessageClass = "text-danger";
+              return;
+              break;
+
+            default:
+              break;
+          }
+
+          _this.Message = "Customer Couldn't be created || Server Error : " + error.response.statusText;
+        } else if (error.request) {
+          /*
+          * The request was made but no response was received, `error.request`
+          * is an instance of XMLHttpRequest in the browser and an instance
+          * of http.ClientRequest in Node.js
+          */
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request and triggered an Error
+          console.log('Error', error.message);
+        }
+      });
     }
   },
   components: {}
@@ -4715,32 +4777,105 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['customerId'],
   watch: {
-    customerId: function customerId(val) {
-      /* axios
-       *
-       *
-       * 
-       * 
-       * */
-      this.fullname = "nabi zakaria";
-      this.tel = "0555655100";
-      this.address = "tlemcen- bensekrane";
-      this.email = "nabizakaria";
+    customerId: function customerId(Id) {
+      this.getCustomer(Id);
+      this.Message = "";
+      this.MessageClass = "text-success";
     }
   },
   data: function data() {
     return {
-      fullname: "",
-      tel: "",
-      address: "",
-      email: ""
+      Message: "",
+      MessageClass: "text-success",
+      customer: {}
     };
   },
   methods: {
-    editcustomer: function editcustomer() {}
+    getCustomer: function getCustomer(customerId) {
+      var _this = this;
+
+      this.disable = false;
+      this.errorMsg = "";
+      axios.get('/api/customers/' + this.customerId).then(function (Response) {
+        _this.customer = Response.data.data;
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          _this.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 422:
+              _this.Message = Object.values(error.response.data.errors)[0][0];
+              _this.MessageClass = "text-danger";
+              return;
+
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+
+          _this.Message = "customer : " + error.response.statusText;
+        }
+      });
+    },
+    editCustomer: function editCustomer(event) {
+      var _this2 = this;
+
+      /** edit the Medicine using Axios via the server's API
+       * 
+       * 
+       * 
+       * 
+       * 
+       */
+      axios.patch('/api/customers/' + this.customerId, this.customer).then(function (Response) {
+        _this2.ImgFormData = null;
+
+        _this2.getCustomer(_this2.customerId);
+
+        switch (Response.status) {
+          case 200:
+            _this2.Message = "customer was updated successfully .";
+            _this2.MessageClass = "text-success"; //clear all inputs 
+
+            _this2.customer = {}; //emit back the edited Customer : 
+
+            _this2.$emit('updated', Response.data.data);
+
+            break;
+
+          default:
+            break;
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          console.log(error.response);
+          _this2.Message = "Error : " + error.response.data.errors;
+          _this2.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
+    }
   }
 });
 
@@ -68427,13 +68562,12 @@ var render = function() {
               _c(
                 "th",
                 {
-                  class:
-                    _vm.selected_column == "fullname" ? "select-search" : "",
+                  class: _vm.selected_column == "name" ? "select-search" : "",
                   on: {
                     click: function($event) {
-                      _vm.selected_column == "fullname"
+                      _vm.selected_column == "name"
                         ? (_vm.selected_column = "")
-                        : (_vm.selected_column = "fullname")
+                        : (_vm.selected_column = "name")
                     }
                   }
                 },
@@ -68498,14 +68632,12 @@ var render = function() {
                   "td",
                   {
                     class:
-                      _vm.selected_column == "fullname"
-                        ? "select-search-data"
-                        : ""
+                      _vm.selected_column == "name" ? "select-search-data" : ""
                   },
                   [
                     _vm._v(
                       "\n                        " +
-                        _vm._s(customer.fullname) +
+                        _vm._s(customer.name) +
                         "\n                    "
                     )
                   ]
@@ -68553,7 +68685,7 @@ var render = function() {
                       },
                       on: {
                         click: function($event) {
-                          return _vm.settings(customer.Id)
+                          return _vm.settings(customer.id)
                         }
                       }
                     },
@@ -68564,7 +68696,28 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(2, true)
+                  _c(
+                    "a",
+                    {
+                      staticClass: "delete",
+                      attrs: {
+                        href: "#",
+                        title: "",
+                        "data-tooltip": "tooltip",
+                        "data-original-title": "Delete"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.deleteCustomer(customer.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        attrs: { src: "/img/icons/trash.png", width: "24" }
+                      })
+                    ]
+                  )
                 ])
               ])
             }),
@@ -68682,9 +68835,12 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("editCustomer"),
+      _c("editCustomer", {
+        attrs: { customerId: _vm.selectedCustomer_Id },
+        on: { updated: _vm.onCustomerUpdated }
+      }),
       _vm._v(" "),
-      _c("addCustomer")
+      _c("addCustomer", { on: { created: _vm.onCustomerCreated } })
     ],
     1
   )
@@ -68720,24 +68876,6 @@ var staticRenderFns = [
         ]
       )
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "delete",
-        attrs: {
-          href: "#",
-          title: "",
-          "data-tooltip": "tooltip",
-          "data-original-title": "Delete"
-        }
-      },
-      [_c("img", { attrs: { src: "/img/icons/trash.png", width: "24" } })]
-    )
   }
 ]
 render._withStripped = true
@@ -68790,7 +68928,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.NextModal($event)
+                        return _vm.addCustomer($event)
                       }
                     }
                   },
@@ -68798,7 +68936,7 @@ var render = function() {
                     _vm._m(1),
                     _vm._v(" "),
                     _c("div", { staticClass: "md-form mb-2" }, [
-                      _c("label", { attrs: { for: "fullname" } }, [
+                      _c("label", { attrs: { for: "name" } }, [
                         _vm._v("Fullname")
                       ]),
                       _vm._v(" "),
@@ -68807,26 +68945,26 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fullname,
-                            expression: "fullname"
+                            value: _vm.customer.name,
+                            expression: "customer.name"
                           }
                         ],
                         staticClass: "form-control ",
                         attrs: {
-                          name: "fullname",
+                          name: "name",
                           type: "text",
-                          id: "fullname",
+                          id: "name",
                           required: "",
                           minlength: "8",
                           maxlength: "25"
                         },
-                        domProps: { value: _vm.fullname },
+                        domProps: { value: _vm.customer.name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.fullname = $event.target.value
+                            _vm.$set(_vm.customer, "name", $event.target.value)
                           }
                         }
                       })
@@ -68842,8 +68980,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.tel,
-                            expression: "tel"
+                            value: _vm.customer.tel,
+                            expression: "customer.tel"
                           }
                         ],
                         staticClass: "form-control ",
@@ -68854,13 +68992,13 @@ var render = function() {
                           required: "",
                           pattern: "[0-9]{9}|[0-9]{10}"
                         },
-                        domProps: { value: _vm.tel },
+                        domProps: { value: _vm.customer.tel },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.tel = $event.target.value
+                            _vm.$set(_vm.customer, "tel", $event.target.value)
                           }
                         }
                       })
@@ -68876,8 +69014,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.address,
-                            expression: "address"
+                            value: _vm.customer.address,
+                            expression: "customer.address"
                           }
                         ],
                         staticClass: "form-control ",
@@ -68889,13 +69027,17 @@ var render = function() {
                           minlength: "8",
                           maxlength: "25"
                         },
-                        domProps: { value: _vm.address },
+                        domProps: { value: _vm.customer.address },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.address = $event.target.value
+                            _vm.$set(
+                              _vm.customer,
+                              "address",
+                              $event.target.value
+                            )
                           }
                         }
                       })
@@ -68911,8 +69053,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.email,
-                            expression: "email"
+                            value: _vm.customer.email,
+                            expression: "customer.email"
                           }
                         ],
                         staticClass: "form-control ",
@@ -68922,16 +69064,20 @@ var render = function() {
                           id: "email",
                           required: ""
                         },
-                        domProps: { value: _vm.email },
+                        domProps: { value: _vm.customer.email },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.email = $event.target.value
+                            _vm.$set(_vm.customer, "email", $event.target.value)
                           }
                         }
                       })
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { class: _vm.MessageClass }, [
+                      _vm._v(_vm._s(_vm.Message))
                     ]),
                     _vm._v(" "),
                     _c("hr"),
@@ -69043,13 +69189,13 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.editcustomer($event)
+                        return _vm.editCustomer($event)
                       }
                     }
                   },
                   [
                     _c("div", { staticClass: "md-form mb-2" }, [
-                      _c("label", { attrs: { for: "fullname" } }, [
+                      _c("label", { attrs: { for: "name" } }, [
                         _vm._v("Fullname")
                       ]),
                       _vm._v(" "),
@@ -69058,26 +69204,26 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.fullname,
-                            expression: "fullname"
+                            value: _vm.customer.name,
+                            expression: "customer.name"
                           }
                         ],
                         staticClass: "form-control ",
                         attrs: {
-                          name: "fullname",
+                          name: "name",
                           type: "text",
-                          id: "fullname",
+                          id: "name",
                           required: "",
                           minlength: "8",
                           maxlength: "25"
                         },
-                        domProps: { value: _vm.fullname },
+                        domProps: { value: _vm.customer.name },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.fullname = $event.target.value
+                            _vm.$set(_vm.customer, "name", $event.target.value)
                           }
                         }
                       })
@@ -69093,8 +69239,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.tel,
-                            expression: "tel"
+                            value: _vm.customer.tel,
+                            expression: "customer.tel"
                           }
                         ],
                         staticClass: "form-control ",
@@ -69105,13 +69251,13 @@ var render = function() {
                           required: "",
                           pattern: "[0-9]{9}|[0-9]{10}"
                         },
-                        domProps: { value: _vm.tel },
+                        domProps: { value: _vm.customer.tel },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.tel = $event.target.value
+                            _vm.$set(_vm.customer, "tel", $event.target.value)
                           }
                         }
                       })
@@ -69127,8 +69273,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.address,
-                            expression: "address"
+                            value: _vm.customer.address,
+                            expression: "customer.address"
                           }
                         ],
                         staticClass: "form-control ",
@@ -69140,13 +69286,17 @@ var render = function() {
                           minlength: "8",
                           maxlength: "25"
                         },
-                        domProps: { value: _vm.address },
+                        domProps: { value: _vm.customer.address },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.address = $event.target.value
+                            _vm.$set(
+                              _vm.customer,
+                              "address",
+                              $event.target.value
+                            )
                           }
                         }
                       })
@@ -69162,8 +69312,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.email,
-                            expression: "email"
+                            value: _vm.customer.email,
+                            expression: "customer.email"
                           }
                         ],
                         staticClass: "form-control ",
@@ -69173,19 +69323,23 @@ var render = function() {
                           id: "email",
                           required: ""
                         },
-                        domProps: { value: _vm.email },
+                        domProps: { value: _vm.customer.email },
                         on: {
                           input: function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.email = $event.target.value
+                            _vm.$set(_vm.customer, "email", $event.target.value)
                           }
                         }
                       })
                     ]),
                     _vm._v(" "),
                     _c("hr"),
+                    _vm._v(" "),
+                    _c("span", { class: _vm.MessageClass }, [
+                      _vm._v(_vm._s(_vm.Message))
+                    ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "md-form mb-2" }),
                     _vm._v(" "),

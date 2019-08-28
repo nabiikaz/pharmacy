@@ -17,6 +17,8 @@ class RoleController extends Controller
             "medicines" => ["create","read","edit","delete"],
             "suppliers" => ["create","read","edit","delete"],
             "batches" => ["create","read","edit","delete"],
+            "customers" => ["create","read","edit","delete"]
+
             
         ], 
         "moderator"=> [
@@ -24,7 +26,11 @@ class RoleController extends Controller
             "medicines" => ["create","read","edit","delete"],
             "suppliers" => ["create","read","edit","delete"],
             "batches" => ["create","read","edit","delete"],
+            "customers" => ["create","read","edit","delete"]
 
+        ],
+        "customer" => [
+            "customers" => ["read","edit"]
         ]
         
     ];
@@ -44,6 +50,7 @@ class RoleController extends Controller
             $role = $this->validateRole($roleName);
 
             $role  = $this->validateRole($roleName);
+            if($role != null)
             $role->detachPermission();
         }
 

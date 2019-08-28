@@ -44,6 +44,9 @@ class PharmacistController extends Controller
             //dd($Pharmacists[$i]->roles()->first()->name);
             $tmp = $Pharmacists[$i]->roles()->first()["name"];
             $Pharmacists[$i]->role = $tmp;
+
+            if($Pharmacists[$i]->roles()->first()["name"] == "customer")
+                $Pharmacists->forget($i);
         }
 
         return PharmacistResource::Collection($Pharmacists);

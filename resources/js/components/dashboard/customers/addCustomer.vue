@@ -14,7 +14,7 @@
                         
 
 
-                        <form method="post" @submit.prevent="NextModal">
+                        <form method="post" @submit.prevent="addCustomer">
                             
                             <div class="md-from mb-2 ">
                             <h3 style="color: #6f6e6e;">Enter customer Information</h3>
@@ -23,9 +23,9 @@
                             <div class="md-form mb-2">
 
 
-                               <label for="fullname">Fullname</label>
-                                        <input name="fullname" type="text" id="fullname" class="form-control "
-                                            v-model="fullname" required minlength="8" maxlength="25">
+                               <label for="name">Fullname</label>
+                                        <input name="name" type="text" id="name" class="form-control "
+                                            v-model="customer.name" required minlength="8" maxlength="25">
                             </div>
 
                              <div class="md-form mb-2">
@@ -33,7 +33,7 @@
 
                                <label for="phone">Phone Number :</label>
                                         <input name="phone number" type="tel" id="phone" class="form-control " 
-                                                v-model="tel" required pattern="[0-9]{9}|[0-9]{10}">
+                                                v-model="customer.tel" required pattern="[0-9]{9}|[0-9]{10}">
                             </div>
 
                              <div class="md-form mb-2">
@@ -41,7 +41,7 @@
 
                                <label for="address">Address</label>
                                         <input name="address" type="text" id="address" class="form-control "
-                                            v-model="address" required minlength="8" maxlength="25">
+                                            v-model="customer.address" required minlength="8" maxlength="25">
                             </div>
 
                              <div class="md-form mb-2">
@@ -50,9 +50,10 @@
                               <label for="email">Email</label>
 
                                         <input name="email" type="email" id="email" class="form-control " 
-                                        v-model="email" required>
+                                        v-model="customer.email" required>
                             </div>
 
+                            <span :class="MessageClass">{{Message}}</span>
 
                             
                             <hr>
@@ -87,13 +88,15 @@
         },
         data() {
             return {
-
-                img: "/img/icons/man.png",
-                Img: null,
-                fullname: "",
+                  Message:"",
+                MessageClass:"text-success",
+                
+                name: "",
                 address: "",
                 tel: "",
                 email: "",
+
+                customer:{},
                 
 
 
@@ -102,56 +105,79 @@
             }
         },
         methods: {
-            onFileSelected : function(event){
-                this.img = URL.createObjectURL(event.target.files[0])
-
-                this.Img = new FormData()
-                this.Img.append("image",event.target.files[0],event.target.files[0].name)
-            },
-
-            NextModal: function (id) {
-                
-               //hide the current modal (the personal information modal)
-                $("#modaladdcustomer").modal('hide')
-                
-                //show the second modal (the credentials modal)
-                $("#modaladdcustomer2").modal("show")
-
-
-
-                
-
-            },
-            PreviousModal : function(){
-                
-                
-
-                //hide the current modal (the credentials modal)
-                $("#modaladdcustomer2").modal('hide')
-                
-                //show the first modal (the personal information modal)
-                $("#modaladdcustomer").modal("show")
-
-
-
-                
-            },
+            
             untoggle_modal: function (id) {
                 $("#" + id).modal('hide');
             },
-            addcustomer: function () { //this method adds a customer via the api 
-                /* we add new customer using Axios 
-                *
-                *
-                * 
-                * 
-                * 
-                * 
-                * 
-                * */
+            addCustomer: function () { //this method adds a customer via the api 
+                console.log(this.customer)
+                
+                axios.post('/api/customers',this.customer)
+                    .then((response)=>{
+                        console.log(response)
+
+                        switch (response.status) {
+                            case 201:
+
+                                this.Message = "Pharmacist was created successfully ."
+                                this.MessageClass = "text-success"
+                                //clear all inputs 
+                                this.customer = {}
+                                
+                                //emit back the created Medicine : 
+                                
+                                this.$emit('created', response.data.data)
 
 
-                alert("customer Added")
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                
+
+                         
+
+                    }).catch(error => {
+
+
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 422 :                              
+                                this.Message  = Object.values(error.response.data.errors)[0][0]
+                                
+                                this.MessageClass = "text-danger"
+                                return
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                            this.Message = "Customer Couldn't be created || Server Error : "+error.response.statusText
+                        }else if (error.request) {
+                            /*
+                            * The request was made but no response was received, `error.request`
+                            * is an instance of XMLHttpRequest in the browser and an instance
+                            * of http.ClientRequest in Node.js
+                            */
+                            console.log(error.request);
+                        } else {
+                            // Something happened in setting up the request and triggered an Error
+                            console.log('Error', error.message);
+                        }
+                       
+                    });
+            
+
             },
 
 
