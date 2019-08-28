@@ -14,10 +14,10 @@
 Route::get("purchases",function(){
 
     //dd(Auth::user()->Suppliers()->attach(App\Supplier::find(1)));
-/*dd(App\Purchase::find(1)->Medicines()->attach([2=>["fabrication_date"=>"2019-08-17",
-                                 "expiry_date" => "2019-08-17","unit_price" => 48000,"batch_price" => 30000,"quantity" => 99 ]]))->withTimestamps();
-*/
-dd(App\Purchase::find(1)->Batches);
+dd(App\Purchase::find(1)->Medicines()->attach([2=>["fabrication_date"=>"2019-08-17",
+                                 "expiry_date" => "2019-08-17","unit_price" => 48000,"batch_price" => 30000,"quantity" => 99,"quantity_min" =>0,"refund_rate"=>0 ]]))->withTimestamps();
+
+dd(App\Purchase::find(1)->Batches()->withPivot("fabrication_date","expiry_date","unit_price","batch_price","quantity","quantity_min","refund_rate"));
 
 
 

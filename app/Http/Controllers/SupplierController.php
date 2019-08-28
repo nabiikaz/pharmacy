@@ -34,11 +34,14 @@ class SupplierController extends Controller
         $orderby = ($request->get('filter_flow') == "Descending")? "desc":"asc";
         
 
-
-
         $Suppliers = Supplier::where($selected_column,"like", "%".$search."%")
-                    ->orderBy($selected_column,$orderby)
-                    ->paginate(5);
+                             ->orderBy($selected_column,$orderby);
+        if($request->has("page"))
+                $Suppliers = $Suppliers->paginate(5);
+        else
+                $Suppliers = $Suppliers->paginate(15);
+
+                    
 
        
 

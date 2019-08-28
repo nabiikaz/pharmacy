@@ -19,8 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix("/")->middleware("role:admin|moderator,api")->group(function(){
 
     Route::apiResource('pharmacists','PharmacistController');
-    Route::apiResource('suppliers','SupplierController');
     Route::apiResource('medicines','MedicineController');
+    Route::apiResource('suppliers','SupplierController');
+    Route::apiResource('batches','BatchController');
 });
 
 

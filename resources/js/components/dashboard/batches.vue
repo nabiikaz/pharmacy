@@ -19,13 +19,7 @@
                                 @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
                                 :title="filter_flow">
                     </div>
-                    <div class="col-md-4">
-                        <a href="#" class="btn btn-primary" data-toggle="modal"
-                            :data-target="(medicineId==-1)? '#modalSelectMedicine':'#modalSelectSupplier'">
-                            <i class="material-icons"></i> <span>Add New Medicine Batch</span>
-
-                        </a>
-                    </div>
+                    
                 </div>
 
             </div>
@@ -66,7 +60,7 @@
                         </div>
                         <div class="col-sm-5 d-flex justify-content-end  pr-5" data-toggle="modal" data-target="#modalCart">
                             <img style="cursor:pointer;" src="/img/icons/add_to_cart.png" width="38"
-                                :title="filter_flow">
+                                title="Batches">
                             <span
                                 :class=" (batches_in_cart_lenght==0)? 'rounded-circle   text-center pt-1  text-white bg-danger':'rounded-circle   text-center pt-1  text-white bg-success'"
                                 style="width:30px;height:30px;position:absolute;margin-top:-13px;margin-left:13px;"><b>{{batches_in_cart_lenght}}</b></span>
@@ -106,8 +100,8 @@
                         <th class="text-center" :class="(selected_column == 'quantity_stock')? 'select-search':''"
                             @click="(selected_column == 'quantity_stock')? selected_column='':selected_column = 'quantity_stock'">Quantity
                         </th>
-                        <th class="text-center" :class="(selected_column == 'refund')? 'select-search':''"
-                         @click="(selected_column == 'refund')? selected_column='':selected_column = 'refund'"  >Refund</th>
+                        <th class="text-center" :class="(selected_column == 'refund_rate')? 'select-search':''"
+                         @click="(selected_column == 'refund_rate')? selected_column='':selected_column = 'refund_rate'"  >Refund</th>
 
 
                         <th class="text-center" style="width:170px;">Action</th>
@@ -130,28 +124,28 @@
                             {{batch.batch_price }}</td>
                         <td class="text-center" :class="(selected_column == 'quantity_stock')? 'select-search-data':''"
                             :style="(batch.quantity_stock<batch.quantity_min)? 'color:red;':'color:green;'"
-                            data-tooltip="tooltip"
-                            :data-original-title="(batch.quantity_stock<batch.quantity_min)?'Quantity en Stock < min( '+batch.quantity_min+' )       risk of rupture':'' ">
-                            {{batch.quantity_stock }} <strong>/</strong> {{batch.quantity_bought }}</td>
+                            data-toggle="tooltip"
+                            :title="(batch.quantity_stock<batch.quantity_min)?'Quantity en Stock < min( '+batch.quantity_min+' )       risk of rupture':'' ">
+                            {{batch.quantity_stock }} <strong>/</strong> {{batch.quantity }}</td>
 
-                         <td class="d-flex justify-content-center" :class="(selected_column == 'refund')? 'select-search-data':''"
-                                                             data-tooltip="tooltip" :data-original-title="batch.refund+' %'" >
-                            <img width="22" height="22" v-bind:src="(batch.refund > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
+                         <td class="d-flex justify-content-center" :class="(selected_column == 'refund_rate')? 'select-search-data':''"
+                                                             data-toggle="tooltip" :data-original-title="batch.refund_rate+' %'" >
+                            <img width="22" height="22" v-bind:src="(batch.refund_rate > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
                         </td>
 
         
                         <td class="text-center">
-                            <a href="#" class="sell" title="" data-tooltip="tooltip" data-original-title="Add To Cart"
-                                @click="addToCart(batch.Id)">
+                            <a href="#" class="sell" title="" data-toggle="tooltip" data-original-title="Add To Cart"
+                                @click="addToCart(batch.id)">
                                 <img src="/img/icons/add_to_cart.png" style="color:green;" width="22">
                             </a>
 
                             <a :href="'/dashboard/medicines/sales/'+batch.Id" class="sales" title=""
-                                data-tooltip="tooltip" data-original-title="Sales">
+                                data-toggle="tooltip" data-original-title="Sales">
                                 <img src="/img/icons/sales.png" style="color:green;" width="22">
                             </a>
 
-                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete">
+                            <a href="#" class="delete" title="" data-toggle="tooltip" data-original-title="Delete" @click="deleteBatch(batch.id)">
                                 <img src="/img/icons/trash.png" width="24">
                             </a>
                         </td>
@@ -438,8 +432,8 @@
 
                                        
 
-                                        <a href="#" class="delete" title="" data-tooltip="tooltip"
-                                            data-original-title="Delete" @click="removeBatchFromCart(batch.Id)">
+                                        <a href="#" class="delete" title="" data-toggle="tooltip"
+                                            data-original-title="Delete" @click="removeBatchFromCart(indx)">
                                             <img src="/img/icons/trash.png" width="24">
                                         </a>
                                     </td>
@@ -457,12 +451,13 @@
     </div>
 </template>
 <script>
+import { constants } from 'crypto';
     export default {
 
         mounted() {
-            $('[data-tooltip="tooltip"]').tooltip();
-
-
+            
+            this.getBatches()
+            
 
 
         },
@@ -486,41 +481,7 @@
 
 
                 //displayed batches
-                batches: [{
-                        Id: 1,
-                        medicine_name: "DOLIPRANE",
-                        fabrication_date: "2019-08-26",
-                        expiry_date: "2020-08-27",
-                        unit_price: 0,
-                        batch_price: 0,
-                        quantity_bought: 25,
-                        quantity_stock: 9,
-                        quantity_min: 90,
-                        refund: 1,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
-                        
-
-
-                    },
-                    {
-                        Id: 2,
-                        medicine_name: "sulpiride",
-                        fabrication_date: "2019-08-26",
-                        expiry_date: "2020-08-27",
-                        unit_price: 150,
-                        batch_price: 100,
-                        quantity_bought: 25,
-                        quantity_stock: 9,
-                        quantity_min: 90,
-                        refund: 0,//pourcentage of refund if 0% then no refund else a pourcentage is defined as a refund %
-
-
-
-                    }
-
-
-
-
-                ],
+                batches: [],
                 selected_supplier: null,
 
                 new_supplier: {
@@ -543,18 +504,7 @@
                         name: "ilyes"
                     },
                 ],
-                newBatch: {
-                    Id: 0,
-                    medicine_name: "",
-                    fabrication_date: "",
-                    expiry_date: "",
-                    unit_price: null,
-                    batch_price: null,
-                    quantity_bought: null,
-                    quantity_stock: null,
-                    quantity_min: null,
-
-                },
+                newBatch: {},
 
                 paginationCurrent: 1
 
@@ -579,11 +529,34 @@
 
 
             },
+            selected_column: function(){
+                this.getBatches();
+            },
+            filter_flow : function(){
+                 this.getBatches();
+            },
 
             //watch batches_in_cart so that if a new batch is being added to the cart the number of items increases
             batches_in_cart: function (old,val) {
                 this.batches_in_cart_lenght = val.length
+
+
+                for(let i = 0 ; i < this.batches_in_cart_lenght ;i++){
+                    for(let j = this.batches_in_cart_lenght-1;j>i;j--){
+                        if(this.batches_in_cart[i].id == this.batches_in_cart[j].id ){
+                            if(this.batches_in_cart[i].quantity < this.batches_in_cart[i].quantity_min)
+                                this.batches_in_cart[i].quantity++;
+                            this.batches_in_cart.splice(j,1);
+                            return
+
+                        }
+                    }
+                }
                 
+
+            },
+            batches: function(){
+                        $('[data-toggle=tooltip]').tooltip();
 
             }
 
@@ -596,59 +569,85 @@
 
         methods: {
             //remove batch from the cart 
-            removeBatchFromCart: function(batchId){
-
-                //search for the batch in batches_in_cart collection
+            removeBatchFromCart: function(index){
+                this.batches_in_cart.splice(index,1)
+               /* //search for the batch in batches_in_cart collection
                 for (let i = 0; i < this.batches_in_cart.length; i++) {
                     if (batchId == this.batches_in_cart[i].Id)
                         this.batches_in_cart.splice(i,1)
                     
-                }
+                }*/
 
+            },
+            getBatch: function(batchId){
+                    this.disable = false
+                    this.errorMsg = ""
+                    
+                    axios.get('/api/batches/'+batchId)
+                    .then((Response)=>{
+                          this.batches_in_cart.push(Response.data.data)
+                        $('[data-toggle=tooltip]').tooltip();
+
+                    
+
+                        
+
+                         
+
+                    }).catch(error => {
+                        
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            
+                             switch (error.response.status) {
+                            case 404:
+
+                                
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                        }
+                    })
+
+
+                
+               
+               
+
+                 
             },
             //get batches in the current page
-            getBatches: function () {
-                /** get batches in the current page using the server's API with (axios)
-                 *
-                 *
-                 *
-                 */
+            getBatches: function(){
+            
+                axios.get("/api/batches", {
+                    params:{
+                            
+                        search:this.search,
+                        selected_column:this.selected_column,
+                        filter_flow:this.filter_flow,
+                        page:this.paginationCurrent
+                        }
+                    
+                    })
+                        .then((response) => {
+                        this.batches = response.data.data;
+                        $('[data-toggle=tooltip]').tooltip();
+                        
+                    }, (error) => {
+                        console.log(error);
+                    });
 
+           
 
-            },
-            getBatch: function (batchId) {
-
-                /** get the batch with the batchId using the server's API with (axios)
-                 *
-                 *
-                 *
-                 */
-
-                let batch = {
-                    Id: 0,
-                    medicine_name: "test Medicine Name",
-                    fabrication_date: "07/08/2015",
-                    expiry_date: "07/09/2019",
-                    unit_price: 29,
-                    batch_price: 20,
-                    quantity_bought: null,
-                    quantity_stock: 5,
-                    quantity_min: 3,
-
-
-                };
-
-
-
-
-
-
-
-
-
-                return batch
-
-            },
+             },
+            
             addNewSupplier: function () {
 
             },
@@ -657,50 +656,40 @@
             },
             //this function add a new a batch to cart :
             addToCart: function (batchId) {
-                //retrieve the batch informations from the server
-                let batch = this.getBatch(batchId)
-                //we add the quantity property to batch object
+                this.getBatch(batchId);
+               
 
 
-                //test if the batch already exist in the batches_in_cart data
-                //if the batch exist in batches_in_cart thenwe increment the quantity by one
-                for (let i = 0; i < this.batches_in_cart.length; i++) { 
-                    //test if thequantity in the stock is above 0( > 0)
-                    if (batch.Id == this.batches_in_cart[i].Id) { 
 
-                        if (this.batches_in_cart[i].quantity < batch.quantity_stock){
-                            this.batches_in_cart[i].quantity++
+            },
+             //delete medicines 
+            deleteBatch: function(batchId){
+                 axios.delete('/api/batches/'+batchId).then((response)=>{
+                                this.getBatches()
 
-                            
+                                for(let i = 0;i<this.batches_in_cart.length;i++){
+                                    if(this.batches_in_cart[i].id == batchId)
+                                        this.batches_in_cart.splice(i,1);
+                                }
 
-                            console.log(batch.Id+" / "+this.batches_in_cart[i].Id)
+                 })
+                    .catch(error => {
+                        
+                        switch (error.response.status) {
+                            case 404:
 
+                                //if the medicine is already deleted then refresh current medicines view 
+                                this.getMedicines()
 
+                                
+                                break;
+                        
+                            default:
+                                break;
                         }
-                    } 
+                    });
 
-                }
-
-                if (this.batches_in_cart.length == 0){
-                    batch.quantity = 1
-                    this.batches_in_cart.push(batch)
-                }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            }
+            },
 
 
 

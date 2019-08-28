@@ -49,7 +49,10 @@ const app = new Vue({
     el: '#app',
     data:{
         
-    }
+    },
+    mounted: function() {
+        $('[data-toggle="tooltip"]').tooltip();
+      }
     
 });
 

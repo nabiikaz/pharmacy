@@ -46,6 +46,35 @@
                         </ul>
                         
                     </div>
+                    <div class="col-sm-7 ">
+                    <div class="row">
+                        <div class="col-sm-1">
+                            
+
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="md-form ">
+                               
+
+                            </div>
+
+                        </div>
+                        <div class="col-sm-5 d-flex justify-content-end  pr-5" data-toggle="modal" data-target="#modalCart">
+                            <img style="cursor:pointer;" src="/img/icons/batch.png" width="38"
+                                title="New Medicine Batches">
+                            <span
+                                :class=" (batches_in_cart_lenght==0)? 'rounded-circle   text-center pt-1  text-white bg-danger':'rounded-circle   text-center pt-1  text-white bg-success'"
+                                style="width:30px;height:30px;position:absolute;margin-top:-13px;margin-left:13px;"><b>{{batches_in_cart_lenght}}</b></span>
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
 
                   
                 </div>
@@ -82,11 +111,11 @@
                        
                         
                         <td class="text-center">
+                            <a href="#" class="batch" title="" data-tooltip="tooltip" data-original-title="Add New Batch" @click="openNewBatchModal(medicine.id,medicine.medicine_name)"
+                            data-toggle="modal" data-target="#modalAddNewBatch"><img src="/img/icons/batch.png" width="22" ></a>
+                            
                             <a href="#" class="edit" title="" data-tooltip="tooltip" data-original-title="Edit Medicine"
                                 v-on:click="settings(medicine.id)"><img src="/img/icons/edit.png" width="22" ></a>
-                            
-                            <a :href="'/dashboard/medicines/batches/'+medicine.id" class="batch" title="" data-tooltip="tooltip" data-original-title="batches"
-                            ><img src="/img/icons/batch.png" width="22" ></a>
                             
 
 
@@ -112,6 +141,280 @@
                 </ul>
             </div>
         </div>
+
+
+         <div id="modalCart" class="modal fade" role="dialog" >
+            <div class="modal-dialog modal-lg" role="document" style="max-width:1300px;">
+                <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
+                    <div class="modal-header bg-success text-center">
+                        <h4 class="modal-title  w-100 font-weight-bold text-white">New Medicine Batches</h4>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr style="cursor:pointer">
+
+
+
+
+
+
+
+                                    <th class="text-center ">Name</th>
+                                    <th class="text-center">Fabrication Date</th>
+                                    <th class="text-center">Expiry Date</th>
+                                    <th class="text-center">Unit Price</th>
+                                    <th class="text-center">Batch Price</th>
+                                    <th class="text-center">Quantity Purchased</th>
+                                    <th class="text-center">Quantity Minimum</th>
+                                    <th class="text-center">Refund Rate</th>
+                                    <th class="text-center" style="with:1">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(batch,index) in batches_in_cart" :key="index">
+
+
+
+                                    <td  class="text-center d-inline-block text-truncate" style="max-width: 195px;" >{{batch.medicine_name }}</td>
+                                    <td class="text-center" >
+                                        <input type="date"  style="width:155px;" class="form-control" v-model="batch.fabrication_date">
+                                    </td>
+                                    <td class="text-center" >
+                                        <input type="date"  style="width:155px;" class="form-control" v-model="batch.expiry_date">
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="number"   class="form-control" v-model="batch.unit_price" required min="0" >
+                                    </td>
+
+                                     <td class="text-center">
+                                        <input type="number"   class="form-control" v-model="batch.batch_price" required min="0" >
+                                    </td>
+
+                                   
+
+                                    <td class="text-center">
+                                        <input type="number" style="width:80px;" class="form-control" v-model.number="batch.quantity"  min="1">
+                                    </td>
+
+                                     <td class="text-center">
+                                        <input type="number" style="width:80px;" class="form-control" v-model.number="batch.quantity_min"  min="1">
+                                    </td>
+
+                                    <td class="text-center">
+                                        <input type="number" style="width:80px;" class="form-control" v-model.number="batch.refund_rate"  min="0" max="100">
+                                    </td>
+
+
+                                    <td class="text-center">
+                                        
+
+                                       
+
+                                        <a href="#" class="delete" title="" data-tooltip="tooltip"
+                                            data-original-title="Delete" @click="removeBatchFromCart(batch.Id)">
+                                            <img src="/img/icons/trash.png" width="24">
+                                        </a>
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+
+                        <div class="row">
+                            <div class="col-10"></div>
+                            <div class="col-2 d-flex justify-content-end">
+                                <input type="submit" class="btn btn-primary "  v-model="submitBatchesBtnTxt" @click="submitBatches">
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalAddNewBatch" tabindex="-1" role="dialog" aria-labelledby="add New Batch"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
+                    <div class="modal-header bg-success text-center">
+                        <h4 class="modal-title  w-100 font-weight-bold text-white">Add New Medicine Batch</h4>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body mx-3">
+
+                        <div class="md-form ">
+
+
+                            
+                            <form @submit.prevent="addNewBatch">
+                                <span style="color:gray;">Medicine Name :<strong class="text-success"> {{batch_medicine_name}} </strong> </span>
+                                <div class="pb-2 mt-3">
+                                    <label for="fabrication_date" class="mb-0 ">Fabricaion Date</label>
+                                    <input type="date" id="fabrication_date" class="form-control"
+                                        v-model="newBatch.fabrication_date" required>
+                                </div>
+
+                                <div class="pb-2 ">
+                                    <label for="expiry_date" class="mb-0 ">Expiry Datee</label>
+                                    <input type="date" id="expiry_date" class="form-control"
+                                        v-model="newBatch.expiry_date" required>
+                                </div>
+                                <div class="row">
+                                   
+
+                                    <div class="col-sm-6">
+                                        <label for="quantity" class="mb-0 ">Quantity Purchased</label>
+                                        <input type="number" id="quantity" class="form-control"
+                                            v-model="newBatch.quantity" required min="0">
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label for="quantity_minimum" class="mb-0 ">Quantity Minimum</label>
+                                        <input type="number" id="quantity_minimum" class="form-control"
+                                            v-model="newBatch.quantity_min" required min="0">
+                                    </div>
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <label for="unit_price" class="mb-0 ">Unit Price</label>
+                                        <input type="number" step="0.01" id="unit_price" class="form-control"
+                                            v-model="newBatch.unit_price" required min="0">
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label for="batch_price" class="mb-0 ">Batch Price</label>
+                                        <input type="number" step="0.01" id="batch_price" class="form-control"
+                                            v-model="newBatch.batch_price" required min="0">
+                                    </div>
+
+                                    <div class="col-sm-4">
+                                        <label for="batch_price" class="mb-0 ">Refund Rate</label>
+                                        <input type="number" step="0.01" id="batch_price" class="form-control" value="0"
+                                            v-model="newBatch.refund_rate" required min="0" max="100">
+                                    </div>
+
+                                </div>
+
+                                
+
+
+
+                                <hr>
+
+                                <div class="md-form ">
+                                    <button class="form-control btn btn-success">Add Batch</button>
+                                </div>
+
+                            </form>
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+           <div class="modal fade" id="modalSelectSupplier" tabindex="-1" role="dialog" aria-labelledby="add New Batch"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
+                    <div class="modal-header bg-success text-center">
+                        <h4 class="modal-title  w-100 font-weight-bold text-white">Add New Medicine Batch</h4>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body mx-3">
+
+                        <div class="md-form ">
+                            <h3 style="color: #6f6e6e;" class="text-center ">2- Select the Supplier : </h3>
+
+                            <select v-model="selected_supplier_id" class="form-control">
+                                <option v-for="(supplier,index) in suppliers" :key="index" :value="supplier.id">
+                                    {{supplier.supplier_name}}</option>
+                            </select>
+                            <span class="text-primary mb-3">Or add a new supplier !</span>
+                            <form @submit.prevent="addNewSupplier">
+                                <div class="pb-2 ">
+                                    <input type="text" placeholder="Fullname" class="form-control"
+                                        v-model="new_supplier.supplier_name" required>
+                                </div>
+
+                                <div class="pb-2">
+                                    <input type="tel" placeholder="phone number" class="form-control"
+                                        v-model="new_supplier.tel" required minlength="9" maxlength="10">
+                                </div>
+
+                                <div class="pb-2">
+                                    <input type="text" placeholder="address" class="form-control"
+                                        v-model="new_supplier.address" required minlength="8" maxlength="35">
+                                </div>
+
+                                <div class="pb-2">
+                                    <input type="email" placeholder="email" class="form-control"
+                                        v-model="new_supplier.email" required>
+                                </div>
+                                <span :class="MessageClass">{{Message}}</span>
+
+                                <hr>
+
+                                <div class="md-form ">
+                                    <button class="form-control btn btn-success">Add New Supplier</button>
+                                </div>
+
+                            </form>
+
+
+
+
+
+
+
+
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
 
 
         
@@ -140,8 +443,8 @@
             
         },
         mounted() {
+            this.getMedicines();
             $('[data-tooltip="tooltip"]').tooltip();
-            this.getMedicines()
 
             
 
@@ -151,10 +454,27 @@
 
         data() {
             return {
+                 Message:"",
+                MessageClass:"text-success",
+
+                submitBatchesBtnTxt:"Select Supplier" ,
+                newBatch:{},
+               
+                batch_medicine_name:"N/A", //batch_medicine_name is the name of the medicine selected for creating a new batch of it
+                batch_medicineId:-1,//batch_medicineId is the medicine id of the selected medicine to create a new batch of it 
+
+                batches_in_cart_lenght:0,
+                batches_in_cart:[],
+
+                selected_supplier_id: -1,
                 
                 route : window.location.pathname,
                 selectedMedicine_Id: -1,
                 
+                new_supplier:{},
+
+                suppliers:[],
+               
                 search : "",
                 selected_column: '',
                 filter_flow : 'Ascending',
@@ -167,6 +487,14 @@
             }
         },
         watch:{
+            selected_supplier_id: function(id){
+                if(id > -1){
+                    this.submitBatchesBtnTxt = "Submit Batches"
+                    $("#modalSelectSupplier").modal("hide");
+                    $("#modalCart").modal("show");
+                }
+
+            },
             paginationCurrent : function(page){
                     this.getMedicines();
             },
@@ -184,6 +512,9 @@
             },
             selectedMedicine_Id: function(old_val,new_val){
                 this.getMedicines();
+            },
+            batches_in_cart: function(new_val){
+                this.batches_in_cart_lenght = this.batches_in_cart.length;
             }
         },
         
@@ -191,7 +522,262 @@
 
 
         methods: {
+            openNewBatchModal: function(medicineId,medicine_name){
+                this.batch_medicine_name = medicine_name
+                this.batch_medicineId = medicineId
+
+                
+
+
+            },
+            //add  Batch to cart
+            addNewBatch: function(){
+                this.newBatch.medicine_name = this.batch_medicine_name
+                this.newBatch.medicineId = this.batch_medicineId
+                this.batches_in_cart.push(this.newBatch);
+                this.newBatch = {};
+
+                $("#modalAddNewBatch").modal("hide");
+
+
+
+
+
+
+
+
+
+
+
+                this.batches_in_cart_lenght++;
+
+            },
+            //submit batches in cart to the server 
+            submitBatches: function(){
+
+                if(this.batches_in_cart_lenght <=  0){
+                    alert("Please Add Medicines Batches To Continue....")
+                    $("#modalCart").modal("hide")
+                    return;
+                }else if (this.selected_supplier_id == -1){
+                    this.getSuppliers();
+                    $("#modalCart").modal("hide")
+                    $("#modalSelectSupplier").modal("show");
+                }else {
+
+                     axios.post('/api/batches',
+                     {
+                         "batches": this.batches_in_cart,
+                         "supplier_id" : this.selected_supplier_id
+                     })
+                        .then((response)=>{
+                            console.log(response)
+                              this.Message = "Batches added successfully ."
+                                    this.MessageClass = "text-success"
+                                    //clear all inputs 
+                                    this.batches_in_cart.splice(0,this.batches_in_cart.length)
+
+                                    $("#modalCart").modal("hide")
+                                    
+                        
+                            
+
+                        }).catch(error => {
+
+
+                            if(error.response){
+                                /**
+                                 * the request was made and the server responded with  a
+                                 * status code that falls out of the range of 2**
+                                 *  */
+                                
+                                this.MessageClass = "text-danger"
+                                switch (error.response.status) {
+                                case 422 :                              
+                                    this.Message  = Object.values(error.response.data.errors)[0][0]
+                                    
+                                    this.MessageClass = "text-danger"
+                                    return
+
+                                    
+                                    break;
+                            
+                                default:
+                                    break;
+                                }   
+                                this.Message = "Supplier Couldn't be Added : "+error.response.statusText
+                            }else if (error.request) {
+                                /*
+                                * The request was made but no response was received, `error.request`
+                                * is an instance of XMLHttpRequest in the browser and an instance
+                                * of http.ClientRequest in Node.js
+                                */
+                                console.log(error.request);
+                            } else {
+                                // Something happened in setting up the request and triggered an Error
+                                console.log('Error', error.message);
+                            }
+                        
+                        });
+
+                }
+
+
+            },
+            addNewSupplier:function(){
+                console.log(this.new_supplier)
+                
+                axios.post('/api/suppliers',this.new_supplier)
+                    .then((response)=>{
+
+                        switch (response.status) {
+                            case 201:
+
+                                this.Message = "Supplier was created successfully ."
+                                this.MessageClass = "text-success"
+                                //clear all inputs 
+                                this.supplier = {}
+                                
+                                
+                                this.selected_supplier_id = response.data.data.id
+
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                
+
+                         
+
+                    }).catch(error => {
+
+
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 422 :                              
+                                this.Message  = Object.values(error.response.data.errors)[0][0]
+                                
+                                this.MessageClass = "text-danger"
+                                return
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                            this.Message = "Supplier Couldn't be Added : "+error.response.statusText
+                        }else if (error.request) {
+                            /*
+                            * The request was made but no response was received, `error.request`
+                            * is an instance of XMLHttpRequest in the browser and an instance
+                            * of http.ClientRequest in Node.js
+                            */
+                            console.log(error.request);
+                        } else {
+                            // Something happened in setting up the request and triggered an Error
+                            console.log('Error', error.message);
+                        }
+                       
+                    });
             
+
+            },
+
+            //get Suppliers in the current page 
+            getSuppliers: function(){
+                /** get Suppliers in the current page using the server's API with (axios)
+                 * 
+                 * 
+                 * 
+                 */
+                axios.get("/api/suppliers", {
+                    params:{
+                            
+                        search:"",
+                        selected_column:"",
+                        filter_flow:"ascending",
+                        page:1
+                        }
+                    
+                    })
+                        .then((response) => {
+                        this.suppliers = response.data.data;
+                        
+                    }, (error) => {
+                        console.log(error);
+                    });
+
+
+                    
+
+            
+
+            },
+
+            //retrieve medicine form the database with the medicine Id 
+             getMedicine: function(medicineId){
+                    this.disable = false
+                    this.errorMsg = ""
+               
+                    axios.get('/api/medicines/'+this.medicineId)
+                    .then((Response)=>{
+                         this.medicine = Response.data.data
+                         
+
+                         
+
+                    }).catch(error => {
+                        
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            
+                             switch (error.response.status) {
+                            case 404:
+
+                                
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                        }
+                    })
+               
+               
+
+                 
+            },
+           
+            //remove batch from the cart 
+            removeBatchFromCart: function(batchId){
+
+                //search for the batch in batches_in_cart collection
+                for (let i = 0; i < this.batches_in_cart.length; i++) {
+                    if (batchId == this.batches_in_cart[i].Id){
+                        this.batches_in_cart.splice(i,1)
+                        this.batches_in_cart_lenght--
+                    }
+                    
+                }
+
+                
+
+            },
             //when a medicine is updated event is triggered from the editMedicine Child component            
             onMedicineUpdated : function(medicine){
                 
@@ -494,4 +1080,9 @@
 
     }
 
+label {
+        font-size: 14px;
+        color: gray;
+
+    }
 </style>

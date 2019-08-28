@@ -15,14 +15,16 @@ class RoleController extends Controller
         "admin"=> [
             "users" => ["create","read","edit","delete"],
             "medicines" => ["create","read","edit","delete"],
-
-            "suppliers" => ["create","read","edit","delete"]
+            "suppliers" => ["create","read","edit","delete"],
+            "batches" => ["create","read","edit","delete"],
             
         ], 
         "moderator"=> [
             "users" => ["read","edit"],
             "medicines" => ["create","read","edit","delete"],
-            "suppliers" => ["create","read","edit","delete"]
+            "suppliers" => ["create","read","edit","delete"],
+            "batches" => ["create","read","edit","delete"],
+
         ]
         
     ];

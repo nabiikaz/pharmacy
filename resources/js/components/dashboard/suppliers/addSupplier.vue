@@ -112,7 +112,7 @@
                 $("#" + id).modal('hide');
             },
             addsupplier: function () { //this method adds a supplier via the api 
-               console.log(this.supplier)
+              // console.log(this.supplier)
                 
                 axios.post('/api/suppliers',this.supplier)
                     .then((response)=>{

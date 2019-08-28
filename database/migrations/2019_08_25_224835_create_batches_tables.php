@@ -28,7 +28,12 @@ class CreateBatchesTables extends Migration
             $table->date("expiry_date");
             $table->unsignedMediumInteger("unit_price");
             $table->unsignedMediumInteger("batch_price");
-            $table->integer("quantity");
+            $table->unsignedMediumInteger("quantity");//this is the quantity purchases 
+            $table->unsignedMediumInteger("quantity_stock");//this is the quantity remaining in the stock 
+            $table->unsignedMediumInteger("quantity_min");//this is the alert quantity minimum
+            $table->integer("refund_rate");
+
+//            $table->timestamps();
             
 
             
