@@ -215,7 +215,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
                     <div class="modal-header bg-success text-center">
-                        <h4 class="modal-title  w-100 font-weight-bold text-white">Add New Medicine Batch</h4>
+                        <h4 class="modal-title  w-100 font-weight-bold text-white">Select Customer</h4>
                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -226,7 +226,7 @@
                         <div class="md-form ">
                             <h3 style="color: #6f6e6e;" class="text-center ">2- Select the Customer : </h3>
 
-                            <select v-model="selected_customer" class="form-control " >
+                            <select v-model="selected_customer_id" class="form-control " >
                                 <option v-for="(customer,index) in customers" :key="index" :value="customer.id">
                                     {{customer.name}}</option>
                             </select>
@@ -251,6 +251,8 @@
                                     <input type="email" placeholder="email" class="form-control"
                                         v-model="new_customer.email" required>
                                 </div>
+                                <span :class="MessageClass">{{Message}}</span>
+
                                 <hr>
 
                                 <div class="md-form ">
@@ -479,6 +481,9 @@ import { constants } from 'crypto';
         data() {
 
             return {
+                 Message:"",
+                MessageClass:"text-success",
+
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 medicineId: this.$attrs.medicineid,
                 route: window.location.pathname,
@@ -496,7 +501,7 @@ import { constants } from 'crypto';
 
                 //displayed batches
                 batches: [],
-                selected_customer: null,
+                selected_customer_id: null,
 
                 new_customer: {
                     
@@ -520,8 +525,8 @@ import { constants } from 'crypto';
                 this.getBatches()
 
             },
-            //when selected_customer is changed (a customer is selected) then exit the modal and show theaddNewBatch modal
-            selected_customer: function () {
+            //when selected_customer_id is changed (a customer is selected) then exit the modal and show theaddNewBatch modal
+            selected_customer_id: function () {
 
                 $("#modalSelectCustomer").modal("hide")
                 $("#modalCart").modal("show")
@@ -604,6 +609,76 @@ import { constants } from 'crypto';
             
 
             },
+            addNewCustomer:function(){
+                console.log(this.new_customer)
+                
+                axios.post('/api/customers',this.new_customer)
+                    .then((response)=>{
+
+                        switch (response.status) {
+                            case 201:
+
+                                this.Message = "Customer was created successfully ."
+                                this.MessageClass = "text-success"
+                                //clear all inputs 
+                                this.customer = {}
+                                
+                                
+                                this.selected_customer_id = response.data.data.id
+
+                                this.new_customer = {}
+
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                
+
+                         
+
+                    }).catch(error => {
+
+
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 422 :                              
+                                this.Message  = Object.values(error.response.data.errors)[0][0]
+                                
+                                this.MessageClass = "text-danger"
+                                return
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                            this.Message = "Customer Couldn't be Added : "+error.response.statusText
+                        }else if (error.request) {
+                            /*
+                            * The request was made but no response was received, `error.request`
+                            * is an instance of XMLHttpRequest in the browser and an instance
+                            * of http.ClientRequest in Node.js
+                            */
+                            console.log(error.request);
+                        } else {
+                            // Something happened in setting up the request and triggered an Error
+                            console.log('Error', error.message);
+                        }
+                       
+                    });
+            
+
+            },
             //remove batch from the cart 
             removeBatchFromCart: function(index){
                 this.batches_in_cart.splice(index,1)
@@ -683,9 +758,7 @@ import { constants } from 'crypto';
 
              },
             
-            addNewCustomer: function () {
-
-            },
+            
             addNewBatch: function () {
 
             },

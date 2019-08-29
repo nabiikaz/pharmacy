@@ -36,9 +36,12 @@ class CustomerController extends Controller
 
 
 
+        if($request->has("page"))
+            $Customer = Customer::where($selected_column,"like", "%".$search."%")
+                        ->orderBy($selected_column,$orderby)->paginate(6);
+        else
         $Customer = Customer::where($selected_column,"like", "%".$search."%")
-                    ->orderBy($selected_column,$orderby)
-                    ->paginate(5);
+                        ->orderBy($selected_column,$orderby)->paginate(100);
 
         for ($i=0; $i < count($Customer); $i++) { 
             //dd($Customer[$i]->roles()->first()->name);

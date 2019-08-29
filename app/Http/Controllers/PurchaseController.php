@@ -15,19 +15,25 @@ class PurchaseController extends Controller
      */
     public function index(Request $request)
     {
-      /*  $selected_column  = $request->get("selected_column");
+       $selected_column  = $request->get("selected_column");
 
         if($selected_column=='')
-            $selected_column = 'medicine_name';
+            $selected_column = 'name';
+        else if ($selected_column == "created_at")
+            $selected_column = "purchases.created_at";
 
         $search = $request->get('search');
         $orderby = ($request->get('filter_flow') == "Descending")? "desc":"asc";
         
 
-*/
 
-        $purchases = Purchase::join("suppliers","suppliers.id","=","purchases.supplier_id")
-                            ->join("users","users.id","=","purchases.user_id")->select("supplier_name","name","purchases.created_at")->get();
+
+        $purchases = Purchase::where($selected_column,"like", "%".$search."%")        
+                            ->join("suppliers","suppliers.id","=","purchases.supplier_id")
+                            ->join("users","users.id","=","purchases.user_id")
+                            ->select("supplier_name","name","purchases.id","purchases.created_at")
+                            ->orderBy($selected_column,$orderby)
+                            ->paginate(5);
 
 
         return PurchaseResource::collection($purchases);

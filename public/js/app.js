@@ -4161,6 +4161,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -4171,6 +4173,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      Message: "",
+      MessageClass: "text-success",
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       medicineId: this.$attrs.medicineid,
       route: window.location.pathname,
@@ -4183,7 +4187,7 @@ __webpack_require__.r(__webpack_exports__);
       batches_in_cart_lenght: 0,
       //displayed batches
       batches: [],
-      selected_customer: null,
+      selected_customer_id: null,
       new_customer: {},
       customers: [],
       newBatch: {},
@@ -4199,8 +4203,8 @@ __webpack_require__.r(__webpack_exports__);
       this.paginationCurrent = 1;
       this.getBatches();
     },
-    //when selected_customer is changed (a customer is selected) then exit the modal and show theaddNewBatch modal
-    selected_customer: function selected_customer() {
+    //when selected_customer_id is changed (a customer is selected) then exit the modal and show theaddNewBatch modal
+    selected_customer_id: function selected_customer_id() {
       $("#modalSelectCustomer").modal("hide");
       $("#modalCart").modal("show");
     },
@@ -4256,6 +4260,57 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
+    addNewCustomer: function addNewCustomer() {
+      var _this2 = this;
+
+      console.log(this.new_customer);
+      axios.post('/api/customers', this.new_customer).then(function (response) {
+        switch (response.status) {
+          case 201:
+            _this2.Message = "Customer was created successfully .";
+            _this2.MessageClass = "text-success"; //clear all inputs 
+
+            _this2.customer = {};
+            _this2.selected_customer_id = response.data.data.id;
+            _this2.new_customer = {};
+            break;
+
+          default:
+            break;
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          _this2.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 422:
+              _this2.Message = Object.values(error.response.data.errors)[0][0];
+              _this2.MessageClass = "text-danger";
+              return;
+              break;
+
+            default:
+              break;
+          }
+
+          _this2.Message = "Customer Couldn't be Added : " + error.response.statusText;
+        } else if (error.request) {
+          /*
+          * The request was made but no response was received, `error.request`
+          * is an instance of XMLHttpRequest in the browser and an instance
+          * of http.ClientRequest in Node.js
+          */
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request and triggered an Error
+          console.log('Error', error.message);
+        }
+      });
+    },
     //remove batch from the cart 
     removeBatchFromCart: function removeBatchFromCart(index) {
       this.batches_in_cart.splice(index, 1);
@@ -4267,14 +4322,14 @@ __webpack_require__.r(__webpack_exports__);
        }*/
     },
     getBatch: function getBatch(batchId) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.disable = false;
       this.errorMsg = "";
       axios.get('/api/batches/' + batchId).then(function (Response) {
         Response.data.data.quantity = 1;
 
-        _this2.batches_in_cart.push(Response.data.data);
+        _this3.batches_in_cart.push(Response.data.data);
       })["catch"](function (error) {
         if (error.response) {
           /**
@@ -4293,7 +4348,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     //get batches in the current page
     getBatches: function getBatches() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get("/api/batches", {
         params: {
@@ -4303,12 +4358,11 @@ __webpack_require__.r(__webpack_exports__);
           page: this.paginationCurrent
         }
       }).then(function (response) {
-        _this3.batches = response.data.data;
+        _this4.batches = response.data.data;
       }, function (error) {
         console.log(error);
       });
     },
-    addNewCustomer: function addNewCustomer() {},
     addNewBatch: function addNewBatch() {},
     //this function add a new a batch to cart :
     addToCart: function addToCart(batchId) {
@@ -4316,19 +4370,19 @@ __webpack_require__.r(__webpack_exports__);
     },
     //delete medicines 
     deleteBatch: function deleteBatch(batchId) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios["delete"]('/api/batches/' + batchId).then(function (response) {
-        _this4.getBatches();
+        _this5.getBatches();
 
-        for (var i = 0; i < _this4.batches_in_cart.length; i++) {
-          if (_this4.batches_in_cart[i].id == batchId) _this4.batches_in_cart.splice(i, 1);
+        for (var i = 0; i < _this5.batches_in_cart.length; i++) {
+          if (_this5.batches_in_cart[i].id == batchId) _this5.batches_in_cart.splice(i, 1);
         }
       })["catch"](function (error) {
         switch (error.response.status) {
           case 404:
             //if the medicine is already deleted then refresh current medicines view 
-            _this4.getMedicines();
+            _this5.getMedicines();
 
             break;
 
@@ -6346,6 +6400,7 @@ __webpack_require__.r(__webpack_exports__);
     $('[data-toggle="popover"]').mouseout(function () {
       $(this).popover("hide");
     });
+    this.getpurchases();
   },
   data: function data() {
     return {
@@ -6356,68 +6411,51 @@ __webpack_require__.r(__webpack_exports__);
       selectedSale_Id: -1,
       selected_column: '',
       filter_flow: 'Ascending',
-      //displayed sales 
-      sales: [{
-        Id: 1,
-        pharmacist: "Nabi Zakaria",
-        supplier: "N/A",
-        sale_date: "2019-01-07",
-        total_price: 25
-      }, {
-        Id: 2,
-        pharmacist: "Ahmed Nabi",
-        supplier: "N/A",
-        sale_date: "2019-01-07",
-        total_price: 25
-      }],
+      //displayed purchases 
+      purchases: [],
       paginationCurrent: 1
     };
   },
   watch: {
     paginationCurrent: function paginationCurrent(page) {
-      this.getsales();
+      this.getpurchases();
     },
     search: function search(val) {
       this.paginationCurrent = 1;
-      this.getsales();
+      this.getpurchases();
+    },
+    selected_column: function selected_column() {
+      this.getpurchases();
+    },
+    filter_flow: function filter_flow() {
+      this.getpurchases();
     }
   },
   updated: function updated() {
     $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
-    //get users in the current page 
-    getsales: function getsales() {
-      /** get users in the current page using the server's API with (axios)
+    //get Purchases in the current page 
+    getpurchases: function getpurchases() {
+      var _this = this;
+
+      /** get Purchases in the current page using the server's API with (axios)
        * 
        * 
        * 
        */
-    },
-    //get sale with saleId
-    getSale: function getSale(saleId) {
-      return {
-        Id: 1,
-        pharmacist: "Nabi Zakaria",
-        supplier: "N/A",
-        sale_date: "2019-01-07",
-        total_price: 25,
-        medicines: [{
-          Id: 1,
-          name: "DOLIPRANE",
-          dosage: "500 mg",
-          form: "gélule",
-          family: "Antalgique et antipyrétique ",
-          quantity: 10
-        }, {
-          Id: 2,
-          name: "sulpiride",
-          dosage: "50 mg",
-          form: "sérop",
-          family: "Antalgique  ",
-          quantity: 5
-        }]
-      };
+      axios.get("/api/purchases", {
+        params: {
+          search: this.search,
+          selected_column: this.selected_column,
+          filter_flow: this.filter_flow,
+          page: this.paginationCurrent
+        }
+      }).then(function (response) {
+        _this.purchases = response.data.data;
+      }, function (error) {
+        console.log(error);
+      });
     }
   },
   components: {}
@@ -67587,8 +67625,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.selected_customer,
-                            expression: "selected_customer"
+                            value: _vm.selected_customer_id,
+                            expression: "selected_customer_id"
                           }
                         ],
                         staticClass: "form-control ",
@@ -67602,7 +67640,7 @@ var render = function() {
                                 var val = "_value" in o ? o._value : o.value
                                 return val
                               })
-                            _vm.selected_customer = $event.target.multiple
+                            _vm.selected_customer_id = $event.target.multiple
                               ? $$selectedVal
                               : $$selectedVal[0]
                           }
@@ -67768,6 +67806,10 @@ var render = function() {
                               }
                             }
                           })
+                        ]),
+                        _vm._v(" "),
+                        _c("span", { class: _vm.MessageClass }, [
+                          _vm._v(_vm._s(_vm.Message))
                         ]),
                         _vm._v(" "),
                         _c("hr"),
@@ -68463,7 +68505,7 @@ var staticRenderFns = [
       _c(
         "h4",
         { staticClass: "modal-title  w-100 font-weight-bold text-white" },
-        [_vm._v("Add New Medicine Batch")]
+        [_vm._v("Select Customer")]
       ),
       _vm._v(" "),
       _c(
@@ -72017,12 +72059,13 @@ var render = function() {
               "th",
               {
                 staticClass: "text-center",
-                class: _vm.selected_column == "supplier" ? "select-search" : "",
+                class:
+                  _vm.selected_column == "supplier_name" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column == "supplier"
+                    _vm.selected_column == "supplier_name"
                       ? (_vm.selected_column = "")
-                      : (_vm.selected_column = "supplier")
+                      : (_vm.selected_column = "supplier_name")
                   }
                 }
               },
@@ -72034,12 +72077,12 @@ var render = function() {
               {
                 staticClass: "text-center",
                 class:
-                  _vm.selected_column == "sale_date" ? "select-search" : "",
+                  _vm.selected_column == "created_at" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column == "sale_date"
+                    _vm.selected_column == "created_at"
                       ? (_vm.selected_column = "")
-                      : (_vm.selected_column = "sale_date")
+                      : (_vm.selected_column = "created_at")
                   }
                 }
               },
@@ -72073,7 +72116,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.sales, function(sale, index) {
+          _vm._l(_vm.purchases, function(purchase, index) {
             return _c("tr", { key: index }, [
               _c(
                 "td",
@@ -72084,7 +72127,7 @@ var render = function() {
                       ? "select-search-data"
                       : ""
                 },
-                [_vm._v("\n                        " + _vm._s(sale.pharmacist))]
+                [_vm._v("\n                        " + _vm._s(purchase.name))]
               ),
               _vm._v(" "),
               _c(
@@ -72092,11 +72135,16 @@ var render = function() {
                 {
                   staticClass: "text-center",
                   class:
-                    _vm.selected_column == "supplier"
+                    _vm.selected_column == "supplier_name"
                       ? "select-search-data"
                       : ""
                 },
-                [_vm._v("\n                        " + _vm._s(sale.supplier))]
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(purchase.supplier_name)
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -72104,11 +72152,15 @@ var render = function() {
                 {
                   staticClass: "text-center",
                   class:
-                    _vm.selected_column == "sale_date"
+                    _vm.selected_column == "created_at"
                       ? "select-search-data"
                       : ""
                 },
-                [_vm._v("\n                        " + _vm._s(sale.sale_date))]
+                [
+                  _vm._v(
+                    "\n                        " + _vm._s(purchase.created_at)
+                  )
+                ]
               ),
               _vm._v(" "),
               _c(
@@ -72122,7 +72174,7 @@ var render = function() {
                 },
                 [
                   _vm._v(
-                    "\n                        " + _vm._s(sale.total_price)
+                    "\n                        " + _vm._s(purchase.total_price)
                   )
                 ]
               ),
@@ -72142,7 +72194,7 @@ var render = function() {
                     },
                     on: {
                       click: function($event) {
-                        _vm.selectedSale_Id = sale.Id
+                        _vm.selectedSale_Id = purchase.Id
                       }
                     }
                   },
@@ -72299,7 +72351,7 @@ var render = function() {
                     attrs: {
                       src:
                         _vm.selectedSale_Id > -1
-                          ? "/dashboard/medicines/sales/invoice/" +
+                          ? "/dashboard/medicines/purchases/invoice/" +
                             _vm.selectedSale_Id
                           : "",
                       frameborder: "0",

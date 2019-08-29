@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::prefix("/")->middleware("role:admin|moderator|customer,api")->group(function(){
+Route::prefix("/")->middleware("role:admin|moderator|customer,api","auth")->group(function(){
 
     Route::apiResource('pharmacists','PharmacistController');
     Route::apiResource('medicines','MedicineController');

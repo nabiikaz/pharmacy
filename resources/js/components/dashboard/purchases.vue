@@ -57,12 +57,12 @@
                         <th  class="text-center" :class="(selected_column == 'pharmacist')? 'select-search':''"
                             @click="((selected_column == 'pharmacist'))? selected_column='':selected_column = 'pharmacist'">Made By</th>
                         
-                        <th class="text-center" :class="(selected_column == 'supplier')? 'select-search':''"
-                            @click="((selected_column == 'supplier'))? selected_column='':selected_column = 'supplier'">Supplier</th>
+                        <th class="text-center" :class="(selected_column == 'supplier_name')? 'select-search':''"
+                            @click="((selected_column == 'supplier_name'))? selected_column='':selected_column = 'supplier_name'">Supplier</th>
                         
                         
-                        <th class="text-center" :class="(selected_column == 'sale_date')? 'select-search':''"
-                            @click="((selected_column == 'sale_date'))? selected_column='':selected_column = 'sale_date'">Date</th>
+                        <th class="text-center" :class="(selected_column == 'created_at')? 'select-search':''"
+                            @click="((selected_column == 'created_at'))? selected_column='':selected_column = 'created_at'">Date</th>
                        
                         <th class="text-center" :class="(selected_column == 'total_price')? 'select-search':''"
                             @click="((selected_column == 'total_price'))? selected_column='':selected_column = 'total_price'">Total Price
@@ -71,28 +71,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(sale,index) in sales" :key="index" >
+                    <tr v-for="(purchase,index) in purchases" :key="index" >
 
 
 
                        
                         <td class="text-center" :class="(selected_column == 'pharmacist')? 'select-search-data':''">
-                            {{sale.pharmacist }}</td>
+                            {{purchase.name }}</td>
 
-                        <td class="text-center" :class="(selected_column == 'supplier')? 'select-search-data':''">
-                            {{sale.supplier }}</td>
+                        <td class="text-center" :class="(selected_column == 'supplier_name')? 'select-search-data':''">
+                            {{purchase.supplier_name }}</td>
 
-                        <td class="text-center" :class="(selected_column == 'sale_date')? 'select-search-data':''">
-                            {{sale.sale_date }}</td>
+                        <td class="text-center" :class="(selected_column == 'created_at')? 'select-search-data':''">
+                            {{purchase.created_at }}</td>
                        
                         <td class="text-center" :class="(selected_column == 'total_price')? 'select-search-data':''">
-                            {{sale.total_price }}</td>
+                            {{purchase.total_price }}</td>
 
 
 
                         <td class="text-center">
                             <a href="#" class="invoice" title="" data-tooltip="tooltip" data-original-title="invoice"
-                                data-toogle="modal" data-target="#modalinvoice" @click="selectedSale_Id=sale.Id"><img
+                                data-toogle="modal" data-target="#modalinvoice" @click="selectedSale_Id=purchase.Id"><img
                                     src="/img/icons/bill.png" width="22"></a>
 
                            
@@ -141,7 +141,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <iframe :src="(selectedSale_Id > -1)? '/dashboard/medicines/sales/invoice/'+selectedSale_Id:''"
+                        <iframe :src="(selectedSale_Id > -1)? '/dashboard/medicines/purchases/invoice/'+selectedSale_Id:''"
                             frameborder="0" width="770" height="480"></iframe>
                     </div>
 
@@ -173,7 +173,7 @@
             })
 
 
-
+            this.getpurchases()
 
 
         },
@@ -193,34 +193,8 @@
                 filter_flow: 'Ascending',
                 
 
-                //displayed sales 
-                sales: [{
-                        Id: 1,
-                        pharmacist: "Nabi Zakaria",
-                        supplier: "N/A",
-                        sale_date: "2019-01-07",
-                        total_price: 25,
-
-
-
-
-                    },
-                    {
-                        Id: 2,
-                        pharmacist: "Ahmed Nabi",
-                        supplier: "N/A",
-                        sale_date: "2019-01-07",
-                        total_price: 25,
-
-
-
-
-                    },
-
-
-
-
-                ],
+                //displayed purchases 
+                purchases: [],
 
 
                 paginationCurrent: 1
@@ -230,13 +204,19 @@
 
         watch: {
             paginationCurrent: function (page) {
-                this.getsales();
+                this.getpurchases();
             },
             search: function (val) {
                 this.paginationCurrent = 1
 
-                this.getsales()
+                this.getpurchases()
 
+            },
+            selected_column: function(){
+                this.getpurchases();
+            },
+            filter_flow : function(){
+                 this.getpurchases();
             },
 
 
@@ -246,50 +226,39 @@
 
 
         updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
-methods: {
-            //get users in the current page 
-            getsales: function () {
-                /** get users in the current page using the server's API with (axios)
+        methods: {
+            //get Purchases in the current page 
+            getpurchases: function(){
+                /** get Purchases in the current page using the server's API with (axios)
                  * 
                  * 
                  * 
                  */
-
-            },
-            //get sale with saleId
-            getSale: function(saleId){
-
-
-                return {
+                axios.get("/api/purchases", {
+                    params:{
+                            
+                        search:this.search,
+                        selected_column:this.selected_column,
+                        filter_flow:this.filter_flow,
+                        page:this.paginationCurrent
+                        }
                     
-                        Id: 1,
-                        pharmacist: "Nabi Zakaria",
-                        supplier: "N/A",
-                        sale_date: "2019-01-07",
-                        total_price: 25,
-                        medicines:[
-                            {
-                                Id: 1,
-                                name : "DOLIPRANE",
-                                dosage : "500 mg",
-                                form : "gélule",
-                                family : "Antalgique et antipyrétique ",
-                                quantity:10
-                            },
-                            {
-                                Id: 2,
-                                name : "sulpiride",
-                                dosage : "50 mg",
-                                form : "sérop",
-                                family : "Antalgique  ",
-                                quantity:5
-                            }
-                        ]
+                    })
+                        .then((response) => {
+                        this.purchases = response.data.data;
                         
+                    }, (error) => {
+                        console.log(error);
+                    });
 
-                }
+
+                    
+
+            
 
             },
+            
+            
            
 
         },
