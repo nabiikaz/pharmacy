@@ -161,7 +161,8 @@
 
 
 
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
             hideAlert: function(){
                 $('.alert').hide()
             },

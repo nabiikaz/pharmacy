@@ -142,7 +142,8 @@ import { constants } from 'crypto';
 
             }
         },
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
             onFileSelected : function(event){
                 this.img = URL.createObjectURL(event.target.files[0])
 

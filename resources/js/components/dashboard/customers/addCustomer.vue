@@ -104,7 +104,8 @@
 
             }
         },
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
             
             untoggle_modal: function (id) {
                 $("#" + id).modal('hide');

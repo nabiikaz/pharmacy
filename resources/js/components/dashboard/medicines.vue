@@ -520,6 +520,7 @@
         
 
 
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
 
         methods: {
             openNewBatchModal: function(medicineId,medicine_name){
@@ -593,7 +594,8 @@
                                 
                                 this.MessageClass = "text-danger"
                                 switch (error.response.status) {
-                                case 422 :                              
+                                case 422 :  
+                                               
                                     this.Message  = Object.values(error.response.data.errors)[0][0]
                                     
                                     this.MessageClass = "text-danger"

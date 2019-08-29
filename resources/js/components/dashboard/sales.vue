@@ -247,7 +247,8 @@
 
 
 
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
             //get users in the current page 
             getsales: function () {
                 /** get users in the current page using the server's API with (axios)

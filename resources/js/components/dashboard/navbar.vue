@@ -10,7 +10,7 @@
             </a>
             <ul class="navbar-nav px-3 dropdown">
                 <li class="nav-item text-nowrap ">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-tooltip="dropdown" aria-haspopup="true" aria-expanded="false">
                      
                             <img :src="'/img/avatars/'+current_user.img" class="avatar" alt="Avatar">
                        

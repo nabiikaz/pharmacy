@@ -106,7 +106,8 @@
 
         },
 
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
 
             getCustomer: function(customerId){
                     this.disable = false

@@ -23,6 +23,7 @@ Route::prefix("/")->middleware("role:admin|moderator|customer,api")->group(funct
     Route::apiResource('suppliers','SupplierController');
     Route::apiResource('batches','BatchController');
     Route::apiResource('customers','CustomerController');
+    Route::apiResource('purchases','PurchaseController');
 });
 
 

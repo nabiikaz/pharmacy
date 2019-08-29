@@ -19,6 +19,8 @@ class BatchController extends Controller
      */
     public function index(Request $request)
     {
+
+       
         
         $selected_column  = $request->get("selected_column");
 
@@ -45,6 +47,16 @@ class BatchController extends Controller
      */
     public function store(Request $request)
     {
+
+       /* $request->validate([
+            "batches.*.fabrication_date" => 'required|date|before:batches.*.expiry_date',
+            "batches.*.expiry_date" => 'required|date|after:batches.*.fabrication_date',
+
+        ],
+        [
+           "before"=> "please Verify that Fabrication Date Preceed Expiry Date",
+           "after" => "please Verify that Expiry Date Is After Fabrication Date",
+        ]);*/
         $supplier_id = $request->get("supplier_id");
         $batches = $request->get("batches");
         
@@ -86,17 +98,7 @@ class BatchController extends Controller
         ->join('medicines',"medicines.id","=","batches.id")->first()));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *

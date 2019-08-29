@@ -4151,10 +4151,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getBatches();
+    this.$nextTick(function () {
+      console.log("coco");
+    });
   },
   data: function data() {
     return {
@@ -4170,11 +4183,12 @@ __webpack_require__.r(__webpack_exports__);
       batches_in_cart_lenght: 0,
       //displayed batches
       batches: [],
-      selected_supplier: null,
-      new_supplier: {},
-      suppliers: [],
+      selected_customer: null,
+      new_customer: {},
+      customers: [],
       newBatch: {},
-      paginationCurrent: 1
+      paginationCurrent: 1,
+      submitCart: false
     };
   },
   watch: {
@@ -4185,10 +4199,10 @@ __webpack_require__.r(__webpack_exports__);
       this.paginationCurrent = 1;
       this.getBatches();
     },
-    //when selected_supplier is changed (a supplier is selected) then exit the modal and show theaddNewBatch modal
-    selected_supplier: function selected_supplier() {
-      $("#modalSelectSupplier").modal("hide");
-      $("#modalAddNewBatch").modal("show");
+    //when selected_customer is changed (a customer is selected) then exit the modal and show theaddNewBatch modal
+    selected_customer: function selected_customer() {
+      $("#modalSelectCustomer").modal("hide");
+      $("#modalCart").modal("show");
     },
     selected_column: function selected_column() {
       this.getBatches();
@@ -4210,11 +4224,38 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    batches: function batches() {
-      $('[data-toggle=tooltip]').tooltip();
+    batches: function batches() {//$('[data-tooltip=tooltip]').tooltip();
     }
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
+    //select customer :
+    selectCustomer: function selectCustomer() {
+      this.getCustomers();
+      $('#modalSelectCustomer').modal("show");
+      $('#modalCart').modal('hide');
+    },
+    //get customers in the current page 
+    getCustomers: function getCustomers() {
+      var _this = this;
+
+      /** get customers in the current page using the server's API with (axios)
+       * 
+       * 
+       * 
+       */
+      axios.get("/api/customers", {
+        params: {
+          search: ""
+        }
+      }).then(function (response) {
+        _this.customers = response.data.data;
+      }, function (error) {
+        console.log(error);
+      });
+    },
     //remove batch from the cart 
     removeBatchFromCart: function removeBatchFromCart(index) {
       this.batches_in_cart.splice(index, 1);
@@ -4226,14 +4267,14 @@ __webpack_require__.r(__webpack_exports__);
        }*/
     },
     getBatch: function getBatch(batchId) {
-      var _this = this;
+      var _this2 = this;
 
       this.disable = false;
       this.errorMsg = "";
       axios.get('/api/batches/' + batchId).then(function (Response) {
-        _this.batches_in_cart.push(Response.data.data);
+        Response.data.data.quantity = 1;
 
-        $('[data-toggle=tooltip]').tooltip();
+        _this2.batches_in_cart.push(Response.data.data);
       })["catch"](function (error) {
         if (error.response) {
           /**
@@ -4252,7 +4293,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     //get batches in the current page
     getBatches: function getBatches() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get("/api/batches", {
         params: {
@@ -4262,13 +4303,12 @@ __webpack_require__.r(__webpack_exports__);
           page: this.paginationCurrent
         }
       }).then(function (response) {
-        _this2.batches = response.data.data;
-        $('[data-toggle=tooltip]').tooltip();
+        _this3.batches = response.data.data;
       }, function (error) {
         console.log(error);
       });
     },
-    addNewSupplier: function addNewSupplier() {},
+    addNewCustomer: function addNewCustomer() {},
     addNewBatch: function addNewBatch() {},
     //this function add a new a batch to cart :
     addToCart: function addToCart(batchId) {
@@ -4276,19 +4316,19 @@ __webpack_require__.r(__webpack_exports__);
     },
     //delete medicines 
     deleteBatch: function deleteBatch(batchId) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios["delete"]('/api/batches/' + batchId).then(function (response) {
-        _this3.getBatches();
+        _this4.getBatches();
 
-        for (var i = 0; i < _this3.batches_in_cart.length; i++) {
-          if (_this3.batches_in_cart[i].id == batchId) _this3.batches_in_cart.splice(i, 1);
+        for (var i = 0; i < _this4.batches_in_cart.length; i++) {
+          if (_this4.batches_in_cart[i].id == batchId) _this4.batches_in_cart.splice(i, 1);
         }
       })["catch"](function (error) {
         switch (error.response.status) {
           case 404:
             //if the medicine is already deleted then refresh current medicines view 
-            _this3.getMedicines();
+            _this4.getMedicines();
 
             break;
 
@@ -4441,6 +4481,9 @@ __webpack_require__.r(__webpack_exports__);
     selectedCustomer_Id: function selectedCustomer_Id(old_val, new_val) {
       this.getCustomers();
     }
+  },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
     //when a customer is updated event is triggered from the editMedicine Child component            
@@ -4626,6 +4669,9 @@ __webpack_require__.r(__webpack_exports__);
       customer: {}
     };
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
     untoggle_modal: function untoggle_modal(id) {
       $("#" + id).modal('hide');
@@ -4793,6 +4839,9 @@ __webpack_require__.r(__webpack_exports__);
       MessageClass: "text-success",
       customer: {}
     };
+  },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
     getCustomer: function getCustomer(customerId) {
@@ -5386,6 +5435,9 @@ __webpack_require__.r(__webpack_exports__);
       this.batches_in_cart_lenght = this.batches_in_cart.length;
     }
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
     openNewBatchModal: function openNewBatchModal(medicineId, medicine_name) {
       this.batch_medicine_name = medicine_name;
@@ -5758,6 +5810,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
     onFileSelected: function onFileSelected(e) {
       var _this = this;
@@ -5958,6 +6013,9 @@ __webpack_require__.r(__webpack_exports__);
       ImgFormData: null,
       medicine: {}
     };
+  },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
     onFileSelected: function onFileSelected(e) {
@@ -6324,6 +6382,9 @@ __webpack_require__.r(__webpack_exports__);
       this.getsales();
     }
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
     //get users in the current page 
     getsales: function getsales() {
@@ -6576,6 +6637,9 @@ __webpack_require__.r(__webpack_exports__);
       this.paginationCurrent = 1;
       this.getsales();
     }
+  },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
     //get users in the current page 
@@ -6855,6 +6919,9 @@ __webpack_require__.r(__webpack_exports__);
       this.getSuppliers();
     }
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
     hideAlert: function hideAlert() {
       $('.alert').hide();
@@ -7044,6 +7111,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
     untoggle_modal: function untoggle_modal(id) {
       $("#" + id).modal('hide');
@@ -7216,6 +7286,9 @@ __webpack_require__.r(__webpack_exports__);
         email: ""
       }
     };
+  },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
     getSupplier: function getSupplier(supplierId) {
@@ -7452,6 +7525,9 @@ __webpack_require__.r(__webpack_exports__);
       this.getUsers();
     }
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
     hideAlert: function hideAlert() {
       $('.alert').hide();
@@ -7662,6 +7738,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
+  },
   methods: {
     onFileSelected: function onFileSelected(e) {
       var _this = this;
@@ -7866,6 +7945,9 @@ __webpack_require__.r(__webpack_exports__);
       MessageClass: "text-success",
       user: {}
     };
+  },
+  updated: function updated() {
+    $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
     onFileSelected: function onFileSelected(e) {
@@ -67225,8 +67307,8 @@ var render = function() {
                       ? "color:red;"
                       : "color:green;",
                   attrs: {
-                    "data-toggle": "tooltip",
-                    title:
+                    "data-tooltip": "tooltip",
+                    "data-original-title":
                       batch.quantity_stock < batch.quantity_min
                         ? "Quantity en Stock < min( " +
                           batch.quantity_min +
@@ -67254,7 +67336,7 @@ var render = function() {
                       ? "select-search-data"
                       : "",
                   attrs: {
-                    "data-toggle": "tooltip",
+                    "data-tooltip": "tooltip",
                     "data-original-title": batch.refund_rate + " %"
                   }
                 },
@@ -67281,7 +67363,7 @@ var render = function() {
                     attrs: {
                       href: "#",
                       title: "",
-                      "data-toggle": "tooltip",
+                      "data-tooltip": "tooltip",
                       "data-original-title": "Add To Cart"
                     },
                     on: {
@@ -67305,7 +67387,7 @@ var render = function() {
                     attrs: {
                       href: "/dashboard/medicines/sales/" + batch.Id,
                       title: "",
-                      "data-toggle": "tooltip",
+                      "data-tooltip": "tooltip",
                       "data-original-title": "Sales"
                     }
                   },
@@ -67324,7 +67406,7 @@ var render = function() {
                     attrs: {
                       href: "#",
                       title: "",
-                      "data-toggle": "tooltip",
+                      "data-tooltip": "tooltip",
                       "data-original-title": "Delete"
                     },
                     on: {
@@ -67463,7 +67545,7 @@ var render = function() {
       {
         staticClass: "modal fade",
         attrs: {
-          id: "modalSelectSupplier",
+          id: "modalSelectCustomer",
           tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "add New Batch",
@@ -67495,7 +67577,7 @@ var render = function() {
                         staticClass: "text-center ",
                         staticStyle: { color: "#6f6e6e" }
                       },
-                      [_vm._v("2- Select the Supplier : ")]
+                      [_vm._v("2- Select the Customer : ")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -67505,11 +67587,11 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.selected_supplier,
-                            expression: "selected_supplier"
+                            value: _vm.selected_customer,
+                            expression: "selected_customer"
                           }
                         ],
-                        staticClass: "form-control",
+                        staticClass: "form-control ",
                         on: {
                           change: function($event) {
                             var $$selectedVal = Array.prototype.filter
@@ -67520,20 +67602,20 @@ var render = function() {
                                 var val = "_value" in o ? o._value : o.value
                                 return val
                               })
-                            _vm.selected_supplier = $event.target.multiple
+                            _vm.selected_customer = $event.target.multiple
                               ? $$selectedVal
                               : $$selectedVal[0]
                           }
                         }
                       },
-                      _vm._l(_vm.suppliers, function(supplier, index) {
+                      _vm._l(_vm.customers, function(customer, index) {
                         return _c(
                           "option",
-                          { key: index, domProps: { value: supplier.Id } },
+                          { key: index, domProps: { value: customer.id } },
                           [
                             _vm._v(
                               "\n                                " +
-                                _vm._s(supplier.name)
+                                _vm._s(customer.name)
                             )
                           ]
                         )
@@ -67542,7 +67624,7 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("span", { staticClass: "text-primary mb-3" }, [
-                      _vm._v("Or add a new supplier !")
+                      _vm._v("Or add a new customer !")
                     ]),
                     _vm._v(" "),
                     _c(
@@ -67551,7 +67633,7 @@ var render = function() {
                         on: {
                           submit: function($event) {
                             $event.preventDefault()
-                            return _vm.addNewSupplier($event)
+                            return _vm.addNewCustomer($event)
                           }
                         }
                       },
@@ -67562,8 +67644,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.new_supplier.name,
-                                expression: "new_supplier.name"
+                                value: _vm.new_customer.name,
+                                expression: "new_customer.name"
                               }
                             ],
                             staticClass: "form-control",
@@ -67572,14 +67654,14 @@ var render = function() {
                               placeholder: "Fullname",
                               required: ""
                             },
-                            domProps: { value: _vm.new_supplier.name },
+                            domProps: { value: _vm.new_customer.name },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
                                 _vm.$set(
-                                  _vm.new_supplier,
+                                  _vm.new_customer,
                                   "name",
                                   $event.target.value
                                 )
@@ -67594,8 +67676,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.new_supplier.tel,
-                                expression: "new_supplier.tel"
+                                value: _vm.new_customer.tel,
+                                expression: "new_customer.tel"
                               }
                             ],
                             staticClass: "form-control",
@@ -67606,14 +67688,14 @@ var render = function() {
                               minlength: "9",
                               maxlength: "10"
                             },
-                            domProps: { value: _vm.new_supplier.tel },
+                            domProps: { value: _vm.new_customer.tel },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
                                 _vm.$set(
-                                  _vm.new_supplier,
+                                  _vm.new_customer,
                                   "tel",
                                   $event.target.value
                                 )
@@ -67628,8 +67710,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.new_supplier.address,
-                                expression: "new_supplier.address"
+                                value: _vm.new_customer.address,
+                                expression: "new_customer.address"
                               }
                             ],
                             staticClass: "form-control",
@@ -67640,14 +67722,14 @@ var render = function() {
                               minlength: "8",
                               maxlength: "35"
                             },
-                            domProps: { value: _vm.new_supplier.address },
+                            domProps: { value: _vm.new_customer.address },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
                                 _vm.$set(
-                                  _vm.new_supplier,
+                                  _vm.new_customer,
                                   "address",
                                   $event.target.value
                                 )
@@ -67662,8 +67744,8 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.new_supplier.email,
-                                expression: "new_supplier.email"
+                                value: _vm.new_customer.email,
+                                expression: "new_customer.email"
                               }
                             ],
                             staticClass: "form-control",
@@ -67672,14 +67754,14 @@ var render = function() {
                               placeholder: "email",
                               required: ""
                             },
-                            domProps: { value: _vm.new_supplier.email },
+                            domProps: { value: _vm.new_customer.email },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
                                 _vm.$set(
-                                  _vm.new_supplier,
+                                  _vm.new_customer,
                                   "email",
                                   $event.target.value
                                 )
@@ -68169,12 +68251,12 @@ var render = function() {
                                   attrs: {
                                     href: "#",
                                     title: "",
-                                    "data-toggle": "tooltip",
+                                    "data-tooltip": "tooltip",
                                     "data-original-title": "Delete"
                                   },
                                   on: {
                                     click: function($event) {
-                                      return _vm.removeBatchFromCart(_vm.indx)
+                                      return _vm.removeBatchFromCart(index)
                                     }
                                   }
                                 },
@@ -68193,7 +68275,32 @@ var render = function() {
                         0
                       )
                     ]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _c("hr"),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row " }, [
+                    _c("div", { staticClass: "col-6" }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-6 d-flex justify-content-end" },
+                      [
+                        _c("input", {
+                          staticClass: "btn btn-warning mr-2",
+                          staticStyle: { width: "140px" },
+                          attrs: { type: "text", value: "Select Customer" },
+                          on: { click: _vm.selectCustomer }
+                        }),
+                        _vm._v(" "),
+                        _c("input", {
+                          staticClass: "btn btn-primary ",
+                          staticStyle: { width: "140px" },
+                          attrs: { type: "text", value: "Confirm Sale" }
+                        })
+                      ]
+                    )
+                  ])
                 ])
               ]
             )
@@ -68379,7 +68486,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "md-form " }, [
       _c("button", { staticClass: "form-control btn btn-success" }, [
-        _vm._v("Add New Supplier")
+        _vm._v("Add New Customer")
       ])
     ])
   },
@@ -68414,7 +68521,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "md-form " }, [
       _c("button", { staticClass: "form-control btn btn-success" }, [
-        _vm._v("Add New Supplier")
+        _vm._v("Add New Customer")
       ])
     ])
   },
@@ -71755,7 +71862,7 @@ var render = function() {
                   href: "#",
                   role: "button",
                   id: "dropdownMenuLink",
-                  "data-toggle": "dropdown",
+                  "data-tooltip": "dropdown",
                   "aria-haspopup": "true",
                   "aria-expanded": "false"
                 }
@@ -72030,7 +72137,7 @@ var render = function() {
                       title: "",
                       "data-tooltip": "tooltip",
                       "data-original-title": "invoice",
-                      "data-toggle": "modal",
+                      "data-toogle": "modal",
                       "data-target": "#modalinvoice"
                     },
                     on: {
@@ -87327,7 +87434,7 @@ var app = new Vue({
   el: '#app',
   data: {},
   mounted: function mounted() {
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-tooltip="tooltip"]').tooltip();
   }
 });
 

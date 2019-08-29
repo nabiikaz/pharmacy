@@ -139,7 +139,8 @@
 
 
 
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
             //when a customer is updated event is triggered from the editMedicine Child component            
             onCustomerUpdated : function(customer){
                 

@@ -39,14 +39,18 @@ class PharmacistController extends Controller
         $Pharmacists = Pharmacist::where($selected_column,"like", "%".$search."%")
                     ->orderBy($selected_column,$orderby)
                     ->paginate(5);
-
-        for ($i=0; $i < count($Pharmacists); $i++) { 
+        
+        for ($i=count($Pharmacists)-1; $i >= 0; $i--) { 
             //dd($Pharmacists[$i]->roles()->first()->name);
+           
             $tmp = $Pharmacists[$i]->roles()->first()["name"];
             $Pharmacists[$i]->role = $tmp;
+            if($tmp == "customer"){
+                $Pharmacists = $Pharmacists->forget($i);
+                               
+                
+            }
 
-            if($Pharmacists[$i]->roles()->first()["name"] == "customer")
-                $Pharmacists->forget($i);
         }
 
         return PharmacistResource::Collection($Pharmacists);

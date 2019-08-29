@@ -112,7 +112,8 @@
 
         },
 
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
             getSupplier: function(supplierId){
                     this.disable = false
                     this.errorMsg = ""

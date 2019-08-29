@@ -125,7 +125,8 @@
 
             }
         },
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
             onFileSelected : function(e){
                 this.img = URL.createObjectURL(e.target.files[0])
 

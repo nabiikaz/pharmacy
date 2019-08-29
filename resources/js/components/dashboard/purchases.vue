@@ -92,7 +92,7 @@
 
                         <td class="text-center">
                             <a href="#" class="invoice" title="" data-tooltip="tooltip" data-original-title="invoice"
-                                data-toggle="modal" data-target="#modalinvoice" @click="selectedSale_Id=sale.Id"><img
+                                data-toogle="modal" data-target="#modalinvoice" @click="selectedSale_Id=sale.Id"><img
                                     src="/img/icons/bill.png" width="22"></a>
 
                            
@@ -245,7 +245,8 @@
 
 
 
-        methods: {
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
+methods: {
             //get users in the current page 
             getsales: function () {
                 /** get users in the current page using the server's API with (axios)

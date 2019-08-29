@@ -124,28 +124,28 @@
                             {{batch.batch_price }}</td>
                         <td class="text-center" :class="(selected_column == 'quantity_stock')? 'select-search-data':''"
                             :style="(batch.quantity_stock<batch.quantity_min)? 'color:red;':'color:green;'"
-                            data-toggle="tooltip"
-                            :title="(batch.quantity_stock<batch.quantity_min)?'Quantity en Stock < min( '+batch.quantity_min+' )       risk of rupture':'' ">
+                            data-tooltip="tooltip"
+                            :data-original-title="(batch.quantity_stock<batch.quantity_min)?'Quantity en Stock < min( '+batch.quantity_min+' )       risk of rupture':'' ">
                             {{batch.quantity_stock }} <strong>/</strong> {{batch.quantity }}</td>
 
                          <td class="d-flex justify-content-center" :class="(selected_column == 'refund_rate')? 'select-search-data':''"
-                                                             data-toggle="tooltip" :data-original-title="batch.refund_rate+' %'" >
+                                                             data-tooltip="tooltip" :data-original-title="batch.refund_rate+' %'" >
                             <img width="22" height="22" v-bind:src="(batch.refund_rate > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
                         </td>
 
         
                         <td class="text-center">
-                            <a href="#" class="sell" title="" data-toggle="tooltip" data-original-title="Add To Cart"
+                            <a href="#" class="sell" title="" data-tooltip="tooltip" data-original-title="Add To Cart"
                                 @click="addToCart(batch.id)">
                                 <img src="/img/icons/add_to_cart.png" style="color:green;" width="22">
                             </a>
 
                             <a :href="'/dashboard/medicines/sales/'+batch.Id" class="sales" title=""
-                                data-toggle="tooltip" data-original-title="Sales">
+                                data-tooltip="tooltip" data-original-title="Sales">
                                 <img src="/img/icons/sales.png" style="color:green;" width="22">
                             </a>
 
-                            <a href="#" class="delete" title="" data-toggle="tooltip" data-original-title="Delete" @click="deleteBatch(batch.id)">
+                            <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete" @click="deleteBatch(batch.id)">
                                 <img src="/img/icons/trash.png" width="24">
                             </a>
                         </td>
@@ -210,7 +210,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modalSelectSupplier" tabindex="-1" role="dialog" aria-labelledby="add New Batch"
+        <div class="modal fade" id="modalSelectCustomer" tabindex="-1" role="dialog" aria-labelledby="add New Batch"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
@@ -224,37 +224,37 @@
                     <div class="modal-body mx-3">
 
                         <div class="md-form ">
-                            <h3 style="color: #6f6e6e;" class="text-center ">2- Select the Supplier : </h3>
+                            <h3 style="color: #6f6e6e;" class="text-center ">2- Select the Customer : </h3>
 
-                            <select v-model="selected_supplier" class="form-control">
-                                <option v-for="(supplier,index) in suppliers" :key="index" :value="supplier.Id">
-                                    {{supplier.name}}</option>
+                            <select v-model="selected_customer" class="form-control " >
+                                <option v-for="(customer,index) in customers" :key="index" :value="customer.id">
+                                    {{customer.name}}</option>
                             </select>
-                            <span class="text-primary mb-3">Or add a new supplier !</span>
-                            <form @submit.prevent="addNewSupplier">
+                            <span class="text-primary mb-3">Or add a new customer !</span>
+                            <form @submit.prevent="addNewCustomer">
                                 <div class="pb-2 ">
                                     <input type="text" placeholder="Fullname" class="form-control"
-                                        v-model="new_supplier.name" required>
+                                        v-model="new_customer.name" required>
                                 </div>
 
                                 <div class="pb-2">
                                     <input type="tel" placeholder="phone number" class="form-control"
-                                        v-model="new_supplier.tel" required minlength="9" maxlength="10">
+                                        v-model="new_customer.tel" required minlength="9" maxlength="10">
                                 </div>
 
                                 <div class="pb-2">
                                     <input type="text" placeholder="address" class="form-control"
-                                        v-model="new_supplier.address" required minlength="8" maxlength="35">
+                                        v-model="new_customer.address" required minlength="8" maxlength="35">
                                 </div>
 
                                 <div class="pb-2">
                                     <input type="email" placeholder="email" class="form-control"
-                                        v-model="new_supplier.email" required>
+                                        v-model="new_customer.email" required>
                                 </div>
                                 <hr>
 
                                 <div class="md-form ">
-                                    <button class="form-control btn btn-success">Add New Supplier</button>
+                                    <button class="form-control btn btn-success">Add New Customer</button>
                                 </div>
 
                             </form>
@@ -354,7 +354,7 @@
                                 <hr>
 
                                 <div class="md-form ">
-                                    <button class="form-control btn btn-success">Add New Supplier</button>
+                                    <button class="form-control btn btn-success">Add New Customer</button>
                                 </div>
 
                             </form>
@@ -432,8 +432,8 @@
 
                                        
 
-                                        <a href="#" class="delete" title="" data-toggle="tooltip"
-                                            data-original-title="Delete" @click="removeBatchFromCart(indx)">
+                                        <a href="#" class="delete" title="" data-tooltip="tooltip"
+                                            data-original-title="Delete" @click="removeBatchFromCart(index)">
                                             <img src="/img/icons/trash.png" width="24">
                                         </a>
                                     </td>
@@ -443,7 +443,17 @@
 
                             </tbody>
                         </table>
-                    
+                        <hr>
+
+                        <div class="row ">
+                            <div class="col-6"></div>
+                            <div class="col-6 d-flex justify-content-end">
+                                <input type="text" class="btn btn-warning mr-2" style="width: 140px;" value="Select Customer" @click="selectCustomer">
+                                <input type="text" class="btn btn-primary " style="width: 140px;" value="Confirm Sale" >
+                            </div>
+                           
+                        </div>
+                                           
                     </div>
                 </div>
             </div>
@@ -455,8 +465,12 @@ import { constants } from 'crypto';
     export default {
 
         mounted() {
-            
+
             this.getBatches()
+
+             this.$nextTick(() => {
+                 console.log("coco")
+             })
             
 
 
@@ -482,16 +496,17 @@ import { constants } from 'crypto';
 
                 //displayed batches
                 batches: [],
-                selected_supplier: null,
+                selected_customer: null,
 
-                new_supplier: {
+                new_customer: {
                     
-                },
-                suppliers: [],
+                    },
+                customers: [],
                 newBatch: {},
 
-                paginationCurrent: 1
+                paginationCurrent: 1,
 
+                submitCart: false ,
         }
     },
 
@@ -505,11 +520,11 @@ import { constants } from 'crypto';
                 this.getBatches()
 
             },
-            //when selected_supplier is changed (a supplier is selected) then exit the modal and show theaddNewBatch modal
-            selected_supplier: function () {
+            //when selected_customer is changed (a customer is selected) then exit the modal and show theaddNewBatch modal
+            selected_customer: function () {
 
-                $("#modalSelectSupplier").modal("hide")
-                $("#modalAddNewBatch").modal("show")
+                $("#modalSelectCustomer").modal("hide")
+                $("#modalCart").modal("show")
 
 
             },
@@ -540,7 +555,7 @@ import { constants } from 'crypto';
 
             },
             batches: function(){
-                        $('[data-toggle=tooltip]').tooltip();
+                        //$('[data-tooltip=tooltip]').tooltip();
 
             }
 
@@ -548,10 +563,47 @@ import { constants } from 'crypto';
 
         },
 
+        
 
 
-
+        updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
         methods: {
+
+            //select customer :
+            selectCustomer: function(){
+                this.getCustomers()
+                $('#modalSelectCustomer').modal("show");
+                $('#modalCart').modal('hide');
+
+            },
+            //get customers in the current page 
+            getCustomers: function(){
+                /** get customers in the current page using the server's API with (axios)
+                 * 
+                 * 
+                 * 
+                 */
+                axios.get("/api/customers", {
+                    params:{
+                            
+                        search:"",
+                        
+                        }
+                    
+                    })
+                        .then((response) => {
+                        this.customers = response.data.data;
+                        
+                    }, (error) => {
+                        console.log(error);
+                    });
+
+
+                    
+
+            
+
+            },
             //remove batch from the cart 
             removeBatchFromCart: function(index){
                 this.batches_in_cart.splice(index,1)
@@ -569,8 +621,8 @@ import { constants } from 'crypto';
                     
                     axios.get('/api/batches/'+batchId)
                     .then((Response)=>{
+                        Response.data.data.quantity = 1
                           this.batches_in_cart.push(Response.data.data)
-                        $('[data-toggle=tooltip]').tooltip();
 
                     
 
@@ -622,8 +674,7 @@ import { constants } from 'crypto';
                     })
                         .then((response) => {
                         this.batches = response.data.data;
-                        $('[data-toggle=tooltip]').tooltip();
-                        
+                                                
                     }, (error) => {
                         console.log(error);
                     });
@@ -632,7 +683,7 @@ import { constants } from 'crypto';
 
              },
             
-            addNewSupplier: function () {
+            addNewCustomer: function () {
 
             },
             addNewBatch: function () {
