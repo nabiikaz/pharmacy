@@ -63,8 +63,8 @@
                             @click="((selected_column == 'customer'))? selected_column='':selected_column = 'customer'">Customer</th>
                         
                         
-                        <th class="text-center" :class="(selected_column == 'sale_date')? 'select-search':''"
-                            @click="((selected_column == 'sale_date'))? selected_column='':selected_column = 'sale_date'">Date</th>
+                        <th class="text-center" :class="(selected_column == 'created_at')? 'select-search':''"
+                            @click="((selected_column == 'created_at'))? selected_column='':selected_column = 'created_at'">Date</th>
                        
                         <th class="text-center" :class="(selected_column == 'total_price')? 'select-search':''"
                             @click="((selected_column == 'total_price'))? selected_column='':selected_column = 'total_price'">Total Price
@@ -84,8 +84,8 @@
                         <td class="text-center" :class="(selected_column == 'customer')? 'select-search-data':''">
                             {{sale.customer }}</td>
 
-                        <td class="text-center" :class="(selected_column == 'sale_date')? 'select-search-data':''">
-                            {{sale.sale_date }}</td>
+                        <td class="text-center" :class="(selected_column == 'created_at')? 'select-search-data':''">
+                            {{sale.created_at }}</td>
                        
                         <td class="text-center" :class="(selected_column == 'total_price')? 'select-search-data':''">
                             {{sale.total_price }}</td>
@@ -161,6 +161,8 @@
     export default {
 
         mounted() {
+
+             this.getsales();
             $('[data-tooltip="tooltip"]').tooltip();
 
 
@@ -196,33 +198,7 @@
                 
 
                 //displayed sales 
-                sales: [{
-                        Id: 1,
-                        pharmacist: "Nabi Zakaria",
-                        customer: "N/A",
-                        sale_date: "2019-01-07",
-                        total_price: 25,
-
-
-
-
-                    },
-                    {
-                        Id: 2,
-                        pharmacist: "Ahmed Nabi",
-                        customer: "N/A",
-                        sale_date: "2019-01-07",
-                        total_price: 25,
-
-
-
-
-                    },
-
-
-
-
-                ],
+                sales: [],
 
 
                 paginationCurrent: 1
@@ -240,6 +216,12 @@
                 this.getsales()
 
             },
+            selected_column: function(){
+                this.getsales();
+            },
+            filter_flow : function(){
+                 this.getsales();
+            },
 
 
         },
@@ -248,48 +230,35 @@
 
 
         updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
-methods: {
-            //get users in the current page 
-            getsales: function () {
-                /** get users in the current page using the server's API with (axios)
+        methods: {
+            //get Purchases in the current page 
+            getsales: function(){
+                /** get Purchases in the current page using the server's API with (axios)
                  * 
                  * 
                  * 
                  */
-
-            },
-            //get sale with saleId
-            getSale: function(saleId){
-
-
-                return {
+                axios.get("/api/sales", {
+                    params:{
+                            
+                        search:this.search,
+                        selected_column:this.selected_column,
+                        filter_flow:this.filter_flow,
+                        page:this.paginationCurrent
+                        }
                     
-                        Id: 1,
-                        pharmacist: "Nabi Zakaria",
-                        customer: "N/A",
-                        sale_date: "2019-01-07",
-                        total_price: 25,
-                        medicines:[
-                            {
-                                Id: 1,
-                                name : "DOLIPRANE",
-                                dosage : "500 mg",
-                                form : "gélule",
-                                family : "Antalgique et antipyrétique ",
-                                quantity:10
-                            },
-                            {
-                                Id: 2,
-                                name : "sulpiride",
-                                dosage : "50 mg",
-                                form : "sérop",
-                                family : "Antalgique  ",
-                                quantity:5
-                            }
-                        ]
+                    })
+                        .then((response) => {
+                        this.sales = response.data.data;
                         
+                    }, (error) => {
+                        console.log(error);
+                    });
 
-                }
+
+                    
+
+            
 
             },
            

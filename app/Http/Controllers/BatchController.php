@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use App\Purchase;
+use App\Sale;
 use App\Supplier;
 use App\Batche;
+use App\user as Customer;
 use App\Http\Resources\Batch as BatchResource;
 class BatchController extends Controller
 {
@@ -106,9 +108,34 @@ class BatchController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $customer_id)
     {
-        //
+        $customer = Customer::findOrFail($customer_id);
+        $pharmacist = Auth::user();
+        
+            
+        $pharmacist->Customers()->attach($customer);
+        $sale = Sale::where("user_id","=",$pharmacist->id)
+                            ->where("customer_id","=",$customer_id)
+                            ->orderBy('created_at', 'desc')->first();
+
+
+        foreach($request->all() as $batch){
+            
+            $Batch = Batche::find($batch["id"]);
+            
+            if($batch["quantity"] > $Batch->quantity_stock)
+                $batch["quantity"] = $Batch->quantity_stock;
+            
+                $Batch->quantity_stock -= $batch["quantity"];
+                $Batch->timestamps = false;
+                $Batch->save();
+
+            if($Batch != null)
+                $sale->Batches()->attach([$Batch->id => ["quantity" => $batch["quantity"]]]);
+        }
+        
+        
     }
 
     /**

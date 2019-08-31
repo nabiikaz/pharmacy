@@ -67,7 +67,7 @@ class CustomerController extends Controller
 
                 //validate email and tel uniqueness
                 $request->validate([
-                    'email' => 'required|email|unique:users,email',
+                    'email' => 'email|unique:users,email',
                     'name'  => 'required|min:8|max:25',
                     'tel'   => 'required',
                     'address' => 'required',

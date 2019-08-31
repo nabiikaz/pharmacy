@@ -140,7 +140,7 @@
                                 <img src="/img/icons/add_to_cart.png" style="color:green;" width="22">
                             </a>
 
-                            <a :href="'/dashboard/medicines/sales/'+batch.Id" class="sales" title=""
+                            <a :href="'/dashboard/medicines/sales/'+batch.id" class="sales" title=""
                                 data-tooltip="tooltip" data-original-title="Sales">
                                 <img src="/img/icons/sales.png" style="color:green;" width="22">
                             </a>
@@ -224,7 +224,7 @@
                     <div class="modal-body mx-3">
 
                         <div class="md-form ">
-                            <h3 style="color: #6f6e6e;" class="text-center ">2- Select the Customer : </h3>
+                            <h3 style="color: #6f6e6e;" class="text-center ">Select the Customer : </h3>
 
                             <select v-model="selected_customer_id" class="form-control " >
                                 <option v-for="(customer,index) in customers" :key="index" :value="customer.id">
@@ -249,7 +249,7 @@
 
                                 <div class="pb-2">
                                     <input type="email" placeholder="email" class="form-control"
-                                        v-model="new_customer.email" required>
+                                        v-model="new_customer.email" >
                                 </div>
                                 <span :class="MessageClass">{{Message}}</span>
 
@@ -283,106 +283,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modalAddNewBatch" tabindex="-1" role="dialog" aria-labelledby="add New Batch"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
-                    <div class="modal-header bg-success text-center">
-                        <h4 class="modal-title  w-100 font-weight-bold text-white">Add New Medicine Batch</h4>
-                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-
-                    <div class="modal-body mx-3">
-
-                        <div class="md-form ">
-                            <h3 style="color: #6f6e6e;" class="text-center ">Add New Medicine Batch : </h3>
-
-
-
-                            <form @submit.prevent="addNewBatch">
-                                <span style="color:gray;">Medicine Name :<strong> {{newBatch.medicine_name}} </strong> </span>
-                                <div class="pb-2 ">
-                                    <label for="fabrication_date" class="mb-0 ">Fabricaion Date</label>
-                                    <input type="date" id="fabrication_date" class="form-control"
-                                        v-model="newBatch.fabricaion_date" required>
-                                </div>
-
-                                <div class="pb-2 ">
-                                    <label for="expiry_date" class="mb-0 ">Expiry Datee</label>
-                                    <input type="date" id="expiry_date" class="form-control"
-                                        v-model="newBatch.expiry_date" required>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <label for="quatity_bought" class="mb-0 ">Quantity Purchased</label>
-                                        <input type="number" id="quatity_bought" class="form-control"
-                                            v-model="newBatch.quatity_bought" required min="0">
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label for="quantity_stock" class="mb-0 ">Quantity Stock</label>
-                                        <input type="number" id="quantity_stock" class="form-control"
-                                            v-model="newBatch.quantity_stock" required min="0">
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <label for="quantity_minimum" class="mb-0 ">Quantity Minimum</label>
-                                        <input type="number" id="quantity_minimum" class="form-control"
-                                            v-model="newBatch.quantity_min" required min="0">
-                                    </div>
-
-
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label for="unit_price" class="mb-0 ">Unit Price</label>
-                                        <input type="number" step="0.01" id="unit_price" class="form-control"
-                                            v-model="newBatch.unit_price" required min="0">
-                                    </div>
-
-                                    <div class="col-sm-6">
-                                        <label for="batch_price" class="mb-0 ">Batch Price</label>
-                                        <input type="number" step="0.01" id="batch_price" class="form-control"
-                                            v-model="newBatch.batch_price" required min="0">
-                                    </div>
-
-                                </div>
-
-
-
-                                <hr>
-
-                                <div class="md-form ">
-                                    <button class="form-control btn btn-success">Add New Customer</button>
-                                </div>
-
-                            </form>
-
-
-
-
-
-
-
-
-
-
-                        </div>
-
-
-
-
-
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-
+   
 
         <div id="modalCart" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
@@ -445,13 +346,14 @@
 
                             </tbody>
                         </table>
+                            <span :class="MessageClass">{{Message}}</span>
                         <hr>
 
                         <div class="row ">
                             <div class="col-6"></div>
                             <div class="col-6 d-flex justify-content-end">
                                 <input type="text" class="btn btn-warning mr-2" style="width: 140px;" value="Select Customer" @click="selectCustomer">
-                                <input type="text" class="btn btn-primary " style="width: 140px;" value="Confirm Sale" >
+                                <input type="text" class="btn btn-primary " style="width: 140px;" value="Confirm Sale" @click="SubmitBatches" >
                             </div>
                            
                         </div>
@@ -469,6 +371,7 @@ import { constants } from 'crypto';
         mounted() {
 
             this.getBatches()
+            this.getCustomers()
 
              this.$nextTick(() => {
                  console.log("coco")
@@ -501,7 +404,7 @@ import { constants } from 'crypto';
 
                 //displayed batches
                 batches: [],
-                selected_customer_id: null,
+                selected_customer_id: -1,
 
                 new_customer: {
                     
@@ -527,7 +430,8 @@ import { constants } from 'crypto';
             },
             //when selected_customer_id is changed (a customer is selected) then exit the modal and show theaddNewBatch modal
             selected_customer_id: function () {
-
+                this.MessageClass="text-primary"
+                this.Message=""
                 $("#modalSelectCustomer").modal("hide")
                 $("#modalCart").modal("show")
 
@@ -542,13 +446,13 @@ import { constants } from 'crypto';
 
             //watch batches_in_cart so that if a new batch is being added to the cart the number of items increases
             batches_in_cart: function (old,val) {
-                this.batches_in_cart_lenght = val.length
+                this.batches_in_cart_lenght = this.batches_in_cart.length
 
 
                 for(let i = 0 ; i < this.batches_in_cart_lenght ;i++){
                     for(let j = this.batches_in_cart_lenght-1;j>i;j--){
                         if(this.batches_in_cart[i].id == this.batches_in_cart[j].id ){
-                            if(this.batches_in_cart[i].quantity < this.batches_in_cart[i].quantity_min)
+                            if(this.batches_in_cart[i].quantity < this.batches_in_cart[i].quantity_stock)
                                 this.batches_in_cart[i].quantity++;
                             this.batches_in_cart.splice(j,1);
                             return
@@ -759,7 +663,82 @@ import { constants } from 'crypto';
              },
             
             
+            
+            
             addNewBatch: function () {
+
+            },
+            SubmitBatches: function () {
+                if(this.selected_customer_id == -1){
+                    this.Message= "Please Select A Customer to Continue ..."
+                    this.MessageClass = "text-danger"
+
+                    $("#modalSelectCustomer").modal("show");
+                    $("#modalCart").modal("hide");
+                    return;
+                }
+
+                if(this.batches_in_cart.length == 0){
+                    this.Message= "Please Select A Medicine Batches to Continue the Sale Confirmation ..."
+                    this.MessageClass = "text-danger"
+
+                    return;
+                }
+
+                
+                
+                axios.patch('/api/batches/'+this.selected_customer_id,this.batches_in_cart)
+                    .then((Response)=>{
+                        switch (Response.status) {
+                            case 200:
+
+
+                                this.Message = "Sale Confirmed ."
+                                this.MessageClass = "text-success"
+                                //clear all inputs 
+                                this.batches_in_cart = []
+                                $("#modalCart").modal("hide");
+
+
+                                
+
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                         
+                
+
+                         
+
+                    }).catch(error => {
+                        
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            console.log(error.response)
+                            this.Message = "Error : "+ error.response.data.errors
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 404:
+
+                                
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                        }
+                        
+                    });
+              
 
             },
             //this function add a new a batch to cart :

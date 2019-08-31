@@ -18,7 +18,8 @@ class RoleController extends Controller
             "suppliers" => ["create","read","edit","delete"],
             "batches" => ["create","read","edit","delete"],
             "customers" => ["create","read","edit","delete"],
-            "purchases" => ["create","read","edit","delete"]
+            "purchases" => ["create","read","edit","delete"],
+            "sales" => ["create","read","edit","delete"],
 
             
         ], 
@@ -28,7 +29,8 @@ class RoleController extends Controller
             "suppliers" => ["create","read","edit","delete"],
             "batches" => ["create","read","edit","delete"],
             "customers" => ["create","read","edit","delete"],
-            "purchases" => ["create","read","edit","delete"]
+            "purchases" => ["create","read","edit","delete"],
+            "sales" => ["create","read","edit","delete"],
 
         ],
         "customer" => [

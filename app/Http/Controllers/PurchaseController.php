@@ -31,9 +31,13 @@ class PurchaseController extends Controller
         $purchases = Purchase::where($selected_column,"like", "%".$search."%")        
                             ->join("suppliers","suppliers.id","=","purchases.supplier_id")
                             ->join("users","users.id","=","purchases.user_id")
-                            ->select("supplier_name","name","purchases.id","purchases.created_at")
+                            ->select("supplier_name","name","total_price","purchases.id","purchases.created_at")
                             ->orderBy($selected_column,$orderby)
                             ->paginate(5);
+
+        foreach ($purchases as  $purchase) {
+            $purchase->totalPrice();
+        }
 
 
         return PurchaseResource::collection($purchases);

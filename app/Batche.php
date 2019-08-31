@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Sale;
 class Batche extends Model
 {
     //
@@ -15,5 +15,9 @@ class Batche extends Model
         $from = \Carbon\Carbon::createFromFormat('Y-m-d', $this->expiry_date);
 
         return $to->diffInDays($from);
+    }
+
+    public function Sales(){
+        return $this->belongsToMany(Sale::class,'sale_batches');
     }
 }

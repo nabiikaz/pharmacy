@@ -50,7 +50,7 @@
                               <label for="email">Email</label>
 
                                         <input name="email" type="email" id="email" class="form-control " 
-                                        v-model="customer.email" required>
+                                        v-model="customer.email" >
                             </div>
 
                             <span :class="MessageClass">{{Message}}</span>

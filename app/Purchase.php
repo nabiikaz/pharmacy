@@ -7,7 +7,7 @@ use  Illuminate\Support\Collection;
 class Purchase extends Model
 {
     
-    protected $appends = ["total_price"];
+    //protected $appends = ["total_price"];
 
     /**
      * get all Medicines Purchased in this Purchase
@@ -35,14 +35,18 @@ class Purchase extends Model
      * Calculate and return the Total Price of the medicines Batches purchased 
      */
 
-    public function getTotalPriceAttribute(){
+    public function totalPrice(){
+        if($this->total_price != 0)
+            return;
+            
         $totalPrice = 0;
         foreach ($this->Batches as  $batch) {
             
             $totalPrice +=$batch->quantity * $batch->batch_price;
         }
 
-        return $totalPrice;
+        $this->total_price = $totalPrice;
+        $this->save();
     }
    
 }

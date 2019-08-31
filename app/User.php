@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\User as Customer;
+use App\User as Pharmacist;
 
 class User extends Authenticatable
 {
@@ -49,6 +51,17 @@ class User extends Authenticatable
         });*/
 
     }
+    /**
+     * get all the sales that were made by this user if he is a (Pharmacist) 
+     * or the purchases that were made by this user if he were a (Customer)
+     */
+
+
+    public function Customers(){
+        return $this->belongsToMany(Customer::Class,"sales","user_id","customer_id")->withPivot("id as sale_id","created_at as sale_date")->withTimestamps();
+    }
+
+
     /**
      * get all purchases that are attached to this user
      */

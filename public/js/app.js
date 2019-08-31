@@ -4065,108 +4065,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getBatches();
+    this.getCustomers();
     this.$nextTick(function () {
       console.log("coco");
     });
@@ -4187,7 +4090,7 @@ __webpack_require__.r(__webpack_exports__);
       batches_in_cart_lenght: 0,
       //displayed batches
       batches: [],
-      selected_customer_id: null,
+      selected_customer_id: -1,
       new_customer: {},
       customers: [],
       newBatch: {},
@@ -4205,6 +4108,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     //when selected_customer_id is changed (a customer is selected) then exit the modal and show theaddNewBatch modal
     selected_customer_id: function selected_customer_id() {
+      this.MessageClass = "text-primary";
+      this.Message = "";
       $("#modalSelectCustomer").modal("hide");
       $("#modalCart").modal("show");
     },
@@ -4216,12 +4121,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     //watch batches_in_cart so that if a new batch is being added to the cart the number of items increases
     batches_in_cart: function batches_in_cart(old, val) {
-      this.batches_in_cart_lenght = val.length;
+      this.batches_in_cart_lenght = this.batches_in_cart.length;
 
       for (var i = 0; i < this.batches_in_cart_lenght; i++) {
         for (var j = this.batches_in_cart_lenght - 1; j > i; j--) {
           if (this.batches_in_cart[i].id == this.batches_in_cart[j].id) {
-            if (this.batches_in_cart[i].quantity < this.batches_in_cart[i].quantity_min) this.batches_in_cart[i].quantity++;
+            if (this.batches_in_cart[i].quantity < this.batches_in_cart[i].quantity_stock) this.batches_in_cart[i].quantity++;
             this.batches_in_cart.splice(j, 1);
             return;
           }
@@ -4364,25 +4269,75 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     addNewBatch: function addNewBatch() {},
+    SubmitBatches: function SubmitBatches() {
+      var _this5 = this;
+
+      if (this.selected_customer_id == -1) {
+        this.Message = "Please Select A Customer to Continue ...";
+        this.MessageClass = "text-danger";
+        $("#modalSelectCustomer").modal("show");
+        $("#modalCart").modal("hide");
+        return;
+      }
+
+      if (this.batches_in_cart.length == 0) {
+        this.Message = "Please Select A Medicine Batches to Continue the Sale Confirmation ...";
+        this.MessageClass = "text-danger";
+        return;
+      }
+
+      axios.patch('/api/batches/' + this.selected_customer_id, this.batches_in_cart).then(function (Response) {
+        switch (Response.status) {
+          case 200:
+            _this5.Message = "Sale Confirmed .";
+            _this5.MessageClass = "text-success"; //clear all inputs 
+
+            _this5.batches_in_cart = [];
+            $("#modalCart").modal("hide");
+            break;
+
+          default:
+            break;
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          console.log(error.response);
+          _this5.Message = "Error : " + error.response.data.errors;
+          _this5.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
+    },
     //this function add a new a batch to cart :
     addToCart: function addToCart(batchId) {
       this.getBatch(batchId);
     },
     //delete medicines 
     deleteBatch: function deleteBatch(batchId) {
-      var _this5 = this;
+      var _this6 = this;
 
       axios["delete"]('/api/batches/' + batchId).then(function (response) {
-        _this5.getBatches();
+        _this6.getBatches();
 
-        for (var i = 0; i < _this5.batches_in_cart.length; i++) {
-          if (_this5.batches_in_cart[i].id == batchId) _this5.batches_in_cart.splice(i, 1);
+        for (var i = 0; i < _this6.batches_in_cart.length; i++) {
+          if (_this6.batches_in_cart[i].id == batchId) _this6.batches_in_cart.splice(i, 1);
         }
       })["catch"](function (error) {
         switch (error.response.status) {
           case 404:
             //if the medicine is already deleted then refresh current medicines view 
-            _this5.getMedicines();
+            _this6.getMedicines();
 
             break;
 
@@ -6633,6 +6588,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
+    this.getsales();
     $('[data-tooltip="tooltip"]').tooltip();
     $('[data-toggle="popover"]').mouseover(function () {
       $(this).popover("show");
@@ -6651,19 +6607,7 @@ __webpack_require__.r(__webpack_exports__);
       selected_column: '',
       filter_flow: 'Ascending',
       //displayed sales 
-      sales: [{
-        Id: 1,
-        pharmacist: "Nabi Zakaria",
-        customer: "N/A",
-        sale_date: "2019-01-07",
-        total_price: 25
-      }, {
-        Id: 2,
-        pharmacist: "Ahmed Nabi",
-        customer: "N/A",
-        sale_date: "2019-01-07",
-        total_price: 25
-      }],
+      sales: [],
       paginationCurrent: 1
     };
   },
@@ -6674,44 +6618,39 @@ __webpack_require__.r(__webpack_exports__);
     search: function search(val) {
       this.paginationCurrent = 1;
       this.getsales();
+    },
+    selected_column: function selected_column() {
+      this.getsales();
+    },
+    filter_flow: function filter_flow() {
+      this.getsales();
     }
   },
   updated: function updated() {
     $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
-    //get users in the current page 
+    //get Purchases in the current page 
     getsales: function getsales() {
-      /** get users in the current page using the server's API with (axios)
+      var _this = this;
+
+      /** get Purchases in the current page using the server's API with (axios)
        * 
        * 
        * 
        */
-    },
-    //get sale with saleId
-    getSale: function getSale(saleId) {
-      return {
-        Id: 1,
-        pharmacist: "Nabi Zakaria",
-        customer: "N/A",
-        sale_date: "2019-01-07",
-        total_price: 25,
-        medicines: [{
-          Id: 1,
-          name: "DOLIPRANE",
-          dosage: "500 mg",
-          form: "gélule",
-          family: "Antalgique et antipyrétique ",
-          quantity: 10
-        }, {
-          Id: 2,
-          name: "sulpiride",
-          dosage: "50 mg",
-          form: "sérop",
-          family: "Antalgique  ",
-          quantity: 5
-        }]
-      };
+      axios.get("/api/sales", {
+        params: {
+          search: this.search,
+          selected_column: this.selected_column,
+          filter_flow: this.filter_flow,
+          page: this.paginationCurrent
+        }
+      }).then(function (response) {
+        _this.sales = response.data.data;
+      }, function (error) {
+        console.log(error);
+      });
     }
   },
   components: {}
@@ -67423,7 +67362,7 @@ var render = function() {
                   {
                     staticClass: "sales",
                     attrs: {
-                      href: "/dashboard/medicines/sales/" + batch.Id,
+                      href: "/dashboard/medicines/sales/" + batch.id,
                       title: "",
                       "data-tooltip": "tooltip",
                       "data-original-title": "Sales"
@@ -67615,7 +67554,7 @@ var render = function() {
                         staticClass: "text-center ",
                         staticStyle: { color: "#6f6e6e" }
                       },
-                      [_vm._v("2- Select the Customer : ")]
+                      [_vm._v("Select the Customer : ")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -67787,11 +67726,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control",
-                            attrs: {
-                              type: "email",
-                              placeholder: "email",
-                              required: ""
-                            },
+                            attrs: { type: "email", placeholder: "email" },
                             domProps: { value: _vm.new_customer.email },
                             on: {
                               input: function($event) {
@@ -67828,378 +67763,6 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "modalAddNewBatch",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "add New Batch",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
-          [
-            _c(
-              "div",
-              {
-                staticClass: "modal-content ",
-                staticStyle: {
-                  "border-top-left-radius": "10px",
-                  "border-top-right-radius": "10px"
-                }
-              },
-              [
-                _vm._m(6),
-                _vm._v(" "),
-                _c("div", { staticClass: "modal-body mx-3" }, [
-                  _c("div", { staticClass: "md-form " }, [
-                    _c(
-                      "h3",
-                      {
-                        staticClass: "text-center ",
-                        staticStyle: { color: "#6f6e6e" }
-                      },
-                      [_vm._v("Add New Medicine Batch : ")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "form",
-                      {
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.addNewBatch($event)
-                          }
-                        }
-                      },
-                      [
-                        _c("span", { staticStyle: { color: "gray" } }, [
-                          _vm._v("Medicine Name :"),
-                          _c("strong", [
-                            _vm._v(
-                              " " + _vm._s(_vm.newBatch.medicine_name) + " "
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "pb-2 " }, [
-                          _c(
-                            "label",
-                            {
-                              staticClass: "mb-0 ",
-                              attrs: { for: "fabrication_date" }
-                            },
-                            [_vm._v("Fabricaion Date")]
-                          ),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newBatch.fabricaion_date,
-                                expression: "newBatch.fabricaion_date"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "date",
-                              id: "fabrication_date",
-                              required: ""
-                            },
-                            domProps: { value: _vm.newBatch.fabricaion_date },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newBatch,
-                                  "fabricaion_date",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "pb-2 " }, [
-                          _c(
-                            "label",
-                            {
-                              staticClass: "mb-0 ",
-                              attrs: { for: "expiry_date" }
-                            },
-                            [_vm._v("Expiry Datee")]
-                          ),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.newBatch.expiry_date,
-                                expression: "newBatch.expiry_date"
-                              }
-                            ],
-                            staticClass: "form-control",
-                            attrs: {
-                              type: "date",
-                              id: "expiry_date",
-                              required: ""
-                            },
-                            domProps: { value: _vm.newBatch.expiry_date },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.newBatch,
-                                  "expiry_date",
-                                  $event.target.value
-                                )
-                              }
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "row" }, [
-                          _c("div", { staticClass: "col-sm-4" }, [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "mb-0 ",
-                                attrs: { for: "quatity_bought" }
-                              },
-                              [_vm._v("Quantity Purchased")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.newBatch.quatity_bought,
-                                  expression: "newBatch.quatity_bought"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "number",
-                                id: "quatity_bought",
-                                required: "",
-                                min: "0"
-                              },
-                              domProps: { value: _vm.newBatch.quatity_bought },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.newBatch,
-                                    "quatity_bought",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "col-sm-4" }, [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "mb-0 ",
-                                attrs: { for: "quantity_stock" }
-                              },
-                              [_vm._v("Quantity Stock")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.newBatch.quantity_stock,
-                                  expression: "newBatch.quantity_stock"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "number",
-                                id: "quantity_stock",
-                                required: "",
-                                min: "0"
-                              },
-                              domProps: { value: _vm.newBatch.quantity_stock },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.newBatch,
-                                    "quantity_stock",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "col-sm-4" }, [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "mb-0 ",
-                                attrs: { for: "quantity_minimum" }
-                              },
-                              [_vm._v("Quantity Minimum")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.newBatch.quantity_min,
-                                  expression: "newBatch.quantity_min"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "number",
-                                id: "quantity_minimum",
-                                required: "",
-                                min: "0"
-                              },
-                              domProps: { value: _vm.newBatch.quantity_min },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.newBatch,
-                                    "quantity_min",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "row" }, [
-                          _c("div", { staticClass: "col-sm-6" }, [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "mb-0 ",
-                                attrs: { for: "unit_price" }
-                              },
-                              [_vm._v("Unit Price")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.newBatch.unit_price,
-                                  expression: "newBatch.unit_price"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "number",
-                                step: "0.01",
-                                id: "unit_price",
-                                required: "",
-                                min: "0"
-                              },
-                              domProps: { value: _vm.newBatch.unit_price },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.newBatch,
-                                    "unit_price",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "col-sm-6" }, [
-                            _c(
-                              "label",
-                              {
-                                staticClass: "mb-0 ",
-                                attrs: { for: "batch_price" }
-                              },
-                              [_vm._v("Batch Price")]
-                            ),
-                            _vm._v(" "),
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.newBatch.batch_price,
-                                  expression: "newBatch.batch_price"
-                                }
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "number",
-                                step: "0.01",
-                                id: "batch_price",
-                                required: "",
-                                min: "0"
-                              },
-                              domProps: { value: _vm.newBatch.batch_price },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.newBatch,
-                                    "batch_price",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            })
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("hr"),
-                        _vm._v(" "),
-                        _vm._m(7)
-                      ]
-                    )
-                  ])
-                ])
-              ]
-            )
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
       { staticClass: "modal fade", attrs: { id: "modalCart", role: "dialog" } },
       [
         _c(
@@ -68216,14 +67779,14 @@ var render = function() {
                 }
               },
               [
-                _vm._m(8),
+                _vm._m(6),
                 _vm._v(" "),
                 _c("div", { staticClass: "modal-body" }, [
                   _c(
                     "table",
                     { staticClass: "table table-striped table-hover" },
                     [
-                      _vm._m(9),
+                      _vm._m(7),
                       _vm._v(" "),
                       _c(
                         "tbody",
@@ -68319,6 +67882,10 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
+                  _c("span", { class: _vm.MessageClass }, [
+                    _vm._v(_vm._s(_vm.Message))
+                  ]),
+                  _vm._v(" "),
                   _c("hr"),
                   _vm._v(" "),
                   _c("div", { staticClass: "row " }, [
@@ -68338,7 +67905,8 @@ var render = function() {
                         _c("input", {
                           staticClass: "btn btn-primary ",
                           staticStyle: { width: "140px" },
-                          attrs: { type: "text", value: "Confirm Sale" }
+                          attrs: { type: "text", value: "Confirm Sale" },
+                          on: { click: _vm.SubmitBatches }
                         })
                       ]
                     )
@@ -68506,41 +68074,6 @@ var staticRenderFns = [
         "h4",
         { staticClass: "modal-title  w-100 font-weight-bold text-white" },
         [_vm._v("Select Customer")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close text-white",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "md-form " }, [
-      _c("button", { staticClass: "form-control btn btn-success" }, [
-        _vm._v("Add New Customer")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header bg-success text-center" }, [
-      _c(
-        "h4",
-        { staticClass: "modal-title  w-100 font-weight-bold text-white" },
-        [_vm._v("Add New Medicine Batch")]
       ),
       _vm._v(" "),
       _c(
@@ -69207,12 +68740,7 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control ",
-                        attrs: {
-                          name: "email",
-                          type: "email",
-                          id: "email",
-                          required: ""
-                        },
+                        attrs: { name: "email", type: "email", id: "email" },
                         domProps: { value: _vm.customer.email },
                         on: {
                           input: function($event) {
@@ -72573,12 +72101,12 @@ var render = function() {
               {
                 staticClass: "text-center",
                 class:
-                  _vm.selected_column == "sale_date" ? "select-search" : "",
+                  _vm.selected_column == "created_at" ? "select-search" : "",
                 on: {
                   click: function($event) {
-                    _vm.selected_column == "sale_date"
+                    _vm.selected_column == "created_at"
                       ? (_vm.selected_column = "")
-                      : (_vm.selected_column = "sale_date")
+                      : (_vm.selected_column = "created_at")
                   }
                 }
               },
@@ -72643,11 +72171,11 @@ var render = function() {
                 {
                   staticClass: "text-center",
                   class:
-                    _vm.selected_column == "sale_date"
+                    _vm.selected_column == "created_at"
                       ? "select-search-data"
                       : ""
                 },
-                [_vm._v("\n                        " + _vm._s(sale.sale_date))]
+                [_vm._v("\n                        " + _vm._s(sale.created_at))]
               ),
               _vm._v(" "),
               _c(

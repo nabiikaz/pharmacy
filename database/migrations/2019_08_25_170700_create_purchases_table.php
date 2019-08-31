@@ -17,6 +17,8 @@ class CreatePurchasesTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('supplier_id')->unsigned();
+            $table->integer("total_price")->unsigned()->default(0);
+
             
             
 
