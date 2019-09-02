@@ -26,10 +26,8 @@ Route::prefix("permissions")->group(function(){
     Route::get("reset","RoleController@reset");//->middleware("role:admin");
 });
 
-
-
 Route::get("/",function(){
-    return "index page";
+    return view("layouts.front");
 })->name("index");
 
 

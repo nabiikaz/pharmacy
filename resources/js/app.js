@@ -39,6 +39,16 @@ Vue.component("dashboard_purchases",require('./components/dashboard/purchases.vu
 Vue.component("dashboard_customers",require('./components/dashboard/customers.vue').default);
 
 
+
+
+
+
+
+Vue.component("home",require('./components/home/home.vue').default);
+Vue.component("home_filter",require('./components/home/filter.vue').default);
+
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
