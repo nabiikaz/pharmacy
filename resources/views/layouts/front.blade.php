@@ -16,15 +16,15 @@
 
             <home ></home>
 
-            <div style="background-color:#f8f9fa;" class=" p-3">
+           <!-- <div style="background-color:#f8f9fa;" class=" p-3">
                 <div class=" container">
                     HOME / 
                 </div>
 
-            </div>
-
-            <home_filter></home_filter>
+            </div>-->
+            
         </div>
+
     </div>
 
 
