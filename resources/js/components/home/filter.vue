@@ -1,16 +1,16 @@
 <template>
     <div class="">
-            <img src="/img/icons/filter.png" width="45" class="rounded-circle border-dark dropdown-toggle" data-flip="false" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="true">
+            <img src="/img/icons/filter.png" width="45" class="rounded-circle border-dark dropdown-toggle"
+             data-flip="false" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="true" 
+            data-tooltip="tooltip" data-title="Filter Control" data-placement="right" />
 
                 <div class="filter dropdown-menu"   >
-                    <h3 class="text-center ">Search Filter: </h3>
+                    <h3 class="text-center ">Filter Control </h3>
                     <hr >
                     <input type="text" class="form-control mb-1" placeholder="Search Keyword ..." v-model="filter.search" >
-                     <hr>
                     <label style="color:grey;font-size:12px;margin-bottom:-5px;">Expiration Date Range :</label>
                     <rangedate-picker  i18n="EN" @selected="date_slider"
                         :captions="{'title':'Expiration Date Range','ok_button':'Apply'}"></rangedate-picker>
-                    <hr>
                   <label style="color:grey;font-size:12px;margin-bottom:-5px;">Refund Percentage :
                       <strong class="text-success">{{filter.refund_range_value[0]}}% </strong>,<strong class="text-primary" > {{filter.refund_range_value[1]}}%</strong>
                     </label>
@@ -109,6 +109,8 @@ import 'vue-slider-component/theme/default.css'
             $(document).on('click', '.calendar-btn-apply', function (e) {
                e.stopPropagation();
             });
+
+            this.apply_filter();
             
         },
         data() {
@@ -209,5 +211,6 @@ img{
     padding: 10px;
     background-color: #f7f7f7;
     z-index: 2;
+    margin-top:-30px;
 }
 </style>

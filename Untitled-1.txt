@@ -1,0 +1,16 @@
+1- db.personnes.find().pretty()
+ 2- db.personnes.find().limit(5)
+ 3-  db.personnes.find({age:{$gt:30}},{"name":1,"age":1,"email":1})
+ 4- db.personnes.find({"address.postal":5419})
+ 5-  db.personnes.insert({name:"Dib Amine",age:56,hobbies:["swimming","cinema"]})
+    db.personnes.find({name:"Dib Amine"})
+
+ 6- db.personnes.update({name:"Dib Amine"},{$pull:{hobbies:"cinema"}})
+ 7-  db.personnes.aggregate({$group:{"_id":"$gender","count_per_gender":{$sum:1}}})
+ 8- db.personnes.find({_id:111})
+ 9- db.personnes.update({_id:111},{$push:{hobbies:"dance"}})
+ 10-  db.personnes.aggregate([{$unwind:"$hobbies"},{$group:{"_id":"$hobbies" ,"count_per_hobbie":{$sum:1}}}])
+ 
+ 11-  db.personnes.find({"favoriteFruit" : {$exists: false}})
+ 12 - db.personnes.remove({"favoriteFruit" : {$exists: false}})
+ 13 - db.personnes.drop()

@@ -9,6 +9,7 @@ use App\Purchase;
 use App\Sale;
 use App\Supplier;
 use App\Batche;
+use App\Medicine;
 use App\user as Customer;
 use App\Http\Resources\Batch as BatchResource;
 class BatchController extends Controller
@@ -31,12 +32,12 @@ class BatchController extends Controller
 
         $search = $request->get('search');
         $orderby = ($request->get('filter_flow') == "Descending")? "desc":"asc";
-        
-        return Batche::where($selected_column,"like", "%".$search."%")
-                    ->join('medicines',"medicines.id","=","batches.id")
-                    ->orderBy($selected_column,$orderby)
-                    ->paginate(5)
-                    ->toJSON();
+        $batches = Medicine::where($selected_column,"like", "%".$search."%")
+        ->join('batches',"batches.medicine_id","=","Medicines.id")
+        ->orderBy($selected_column,$orderby)
+        ->paginate(5);
+        return BatchResource::collection($batches);
+                    
 
     }
 
@@ -79,7 +80,13 @@ class BatchController extends Controller
             $purchase->Medicines()->attach([$medicine_id => ["fabrication_date"=>$batch["fabrication_date"],
             "expiry_date" => $batch["expiry_date"],"unit_price" => $batch["unit_price"],
             "batch_price" => $batch["batch_price"],"quantity" => $batch["quantity"],"quantity_stock" => $batch["quantity"],"quantity_min" =>$batch["quantity_min"],"refund_rate"=>$batch["refund_rate"] ] ]);
+
+            //update previous batches with same medicine Id 
+            Batche::where("medicine_id","=",$medicine_id)
+                ->update(["unit_price" => $batch["unit_price"]]);
         }
+
+
 
         
 
@@ -94,7 +101,6 @@ class BatchController extends Controller
      */
     public function show(Batche $batch)
     {
-        
         //$batch = Batche::findOrFail($batch->id);
         return (new BatchResource(Batche::where("batches.id","=",$batch->id)
         ->join('medicines',"medicines.id","=","batches.id")->first()));

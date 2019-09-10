@@ -1,7 +1,7 @@
 <template>
 <div>
       <div class="row pt-4 pb-4   ">
-            <div class="col-3 site-logo text-center">
+            <div class="col-3 site-logo ">
                 <a href="/" class="text-"> PHARMA-SINA </a>
             </div>
             <div class="col-6 pt-2 d-flex justify-content-center">

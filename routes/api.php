@@ -27,4 +27,7 @@ Route::prefix("/")->middleware("role:admin|moderator|customer,api","auth")->grou
     Route::apiResource('sales','SaleController');
 });
 
+Route::apiResource('medicines_','MedicineFrontController');
+
+
 

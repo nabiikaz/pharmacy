@@ -7,6 +7,7 @@ use App\Sale;
 class Batche extends Model
 {
     //
+    public $timestamps = false;
 
     protected $appends = ['expire_in'];
 
