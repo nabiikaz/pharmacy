@@ -39,7 +39,7 @@ export default {
   props:["current_user"],
   mounted(){
     $('.dropdown-toggle').dropdown()
-    console.log(this.current_user);
+    
 
   }
     

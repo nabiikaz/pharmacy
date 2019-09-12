@@ -72,7 +72,7 @@ class RegisterController extends Controller
            
         ]);
 
-        //$user->attachRole("moderator");
+        $user->attachRole("customer");
 
         return $user;
     }

@@ -37,9 +37,11 @@ class MedicineFrontController extends Controller
                         ->whereBetween("expiry_date",[$filter->start_date,$filter->end_date])
                         ->whereIn("form",$filter->forms)
                         ->where("quantity_stock",">=",0)
-                        ->groupBy("medicine_id")
+                        ->groupBy("medicine_id")->select("*","batches.id as id")
+                        
                         
                         ->paginate(12);
+        
 
         
         //->orderBy($selected_column,$orderby)

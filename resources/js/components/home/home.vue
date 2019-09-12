@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container">
-            <home_navbar></home_navbar>
+            <home_navbar :medicine_id="medicine_id"></home_navbar>
 
 
 
@@ -102,6 +102,9 @@
                 medicines_meta:null,
                 getMedicines_status:true,
 
+                //medicine_id is the id of the medicines in which the client want to add to the cart
+                medicine_id:null,
+
 
             }
         },
@@ -125,7 +128,7 @@
                 
             },
             addToCart: function(id){
-
+                this.medicine_id= id;
             },
             /**
              * get medicines from the server's api

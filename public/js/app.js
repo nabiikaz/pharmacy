@@ -6174,7 +6174,6 @@ __webpack_require__.r(__webpack_exports__);
   props: ["current_user"],
   mounted: function mounted() {
     $('.dropdown-toggle').dropdown();
-    console.log(this.current_user);
   }
 });
 
@@ -8320,7 +8319,9 @@ __webpack_require__.r(__webpack_exports__);
       paginationCurrent: 1,
       medicines: null,
       medicines_meta: null,
-      getMedicines_status: true
+      getMedicines_status: true,
+      //medicine_id is the id of the medicines in which the client want to add to the cart
+      medicine_id: null
     };
   },
   watch: {
@@ -8336,7 +8337,9 @@ __webpack_require__.r(__webpack_exports__);
       this.filter = filter;
       this.getMedicines();
     },
-    addToCart: function addToCart(id) {},
+    addToCart: function addToCart(id) {
+      this.medicine_id = id;
+    },
 
     /**
      * get medicines from the server's api
@@ -8422,7 +8425,233 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["medicine_id"],
+  mounted: function mounted() {
+    this.getMedicines();
+  },
+  data: function data() {
+    return {
+      crsf: $("meta[name='csrf-token']").attr("content"),
+      medicines: [],
+      invoice: {
+        sub_total: 0,
+        tax: 0,
+        shipping: 0,
+        total: 0
+      }
+    };
+  },
+  watch: {
+    medicine_id: function medicine_id() {
+      //console.log(this.medicine_id);
+      this.pushToCart(this.medicine_id);
+    }
+  },
+  methods: {
+    pushToCart: function pushToCart(id) {
+      var _this = this;
+
+      var event = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var quantity = 1;
+
+      if (event != null) {
+        quantity = parseInt(event.target.value);
+      }
+
+      axios.post('/api/cart', {
+        id: id,
+        quantity: quantity
+      }).then(function (Response) {
+        _this.getMedicines();
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          switch (error.response.status) {
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
+    },
+    deleteMedicine: function deleteMedicine(id) {
+      var _this2 = this;
+
+      //remove the item form the session cart
+      axios["delete"]('/api/cart/' + id).then(function (Response) {
+        _this2.getMedicines();
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          switch (error.response.status) {
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
+    },
+
+    /**
+     * get medicines stored in the redis session
+     */
+    getMedicines: function getMedicines() {
+      var _this3 = this;
+
+      axios.get('/api/cart').then(function (Response) {
+        _this3.medicines = Response.data.data;
+        _this3.invoice = Response.data.invoice;
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          switch (error.response.status) {
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -22266,7 +22495,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.navbar-item[data-v-76914245] {\r\n        padding: 10px;\r\n    text-transform: uppercase;\r\n    letter-spacing: .05em;\r\n    color: #25262a;\r\n    font-size: 15px;\r\n    display: inline;\r\n    text-decoration: none!important;\n}\n.navbar-item>a[data-v-76914245]{\r\n     color: #25262a;\r\n     -webkit-text-decoration-line: none;\r\n             text-decoration-line: none;\n}\n.navbar-item.active[data-v-76914245]{\r\n    border-bottom: 2px solid;\r\n    font-weight: 600;\n}\n.site-logo a[data-v-76914245] {\r\n    text-transform: uppercase;\r\n    letter-spacing: .2em;\r\n    font-size: 22px;\r\n    color: #000!important;\r\n    font-weight: 900\n}\n.site-logo a[data-v-76914245]:hover {\r\n    text-decoration: none\n}\r\n", ""]);
+exports.push([module.i, "\n.cart_items_count[data-v-76914245] {\n    border-radius: 4px;\n    padding: 4px;\n}\n.navbar-item[data-v-76914245] {\n    padding: 10px;\n    text-transform: uppercase;\n    letter-spacing: .05em;\n    color: #25262a;\n    font-size: 15px;\n    display: inline;\n    text-decoration: none !important;\n}\n.navbar-item>a[data-v-76914245] {\n    color: #25262a;\n    -webkit-text-decoration-line: none;\n            text-decoration-line: none;\n}\n.navbar-item.active[data-v-76914245] {\n    border-bottom: 2px solid;\n    font-weight: 600;\n}\n.site-logo a[data-v-76914245] {\n    text-transform: uppercase;\n    letter-spacing: .2em;\n    font-size: 22px;\n    color: #000 !important;\n    font-weight: 900\n}\n.site-logo a[data-v-76914245]:hover {\n    text-decoration: none\n}\n\n", ""]);
 
 // exports
 
@@ -75905,7 +76134,12 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("div", { staticClass: "container" }, [_c("home_navbar")], 1),
+      _c(
+        "div",
+        { staticClass: "container" },
+        [_c("home_navbar", { attrs: { medicine_id: _vm.medicine_id } })],
+        1
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -76248,68 +76482,382 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("div", { staticClass: "row pt-4 pb-4   " }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "col-3 site-logo d-flex justify-content-end " },
+        [
+          _c("a", {
+            ref: "login_ref",
+            staticStyle: { display: "none" },
+            attrs: { href: "login" }
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticStyle: { cursor: "pointer" },
+              on: {
+                click: function($event) {
+                  return _vm.$refs.login_ref.click()
+                }
+              }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src: "/img/icons/login.png",
+                  width: "30",
+                  "data-tooltip": "tooltip",
+                  "data-placement": "left",
+                  "data-title": "Login / Register"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "ml-2 mr-4 ",
+              staticStyle: { cursor: "pointer" },
+              attrs: { "data-toggle": "modal", "data-target": "#CartModal" }
+            },
+            [
+              _c("img", {
+                attrs: {
+                  src: "/img/icons/add_to_cart.png",
+                  width: "30",
+                  "data-tooltip": "tooltip",
+                  "data-placement": "right",
+                  "data-title": "Click To View Cart"
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "span",
+                { staticClass: "cart_items_count bg-success text-white " },
+                [_vm._v(_vm._s(_vm.medicines.length))]
+              )
+            ]
+          )
+        ]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade ",
+        attrs: {
+          id: "CartModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog modal-lg" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "container mb-4" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12" }, [
+                    _c("div", { staticClass: "table-responsive" }, [
+                      _c("table", { staticClass: "table table-striped" }, [
+                        _vm._m(3),
+                        _vm._v(" "),
+                        _c(
+                          "tbody",
+                          _vm._l(_vm.medicines, function(medicine, index) {
+                            return _c("tr", { key: index }, [
+                              _c("td", { staticClass: "text-center" }, [
+                                _vm._v(_vm._s(medicine.name))
+                              ]),
+                              _vm._v(" "),
+                              _c("td", [_vm._v(_vm._s(medicine.status))]),
+                              _vm._v(" "),
+                              _c("td", { staticStyle: { width: "130px" } }, [
+                                _c("input", {
+                                  staticClass: "form-control",
+                                  attrs: {
+                                    type: "number",
+                                    step: "1",
+                                    min: 1,
+                                    max: medicine.max
+                                  },
+                                  domProps: { value: medicine.quantity },
+                                  on: {
+                                    change: function(event) {
+                                      return _vm.pushToCart(medicine.id, event)
+                                    }
+                                  }
+                                })
+                              ]),
+                              _vm._v(" "),
+                              _c("td", { staticClass: "text-right" }, [
+                                _vm._v(_vm._s(medicine.price) + " DA")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "td",
+                                {
+                                  staticClass: "text-right",
+                                  staticStyle: { width: "8px" }
+                                },
+                                [
+                                  _c(
+                                    "a",
+                                    {
+                                      staticClass: "delete",
+                                      attrs: {
+                                        href: "#",
+                                        title: "",
+                                        "data-tooltip": "tooltip",
+                                        "data-original-title": "Delete"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.deleteMedicine(medicine.id)
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("img", {
+                                        attrs: {
+                                          src: "/img/icons/trash.png",
+                                          width: "24"
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              )
+                            ])
+                          }),
+                          0
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "row",
+                        staticStyle: { "margin-right": "50px" }
+                      },
+                      [
+                        _c("div", { staticClass: "col-10 text-right" }, [
+                          _vm._v("Sub-Total")
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-2 text-right pr-2" }, [
+                          _vm._v(_vm._s(_vm.invoice.sub_total) + " DA")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "row",
+                        staticStyle: { "margin-right": "50px" }
+                      },
+                      [
+                        _c("div", { staticClass: "col-10 text-right" }, [
+                          _vm._v("Taxes")
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-2 text-right pr-2" }, [
+                          _vm._v(_vm._s(_vm.invoice.tax) + " DA")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "row",
+                        staticStyle: { "margin-right": "50px" }
+                      },
+                      [
+                        _c("div", { staticClass: "col-10 text-right" }, [
+                          _vm._v("Shipping")
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-2 text-right pr-2" }, [
+                          _vm._v(_vm._s(_vm.invoice.shipping) + " DA")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "row mt-2",
+                        staticStyle: { "margin-right": "50px" }
+                      },
+                      [
+                        _vm._m(4),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          { staticClass: "col-2 text-right pr-2 text-primary" },
+                          [_vm._v(_vm._s(_vm.invoice.total) + " DA")]
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(5)
+          ])
+        ])
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { staticClass: "row pt-4 pb-4   " }, [
-        _c("div", { staticClass: "col-3 site-logo " }, [
-          _c("a", { staticClass: "text-", attrs: { href: "/" } }, [
-            _vm._v(" PHARMA-SINA ")
+    return _c("div", { staticClass: "col-3 site-logo " }, [
+      _c("a", { staticClass: "text-", attrs: { href: "/" } }, [
+        _vm._v(" PHARMA-SINA ")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "col-6 pt-2 d-flex justify-content-center" },
+      [
+        _c("ul", [
+          _c("li", { staticClass: "navbar-item active" }, [
+            _c("a", { attrs: { href: "/" } }, [_vm._v("home")])
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "navbar-item " }, [
+            _c("a", { attrs: { href: "#" } }, [_vm._v("services")])
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "navbar-item " }, [
+            _c("a", { attrs: { href: "/about" } }, [_vm._v("about")])
+          ]),
+          _vm._v(" "),
+          _c("li", { staticClass: "navbar-item " }, [
+            _c("a", { attrs: { href: "/contact" } }, [_vm._v("contact")])
           ])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header " }, [
+      _c("div", { staticClass: "w-100 text-center" }, [
+        _c("h3", { staticClass: "modal-title " }, [_vm._v("Medicines Cart")])
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
+          _vm._v("Medicine")
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-6 pt-2 d-flex justify-content-center" }, [
-          _c("ul", [
-            _c("li", { staticClass: "navbar-item active" }, [
-              _c("a", { attrs: { href: "/" } }, [_vm._v("home")])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "navbar-item " }, [
-              _c("a", { attrs: { href: "#" } }, [_vm._v("services")])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "navbar-item " }, [
-              _c("a", { attrs: { href: "/about" } }, [_vm._v("about")])
-            ]),
-            _vm._v(" "),
-            _c("li", { staticClass: "navbar-item " }, [
-              _c("a", { attrs: { href: "/contact" } }, [_vm._v("contact")])
-            ])
-          ])
+        _c("th", { staticStyle: { width: "20px" }, attrs: { scope: "col" } }, [
+          _vm._v("Available")
         ]),
         _vm._v(" "),
         _c(
-          "div",
-          { staticClass: "col-3 site-logo d-flex justify-content-end" },
-          [
-            _c("div", [
-              _c("img", {
-                attrs: {
-                  src: "/img/icons/login.png",
-                  width: "30",
-                  "data-tooltip": "tooltip",
-                  "data-title": "Login / Register"
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "ml-2" }, [
-              _c("img", {
-                attrs: {
-                  src: "/img/icons/add_to_cart.png",
-                  width: "30",
-                  "data-tooltip": "tooltip",
-                  "data-title": "Click To View Items In Cart"
-                }
-              })
+          "th",
+          {
+            staticClass: "text-center",
+            staticStyle: { width: "8px" },
+            attrs: { scope: "col" }
+          },
+          [_vm._v("Quantity")]
+        ),
+        _vm._v(" "),
+        _c(
+          "th",
+          {
+            staticClass: "text-right",
+            staticStyle: { width: "100px" },
+            attrs: { scope: "col" }
+          },
+          [_vm._v("Price")]
+        ),
+        _vm._v(" "),
+        _c("th", { staticStyle: { width: "8px" } })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-10 text-right text-primary" }, [
+      _c("strong", [_vm._v("Total")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c("div", { staticClass: "col " }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-sm-12  col-md-6" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-block btn-primary ",
+                attrs: { "data-dismiss": "modal" }
+              },
+              [_vm._v("Continue Shopping")]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-12 col-md-6 text-right" }, [
+            _c("button", { staticClass: "btn btn-block btn-success " }, [
+              _vm._v("Checkout")
             ])
-          ]
-        )
+          ])
+        ])
       ])
     ])
   }
@@ -90217,15 +90765,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************!*\
   !*** ./resources/js/components/home/home.vue ***!
   \***********************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _home_vue_vue_type_template_id_1b4c5ed4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./home.vue?vue&type=template&id=1b4c5ed4&scoped=true& */ "./resources/js/components/home/home.vue?vue&type=template&id=1b4c5ed4&scoped=true&");
 /* harmony import */ var _home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./home.vue?vue&type=script&lang=js& */ "./resources/js/components/home/home.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _home_vue_vue_type_style_index_0_id_1b4c5ed4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./home.vue?vue&type=style&index=0&id=1b4c5ed4&scoped=true&lang=css& */ "./resources/js/components/home/home.vue?vue&type=style&index=0&id=1b4c5ed4&scoped=true&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _home_vue_vue_type_style_index_0_id_1b4c5ed4_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./home.vue?vue&type=style&index=0&id=1b4c5ed4&scoped=true&lang=css& */ "./resources/js/components/home/home.vue?vue&type=style&index=0&id=1b4c5ed4&scoped=true&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -90257,7 +90804,7 @@ component.options.__file = "resources/js/components/home/home.vue"
 /*!************************************************************************!*\
   !*** ./resources/js/components/home/home.vue?vue&type=script&lang=js& ***!
   \************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
