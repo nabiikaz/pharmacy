@@ -37,6 +37,7 @@
 import { timeout } from 'q';
 
 export default {
+    name:"geoCoordinates",
     props:["coord_input","unique_id","focusMark"],
     mounted() {
         this.init_map()
@@ -65,8 +66,8 @@ export default {
     },
     watch:{
         coord: function(new_coord){
-            console.log(new_coord)
-            this.$emit("coordUpdate","coco")
+            
+            this.$emit("coordUpdate",new_coord.lat+","+new_coord.lng);
             if(this.map.getObjects().length > 0)
                 this.map.removeObject(this.markerObject)
 
@@ -77,7 +78,7 @@ export default {
             if(this.focusMark)
                 this.map.getViewModel().setLookAtData({position:new_coord},true)
             //raise the coord event
-            this.emitCoordUpdatedEvent(new_coord)
+            
             
             
                 
@@ -89,7 +90,8 @@ export default {
             
 
             if(!RegExp("[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+").test(new_coord)){
-                alert("Error! coordinates not valid") 
+                if(this.map.getObjects().length > 0)
+                    this.map.removeObject(this.markerObject)
                 return;
             }
             
@@ -102,12 +104,7 @@ export default {
         
     },
     methods:{
-        emitCoordUpdatedEvent(coords){
-            
-            this.$parent.$emit("coordUpdate","coords.lat+","+coords.lng");
-            
-
-        },
+        
         setUpClickListener(map) {
             // Attach an event listener to map display
             // obtain the coordinates and display in an alert box.

@@ -50,7 +50,7 @@ Vue.component("home_navbar",require('./components/home/navbar.vue').default);
 Vue.component("home_filter",require('./components/home/filter.vue').default);
 
 
-Vue.component("customers_addresses",require('./components/maps/address.vue').default);
+Vue.component("geoCoordinates",require('./components/maps/address.vue').default);
 
 
 
