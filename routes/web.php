@@ -11,9 +11,12 @@
 |
 */
 
-Route::get("purchases",function(){
 
-   dd(App\Purchase::find(3)->total_price);
+
+Route::get("invoice",function(){
+
+    $pdf = PDF::loadView('invoices.sales',["data"=>'coco']);
+    return $pdf->stream();
 
 });
 
