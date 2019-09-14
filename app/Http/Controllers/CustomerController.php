@@ -75,7 +75,8 @@ class CustomerController extends Controller
                 ]);
 
                 
-
+                if(!$request->has("geo_coord"))
+                    $request->geo_coord = "";
                 //add new customer
                 $customer = Customer::create([
                     'name' => $request->name,
@@ -131,6 +132,8 @@ class CustomerController extends Controller
                 'password' => 'min:8|max:16'
 
             ]);
+
+            
             
 
             

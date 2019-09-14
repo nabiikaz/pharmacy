@@ -6,6 +6,7 @@
 
 require('./bootstrap');
 
+
 window.Vue = require('vue');
 
 /**
@@ -47,6 +48,10 @@ Vue.component("dashboard_customers",require('./components/dashboard/customers.vu
 Vue.component("home",require('./components/home/home.vue').default);
 Vue.component("home_navbar",require('./components/home/navbar.vue').default);
 Vue.component("home_filter",require('./components/home/filter.vue').default);
+
+
+Vue.component("customers_addresses",require('./components/maps/address.vue').default);
+
 
 
 

@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('tel')->default("0555655100");
             $table->date('birthday')->nullable();
             $table->string('address')->nullable();
+            $table->string('geo_coord')->default("");
             $table->string('Img')->default("man.jpg");
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
