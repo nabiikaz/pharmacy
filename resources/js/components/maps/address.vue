@@ -2,7 +2,7 @@
 
     <div>
 
-            <div class="modal fade " id="CartModal" tabindex="-1" role="dialog" >
+            <div class="modal fade " :id="modalId" tabindex="-1" role="dialog" >
                      
             <div class="modal-dialog modal-lg">
 
@@ -16,7 +16,7 @@
                         </button>
                     </div>
                     <div class="modal-body" id="CartModalBody">
-                               <div id="map" ></div>
+                               <div :id="modalId+'_map'" ></div>
                         
 
 
@@ -38,11 +38,11 @@ import { timeout } from 'q';
 
 export default {
     name:"geoCoordinates",
-    props:["coord_input","unique_id","focusMark"],
+    props:["coord_input","unique_id","focusMark","modalId"],
     mounted() {
         this.init_map()
         var self = this
-        $("#CartModal").mouseover(function(){
+        $("#"+this.modalId).mouseover(function(){
             if(self.map != null)
                 self.map.getViewPort().resize()
         })
@@ -117,7 +117,7 @@ export default {
 
         init_map(){
             
-            document.getElementById('map').innerHTML = ""
+            document.getElementById(this.modalId+'_map').innerHTML = ""
                         /**
              * Boilerplate map initialization code starts below:
              */
@@ -130,7 +130,7 @@ export default {
             var defaultLayers = platform.createDefaultLayers();
 
             //Step 2: initialize a map
-            this.map = new H.Map(document.getElementById('map'),
+            this.map = new H.Map(document.getElementById(this.modalId+'_map'),
             defaultLayers.vector.normal.map,{
             center: {lat: 34.900934001110215, lng: -1.3523289793706876},
             zoom: 10,
@@ -167,11 +167,12 @@ export default {
 <style scoped>
     @import url("https://js.api.here.com/v3/3.1/mapsjs-ui.css");
 
-#map {
+#geoModalEdit_map,#geoModalCreate_map {
     width: 100%;
     height: 400px;
     background: grey;
 }
+
 
 
 </style>

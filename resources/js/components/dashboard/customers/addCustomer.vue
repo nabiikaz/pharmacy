@@ -42,6 +42,11 @@
                                <label for="address">Address</label>
                                         <input name="address" type="text" id="address" class="form-control "
                                             v-model="customer.address" required minlength="8" maxlength="25">
+                                        <div class="row pl-2" @click="showMap" style="cursor:pointer">
+                                            <img src="/img/icons/marker.png" width="30" height="30" data-tooltip="tooltip" data-title="Click Here To Point the Geo Coordinates" >
+                                            <span style="font-size:13px;color:gray;padding-top:15px;" v-html="prettyGeoCoordinates"></span>
+
+                                        </div>
                             </div>
 
                              <div class="md-form mb-2">
@@ -71,6 +76,7 @@
             </div>
         </div>
 
+       <geoCoordinates :modalId="geoModal" :focusMark="true" :coord_input="customer.geo_coord" @coordUpdate="coordinatesUpdated"></geoCoordinates>
 
 
     </div>
@@ -88,6 +94,8 @@
         },
         data() {
             return {
+                geoModal:"geoModalCreate",
+
                   Message:"",
                 MessageClass:"text-success",
                 
@@ -96,7 +104,13 @@
                 tel: "",
                 email: "",
 
-                customer:{},
+                customer:{
+                    name:"",
+                    tel:"",
+                    address:"",
+                    email:"",
+                    geo_coord:""
+                },
                 
 
 
@@ -104,9 +118,48 @@
 
             }
         },
+        computed:{
+            prettyGeoCoordinates: function(){
+                let lat=0,lng=0
+                if(this.customer.geo_coord == undefined)
+                    return "No Geo Coordinates Has Been Defined For This Customerr"
+
+
+                if(RegExp("[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+").test(this.customer.geo_coord)){
+                    lat = this.customer.geo_coord.split(",")[0]
+                    lng = this.customer.geo_coord.split(",")[1]
+                }else{
+                    return "No Geo Coordinates Has Been Defined For This Customerd"
+                }
+
+                let result = ""
+                if(lat >=0)
+                    result = lat+"<strong class='text-primary'> N </strong>"
+                else
+                    result = Math.abs(lat) + "<strong class='text-danger'> S </strong>"
+
+                if(lng >=0)
+                    result += lng+"<strong class='text-primary'> E </strong>"
+                else
+                    result += Math.abs(lng) + "<strong class='text-danger'> W </strong>"
+
+                return result;
+
+            }
+        },
         updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
 methods: {
-            
+            coordinatesUpdated: function(e){
+                if(RegExp("[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+").test(e)){
+                    this.customer.geo_coord = e
+
+                    
+                }
+            },
+            showMap: function(){
+                $("#"+this.geoModal).modal("show")
+
+            },
             untoggle_modal: function (id) {
                 $("#" + id).modal('hide');
             },

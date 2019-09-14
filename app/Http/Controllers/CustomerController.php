@@ -83,6 +83,7 @@ class CustomerController extends Controller
                     'email' => $request->email,
                     'tel' => $request->tel,
                     'address' => $request->address,
+                    'geo_coord' => $request->geo_coord,
                     'password' => Hash::make($request->email),
 
                 ]);

@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <geoCoordinates :focusMark="true" :coord_input="customer.geo_coord" @coordUpdate="coordinatesUpdated"></geoCoordinates>
+        <geoCoordinates :modalId="geoModal" :focusMark="true" :coord_input="customer.geo_coord" @coordUpdate="coordinatesUpdated"></geoCoordinates>
 
     </div>
 </template>
@@ -99,6 +99,7 @@
         },
         data() {
             return {
+                geoModal:"geoModalEdit",
                 Message:"",
                 MessageClass:"text-success",
 
@@ -150,7 +151,7 @@
                 }
             },
             showMap: function(){
-                $("#CartModal").modal("show")
+                $("#"+this.geoModal).modal("show")
 
             },
             getCustomer: function(customerId){

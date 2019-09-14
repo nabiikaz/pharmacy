@@ -4664,24 +4664,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['customerId'],
   mounted: function mounted() {},
   data: function data() {
     return {
+      geoModal: "geoModalCreate",
       Message: "",
       MessageClass: "text-success",
       name: "",
       address: "",
       tel: "",
       email: "",
-      customer: {}
+      customer: {
+        name: "",
+        tel: "",
+        address: "",
+        email: "",
+        geo_coord: ""
+      }
     };
+  },
+  computed: {
+    prettyGeoCoordinates: function prettyGeoCoordinates() {
+      var lat = 0,
+          lng = 0;
+      if (this.customer.geo_coord == undefined) return "No Geo Coordinates Has Been Defined For This Customerr";
+
+      if (RegExp("[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+").test(this.customer.geo_coord)) {
+        lat = this.customer.geo_coord.split(",")[0];
+        lng = this.customer.geo_coord.split(",")[1];
+      } else {
+        return "No Geo Coordinates Has Been Defined For This Customerd";
+      }
+
+      var result = "";
+      if (lat >= 0) result = lat + "<strong class='text-primary'> N </strong>";else result = Math.abs(lat) + "<strong class='text-danger'> S </strong>";
+      if (lng >= 0) result += lng + "<strong class='text-primary'> E </strong>";else result += Math.abs(lng) + "<strong class='text-danger'> W </strong>";
+      return result;
+    }
   },
   updated: function updated() {
     $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
+    coordinatesUpdated: function coordinatesUpdated(e) {
+      if (RegExp("[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+").test(e)) {
+        this.customer.geo_coord = e;
+      }
+    },
+    showMap: function showMap() {
+      $("#" + this.geoModal).modal("show");
+    },
     untoggle_modal: function untoggle_modal(id) {
       $("#" + id).modal('hide');
     },
@@ -4851,6 +4891,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      geoModal: "geoModalEdit",
       Message: "",
       MessageClass: "text-success",
       customer: {}
@@ -4885,7 +4926,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     showMap: function showMap() {
-      $("#CartModal").modal("show");
+      $("#" + this.geoModal).modal("show");
     },
     getCustomer: function getCustomer(customerId) {
       var _this = this;
@@ -8738,11 +8779,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "geoCoordinates",
-  props: ["coord_input", "unique_id", "focusMark"],
+  props: ["coord_input", "unique_id", "focusMark", "modalId"],
   mounted: function mounted() {
     this.init_map();
     var self = this;
-    $("#CartModal").mouseover(function () {
+    $("#" + this.modalId).mouseover(function () {
       if (self.map != null) self.map.getViewPort().resize();
     });
   },
@@ -8791,7 +8832,7 @@ __webpack_require__.r(__webpack_exports__);
     init_map: function init_map() {
       var _this = this;
 
-      document.getElementById('map').innerHTML = "";
+      document.getElementById(this.modalId + '_map').innerHTML = "";
       /**
       * Boilerplate map initialization code starts below:
       */
@@ -8803,7 +8844,7 @@ __webpack_require__.r(__webpack_exports__);
       });
       var defaultLayers = platform.createDefaultLayers(); //Step 2: initialize a map
 
-      this.map = new H.Map(document.getElementById('map'), defaultLayers.vector.normal.map, {
+      this.map = new H.Map(document.getElementById(this.modalId + '_map'), defaultLayers.vector.normal.map, {
         center: {
           lat: 34.900934001110215,
           lng: -1.3523289793706876
@@ -22686,7 +22727,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 exports.push([module.i, "@import url(https://js.api.here.com/v3/3.1/mapsjs-ui.css);", ""]);
 
 // module
-exports.push([module.i, "\n#map[data-v-7ca02b72] {\n    width: 100%;\n    height: 400px;\n    background: grey;\n}\n\n\n", ""]);
+exports.push([module.i, "\n#geoModalEdit_map[data-v-7ca02b72],#geoModalCreate_map[data-v-7ca02b72] {\n    width: 100%;\n    height: 400px;\n    background: grey;\n}\n\n\n\n", ""]);
 
 // exports
 
@@ -71701,194 +71742,247 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "modaladdcustomer",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "myModalLabel",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
-          [
-            _c("div", { staticClass: "modal-content" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body mx-3" }, [
-                _c(
-                  "form",
-                  {
-                    attrs: { method: "post" },
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return _vm.addCustomer($event)
+  return _c(
+    "div",
+    [
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "modaladdcustomer",
+            tabindex: "-1",
+            role: "dialog",
+            "aria-labelledby": "myModalLabel",
+            "aria-hidden": "true"
+          }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "modal-dialog", attrs: { role: "document" } },
+            [
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body mx-3" }, [
+                  _c(
+                    "form",
+                    {
+                      attrs: { method: "post" },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.addCustomer($event)
+                        }
                       }
-                    }
-                  },
-                  [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "md-form mb-2" }, [
-                      _c("label", { attrs: { for: "name" } }, [
-                        _vm._v("Fullname")
+                    },
+                    [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "md-form mb-2" }, [
+                        _c("label", { attrs: { for: "name" } }, [
+                          _vm._v("Fullname")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.customer.name,
+                              expression: "customer.name"
+                            }
+                          ],
+                          staticClass: "form-control ",
+                          attrs: {
+                            name: "name",
+                            type: "text",
+                            id: "name",
+                            required: "",
+                            minlength: "8",
+                            maxlength: "25"
+                          },
+                          domProps: { value: _vm.customer.name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.customer,
+                                "name",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.customer.name,
-                            expression: "customer.name"
-                          }
-                        ],
-                        staticClass: "form-control ",
-                        attrs: {
-                          name: "name",
-                          type: "text",
-                          id: "name",
-                          required: "",
-                          minlength: "8",
-                          maxlength: "25"
-                        },
-                        domProps: { value: _vm.customer.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                      _c("div", { staticClass: "md-form mb-2" }, [
+                        _c("label", { attrs: { for: "phone" } }, [
+                          _vm._v("Phone Number :")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.customer.tel,
+                              expression: "customer.tel"
                             }
-                            _vm.$set(_vm.customer, "name", $event.target.value)
+                          ],
+                          staticClass: "form-control ",
+                          attrs: {
+                            name: "phone number",
+                            type: "tel",
+                            id: "phone",
+                            required: "",
+                            pattern: "[0-9]{9}|[0-9]{10}"
+                          },
+                          domProps: { value: _vm.customer.tel },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.customer, "tel", $event.target.value)
+                            }
                           }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "md-form mb-2" }, [
-                      _c("label", { attrs: { for: "phone" } }, [
-                        _vm._v("Phone Number :")
+                        })
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.customer.tel,
-                            expression: "customer.tel"
-                          }
-                        ],
-                        staticClass: "form-control ",
-                        attrs: {
-                          name: "phone number",
-                          type: "tel",
-                          id: "phone",
-                          required: "",
-                          pattern: "[0-9]{9}|[0-9]{10}"
-                        },
-                        domProps: { value: _vm.customer.tel },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                      _c("div", { staticClass: "md-form mb-2" }, [
+                        _c("label", { attrs: { for: "address" } }, [
+                          _vm._v("Address")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.customer.address,
+                              expression: "customer.address"
                             }
-                            _vm.$set(_vm.customer, "tel", $event.target.value)
+                          ],
+                          staticClass: "form-control ",
+                          attrs: {
+                            name: "address",
+                            type: "text",
+                            id: "address",
+                            required: "",
+                            minlength: "8",
+                            maxlength: "25"
+                          },
+                          domProps: { value: _vm.customer.address },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.customer,
+                                "address",
+                                $event.target.value
+                              )
+                            }
                           }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "md-form mb-2" }, [
-                      _c("label", { attrs: { for: "address" } }, [
-                        _vm._v("Address")
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "row pl-2",
+                            staticStyle: { cursor: "pointer" },
+                            on: { click: _vm.showMap }
+                          },
+                          [
+                            _c("img", {
+                              attrs: {
+                                src: "/img/icons/marker.png",
+                                width: "30",
+                                height: "30",
+                                "data-tooltip": "tooltip",
+                                "data-title":
+                                  "Click Here To Point the Geo Coordinates"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("span", {
+                              staticStyle: {
+                                "font-size": "13px",
+                                color: "gray",
+                                "padding-top": "15px"
+                              },
+                              domProps: {
+                                innerHTML: _vm._s(_vm.prettyGeoCoordinates)
+                              }
+                            })
+                          ]
+                        )
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.customer.address,
-                            expression: "customer.address"
-                          }
-                        ],
-                        staticClass: "form-control ",
-                        attrs: {
-                          name: "address",
-                          type: "text",
-                          id: "address",
-                          required: "",
-                          minlength: "8",
-                          maxlength: "25"
-                        },
-                        domProps: { value: _vm.customer.address },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                      _c("div", { staticClass: "md-form mb-2" }, [
+                        _c("label", { attrs: { for: "email" } }, [
+                          _vm._v("Email")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.customer.email,
+                              expression: "customer.email"
                             }
-                            _vm.$set(
-                              _vm.customer,
-                              "address",
-                              $event.target.value
-                            )
+                          ],
+                          staticClass: "form-control ",
+                          attrs: { name: "email", type: "email", id: "email" },
+                          domProps: { value: _vm.customer.email },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.customer,
+                                "email",
+                                $event.target.value
+                              )
+                            }
                           }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "md-form mb-2" }, [
-                      _c("label", { attrs: { for: "email" } }, [
-                        _vm._v("Email")
+                        })
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.customer.email,
-                            expression: "customer.email"
-                          }
-                        ],
-                        staticClass: "form-control ",
-                        attrs: { name: "email", type: "email", id: "email" },
-                        domProps: { value: _vm.customer.email },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.customer, "email", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("span", { class: _vm.MessageClass }, [
-                      _vm._v(_vm._s(_vm.Message))
-                    ]),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _vm._m(2)
-                  ]
-                )
+                      _c("span", { class: _vm.MessageClass }, [
+                        _vm._v(_vm._s(_vm.Message))
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _vm._m(2)
+                    ]
+                  )
+                ])
               ])
-            ])
-          ]
-        )
-      ]
-    )
-  ])
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("geoCoordinates", {
+        attrs: {
+          modalId: _vm.geoModal,
+          focusMark: true,
+          coord_input: _vm.customer.geo_coord
+        },
+        on: { coordUpdate: _vm.coordinatesUpdated }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function() {
@@ -72195,7 +72289,11 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("geoCoordinates", {
-        attrs: { focusMark: true, coord_input: _vm.customer.geo_coord },
+        attrs: {
+          modalId: _vm.geoModal,
+          focusMark: true,
+          coord_input: _vm.customer.geo_coord
+        },
         on: { coordUpdate: _vm.coordinatesUpdated }
       })
     ],
@@ -79210,58 +79308,54 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c(
+      "div",
+      {
+        staticClass: "modal fade ",
+        attrs: { id: _vm.modalId, tabindex: "-1", role: "dialog" }
+      },
+      [
+        _c("div", { staticClass: "modal-dialog modal-lg" }, [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "modal-body", attrs: { id: "CartModalBody" } },
+              [_c("div", { attrs: { id: _vm.modalId + "_map" } })]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" })
+          ])
+        ])
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
+    return _c("div", { staticClass: "modal-header " }, [
+      _c("div", { staticClass: "w-100 text-center" }, [
+        _c("h3", { staticClass: "modal-title " }, [
+          _vm._v("Customer Coordinates")
+        ])
+      ]),
+      _vm._v(" "),
       _c(
-        "div",
+        "button",
         {
-          staticClass: "modal fade ",
-          attrs: { id: "CartModal", tabindex: "-1", role: "dialog" }
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
         },
-        [
-          _c("div", { staticClass: "modal-dialog modal-lg" }, [
-            _c("div", { staticClass: "modal-content" }, [
-              _c("div", { staticClass: "modal-header " }, [
-                _c("div", { staticClass: "w-100 text-center" }, [
-                  _c("h3", { staticClass: "modal-title " }, [
-                    _vm._v("Customer Coordinates")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "close",
-                    attrs: {
-                      type: "button",
-                      "data-dismiss": "modal",
-                      "aria-label": "Close"
-                    }
-                  },
-                  [
-                    _c("span", { attrs: { "aria-hidden": "true" } }, [
-                      _vm._v("×")
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "modal-body", attrs: { id: "CartModalBody" } },
-                [_c("div", { attrs: { id: "map" } })]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" })
-            ])
-          ])
-        ]
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
     ])
   }
