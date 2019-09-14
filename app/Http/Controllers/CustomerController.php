@@ -64,13 +64,13 @@ class CustomerController extends Controller
         
         //test if the request has the image : 
 
-
                 //validate email and tel uniqueness
                 $request->validate([
                     'email' => 'email|unique:users,email',
                     'name'  => 'required|min:8|max:25',
                     'tel'   => 'required',
                     'address' => 'required',
+                    "refund_rate" => 'required|numeric|between:0,99.99',
 
                 ]);
 
@@ -85,6 +85,7 @@ class CustomerController extends Controller
                     'address' => $request->address,
                     'geo_coord' => $request->geo_coord,
                     'password' => Hash::make($request->email),
+                    "refund_rate" => $request->refund_rate,
 
                 ]);
 

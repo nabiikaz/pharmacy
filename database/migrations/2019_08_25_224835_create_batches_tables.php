@@ -31,7 +31,7 @@ class CreateBatchesTables extends Migration
             $table->unsignedMediumInteger("quantity");//this is the quantity purchases 
             $table->unsignedMediumInteger("quantity_stock");//this is the quantity remaining in the stock 
             $table->unsignedMediumInteger("quantity_min");//this is the alert quantity minimum
-            $table->integer("refund_rate");
+            $table->float("refund_rate",4,2)->default(0);
 
 //            $table->timestamps();
             

@@ -40,6 +40,9 @@
                        
                         <th :class="(selected_column == 'email')? 'select-search':''"
                             @click="((selected_column == 'email'))? selected_column='':selected_column = 'email' ">email</th>
+
+                        <th class="text-center" :class="(selected_column == 'refund_rate')? 'select-search':''"
+                         @click="(selected_column == 'refund_rate')? selected_column='':selected_column = 'refund_rate'"  >Refund</th>
                         
                         <th>Action</th>
                     </tr>
@@ -54,6 +57,10 @@
                         <td  :class="(selected_column == 'address')? 'select-search-data':''">{{customer.address}}</td>
                         <td  :class="(selected_column == 'tel')? 'select-search-data':''">{{customer.tel}}</td>
                         <td  :class="(selected_column == 'email')? 'select-search-data':''">{{customer.email}}</td>
+                        <td class="d-flex justify-content-center" :class="(selected_column == 'refund_rate')? 'select-search-data':''"
+                                                             data-tooltip="tooltip" :data-original-title="customer.refund_rate+' %'" >
+                            <img width="22" height="22" v-bind:src="(customer.refund_rate > 0)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon" >
+                        </td>
                         <td  >
                            <a href="#" class="settings " title="" data-tooltip="tooltip" data-original-title="Settings"
                                 v-on:click="settings(customer.id)"><img src="/img/icons/edit.png" width="22" ></a>

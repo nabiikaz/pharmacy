@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->date('birthday')->nullable();
             $table->string('address')->nullable();
             $table->string('geo_coord')->default("");
+            $table->float("refund_rate",4,2)->default(0);//if this user is a customer then this is his purchase refund rate
             $table->string('Img')->default("man.jpg");
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

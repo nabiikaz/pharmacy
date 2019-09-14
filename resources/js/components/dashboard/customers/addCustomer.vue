@@ -49,13 +49,22 @@
                                         </div>
                             </div>
 
-                             <div class="md-form mb-2">
+                            <div class="md-form mb-2">
 
 
                               <label for="email">Email</label>
 
-                                        <input name="email" type="email" id="email" class="form-control " 
+                                        <input name="email" type="email" id="email" class="form-control " required
                                         v-model="customer.email" >
+                            </div>
+
+                            <div class="md-form mb-2">
+
+
+                                <label for="refund">Refund</label>
+
+                                        <input name="refund" type="number" id="refund" class="form-control "
+                                            v-model="customer.refund_rate" required step="0.01"   min="0" max="100">
                             </div>
 
                             <span :class="MessageClass">{{Message}}</span>
@@ -109,7 +118,8 @@
                     tel:"",
                     address:"",
                     email:"",
-                    geo_coord:""
+                    geo_coord:"",
+                    refund_rate:0
                 },
                 
 

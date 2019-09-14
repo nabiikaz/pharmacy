@@ -50,6 +50,15 @@
                                         v-model="customer.email" required>
                             </div>
 
+                            <div class="md-form mb-2">
+
+
+                                <label for="refund">Refund</label>
+
+                                        <input name="refund" type="number" id="refund" class="form-control "
+                                            v-model="customer.refund_rate" required   step="0.01" min="0" max="100">
+                            </div>
+
 
 
                             <hr>
