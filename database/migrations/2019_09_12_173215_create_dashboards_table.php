@@ -20,6 +20,11 @@ class CreateDashboardsTable extends Migration
             //$table->time('close_time')->default("23:59:00");	
             $table->float("tax",4,2)->default(19.00); //the generale tax percentage
             $table->float("shipping_price")->default(300);//shipping price with the default price when the shippement is in the same city 
+            $table->string("store_name");
+            $table->string("store_email");
+            $table->string("address1");
+            $table->string("address2")->default("");
+            $table->string("tel");
             $table->timestamps();
         });
     }

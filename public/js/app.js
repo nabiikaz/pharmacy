@@ -6660,6 +6660,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getsales();
@@ -6673,6 +6686,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      iframeStatus: true,
+      invoiceAction: "view",
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       batchId: this.$attrs.batchId,
       route: window.location.pathname,
@@ -6704,6 +6719,8 @@ __webpack_require__.r(__webpack_exports__);
     $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
+    //iframeLoaded fires when the iframe is fully loaded 
+    iframeLoaded: function iframeLoaded() {},
     //get Purchases in the current page 
     getsales: function getsales() {
       var _this = this;
@@ -75552,7 +75569,7 @@ var render = function() {
                     },
                     on: {
                       click: function($event) {
-                        _vm.selectedSale_Id = sale.Id
+                        _vm.selectedSale_Id = sale.id
                       }
                     }
                   },
@@ -75697,7 +75714,7 @@ var render = function() {
               {
                 staticClass: "modal-content ",
                 staticStyle: {
-                  "border-top-left-radius": "10px",
+                  "border-top-left-radius": "5px",
                   "border-top-right-radius": "10px"
                 }
               },
@@ -75705,18 +75722,83 @@ var render = function() {
                 _vm._m(3),
                 _vm._v(" "),
                 _c("div", { staticClass: "modal-body" }, [
+                  _vm.iframeStatus
+                    ? _c("img", {
+                        staticStyle: {
+                          position: "absolute",
+                          "margin-top": "150px",
+                          "margin-left": "350px"
+                        },
+                        attrs: { src: "/img/icons/load.gif" }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c("iframe", {
                     attrs: {
                       src:
                         _vm.selectedSale_Id > -1
-                          ? "/dashboard/medicines/sales/invoice/" +
-                            _vm.selectedSale_Id
+                          ? "/invoice/sales/" +
+                            _vm.selectedSale_Id +
+                            "?action=" +
+                            _vm.invoiceAction
                           : "",
                       frameborder: "0",
                       width: "770",
-                      height: "480"
+                      height: "400"
+                    },
+                    on: {
+                      load: function($event) {
+                        _vm.iframeStatus = false
+                      }
                     }
                   })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c("div", { staticClass: "row w-100" }, [
+                    _c("div", { staticClass: "col-6" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary w-100",
+                          on: {
+                            click: function($event) {
+                              _vm.invoiceAction == "view"
+                                ? (_vm.invoiceAction = "")
+                                : (_vm.invoiceAction = "view")
+                              _vm.iframeStatus = true
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "View" +
+                              _vm._s(
+                                _vm.invoiceAction == "view"
+                                  ? " As PDF"
+                                  : " As Html Page"
+                              )
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success w-100",
+                          on: {
+                            click: function($event) {
+                              _vm.invoiceAction = "download"
+                              _vm.iframeStatus = true
+                            }
+                          }
+                        },
+                        [_vm._v("Download PDF")]
+                      )
+                    ])
+                  ])
                 ])
               ]
             )

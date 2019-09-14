@@ -12,13 +12,17 @@
 */
 
 
-
-Route::get("invoice",function(){
-
-    $pdf = PDF::loadView('invoices.sales',["data"=>'coco']);
-    return $pdf->stream();
-
+Route::get("invoices",function(){
+    return view("invoices.sales");
 });
+Route::prefix("invoice")->group(function(){
+
+    Route::get("sales/{id}","InvoiceController@salesInvoice");
+});
+
+    
+
+
 
 Route::prefix("permissions")->group(function(){
     

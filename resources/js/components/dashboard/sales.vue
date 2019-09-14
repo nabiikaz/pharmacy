@@ -94,7 +94,7 @@
 
                         <td class="text-center">
                             <a href="#" class="invoice" title="" data-tooltip="tooltip" data-original-title="invoice"
-                                data-toggle="modal" data-target="#modalinvoice" @click="selectedSale_Id=sale.Id"><img
+                                data-toggle="modal" data-target="#modalinvoice" @click="selectedSale_Id=sale.id"><img
                                     src="/img/icons/bill.png" width="22"></a>
 
                            
@@ -135,7 +135,7 @@
 
         <div id="modalinvoice" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content " style="border-top-left-radius:10px;border-top-right-radius:10px;">
+                <div class="modal-content " style="border-top-left-radius:5px;border-top-right-radius:10px; ">
                     <div class="modal-header bg-success text-center">
                         <h4 class="modal-title  w-100 font-weight-bold text-white">View Invoice</h4>
                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
@@ -143,8 +143,21 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <iframe :src="(selectedSale_Id > -1)? '/dashboard/medicines/sales/invoice/'+selectedSale_Id:''"
-                            frameborder="0" width="770" height="480"></iframe>
+                        <img src="/img/icons/load.gif" v-if="iframeStatus" style="position:absolute;margin-top:150px;margin-left:350px;">
+                        <iframe :src="(selectedSale_Id > -1)? '/invoice/sales/'+selectedSale_Id+'?action='+invoiceAction:''"
+                            frameborder="0" width="770" height="400" v-on:load="iframeStatus=false"></iframe>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="row w-100">
+                            <div class="col-6">
+                                <button class="btn btn-primary w-100" @click="(invoiceAction=='view')? invoiceAction='':invoiceAction='view';iframeStatus=true">View{{(invoiceAction=='view')? ' As PDF':' As Html Page'}}</button>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-success w-100" @click="invoiceAction='download'; iframeStatus=true">Download PDF</button>
+                            </div>
+                            
+                        </div>
                     </div>
 
                 </div>
@@ -185,6 +198,8 @@
         data() {
 
             return {
+                iframeStatus:true,
+                invoiceAction:"view",
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 batchId: this.$attrs.batchId,
                 route: window.location.pathname,
@@ -231,6 +246,10 @@
 
         updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
         methods: {
+            //iframeLoaded fires when the iframe is fully loaded 
+            iframeLoaded: function(){
+                
+            },
             //get Purchases in the current page 
             getsales: function(){
                 /** get Purchases in the current page using the server's API with (axios)
