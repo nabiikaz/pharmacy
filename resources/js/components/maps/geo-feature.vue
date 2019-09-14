@@ -9,7 +9,7 @@
                 <div class="modal-content">
                     <div class="modal-header ">
                         <div class="w-100 text-center">
-                            <h3 class="modal-title ">Customer Coordinates</h3>
+                            <h3 class="modal-title ">{{title}}</h3>
                         </div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -38,7 +38,7 @@ import { timeout } from 'q';
 
 export default {
     name:"geoCoordinates",
-    props:["coord_input","unique_id","focusMark","modalId"],
+    props:["coord_input","unique_id","focusMark","modalId","title"],
     mounted() {
         this.init_map()
         var self = this
@@ -58,6 +58,7 @@ export default {
 
     data(){
         return {
+            
             apikey:'rGOxW4XB821m0ZE1YmUg3G9DzmwVjU57MflxIQqCdZk',
             coord : null,
             markerObject:null,
@@ -131,7 +132,7 @@ export default {
 
             //Step 2: initialize a map
             this.map = new H.Map(document.getElementById(this.modalId+'_map'),
-            defaultLayers.vector.normal.map,{
+            defaultLayers.raster.satellite.map,{
             center: {lat: 34.900934001110215, lng: -1.3523289793706876},
             zoom: 10,
            

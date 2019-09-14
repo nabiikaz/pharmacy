@@ -76,7 +76,7 @@
             </div>
         </div>
 
-       <geoCoordinates :modalId="geoModal" :focusMark="true" :coord_input="customer.geo_coord" @coordUpdate="coordinatesUpdated"></geoCoordinates>
+       <geoCoordinates :title="'Add Customer Coordinates'" :modalId="geoModal" :focusMark="true" :coord_input="customer.geo_coord" @coordUpdate="coordinatesUpdated"></geoCoordinates>
 
 
     </div>
@@ -122,14 +122,14 @@
             prettyGeoCoordinates: function(){
                 let lat=0,lng=0
                 if(this.customer.geo_coord == undefined)
-                    return "No Geo Coordinates Has Been Defined For This Customerr"
+                    return "No Geo Coordinates Has Been Defined For This Customer"
 
 
                 if(RegExp("[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+").test(this.customer.geo_coord)){
                     lat = this.customer.geo_coord.split(",")[0]
                     lng = this.customer.geo_coord.split(",")[1]
                 }else{
-                    return "No Geo Coordinates Has Been Defined For This Customerd"
+                    return "No Geo Coordinates Has Been Defined For This Customer"
                 }
 
                 let result = ""

@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <geoCoordinates :modalId="geoModal" :focusMark="true" :coord_input="customer.geo_coord" @coordUpdate="coordinatesUpdated"></geoCoordinates>
+        <geoCoordinates :title="'Modify Customer Coordinates'" :modalId="geoModal" :focusMark="true" :coord_input="customer.geo_coord" @coordUpdate="coordinatesUpdated"></geoCoordinates>
 
     </div>
 </template>
@@ -242,7 +242,7 @@
                              * status code that falls out of the range of 2**
                              *  */
                             console.log(error.response)
-                            this.Message = "Error : "+ error.response.data.errors
+                            this.Message = "Error : "+ Object.values(error.response.data.errors)[0][0]
                             this.MessageClass = "text-danger"
                              switch (error.response.status) {
                             case 404:
