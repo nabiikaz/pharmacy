@@ -69,6 +69,17 @@
                         <th class="text-center" :class="(selected_column == 'total_price')? 'select-search':''"
                             @click="((selected_column == 'total_price'))? selected_column='':selected_column = 'total_price'">Total Price
                         </th>
+
+                        <th class="text-center" :class="(selected_column == 'delivery')? 'select-search':''"
+                            @click="(selected_column == 'delivery')? selected_column='':selected_column = 'delivery'"  >
+                            Is Delivery
+                         </th>
+
+                        <th class="text-center" :class="(selected_column == 'paid')? 'select-search':''"
+                            @click="(selected_column == 'paid')? selected_column='':selected_column = 'paid'"  >
+                            Payment
+                        </th>
+
                         <th class="text-center" style="width:170px;">Action</th>
                     </tr>
                 </thead>
@@ -90,10 +101,18 @@
                         <td class="text-center" :class="(selected_column == 'total_price')? 'select-search-data':''">
                             {{sale.total_price }}</td>
 
+                         <td class="d-flex justify-content-center" :class="(selected_column == 'refund_rate')? 'select-search-data':''" >
+                            <img width="22" height="22" v-bind:src="(sale.delivery)? '/img/icons/checkmark.png':'/img/icons/xmark.png'" class="icon"
+                                data-tooltip="tooltip" :data-original-title="sale.delivery ? 'Purchase Made By Customer':'Sale Made By Pharmacist'" data-deplacement="left" >
+                        </td>
+
+                        <td class="text-center text-whi  "  :class="(selected_column == 'paid')? 'select-search-data '+((sale.paid) ? 'bg-success':'bg-danger'):' '+((sale.paid) ? 'bg-success':'bg-danger') "
+                        v-html="sale.paid ? 'PAID':'NOT PAID'"> </td>
+
 
 
                         <td class="text-center">
-                            <a href="#" class="invoice" title="" data-tooltip="tooltip" data-original-title="invoice"
+                            <a href="#" class="invoice" title="" data-tooltip="tooltip" data-original-title="invoice" data-placement="left"
                                 data-toggle="modal" data-target="#modalinvoice" @click="selectedSale_Id=sale.id"><img
                                     src="/img/icons/bill.png" width="22"></a>
 

@@ -12,9 +12,9 @@
 */
 
 
-Route::get("invoices",function(){
+/*Route::get("invoices",function(){
     return view("invoices.sales");
-});
+});*/
 Route::prefix("invoice")->group(function(){
 
     Route::get("sales/{id}","InvoiceController@salesInvoice");
@@ -43,7 +43,7 @@ Route::get("logout",function(){
     return redirect()->route("index");
 });
 //->middleware("role:admin|moderator")
-Route::prefix('dashboard')->middleware("auth")->group(function(){
+Route::prefix('dashboard')->middleware("auth","role:admin|moderator,api")->group(function(){
     Route::get('/',function(){
         return view('layouts.dashboard');
     });

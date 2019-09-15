@@ -68,7 +68,7 @@
 
 
         <div class="modal fade " id="CartModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
 
                 <div class="modal-content">
                     <div class="modal-header ">
@@ -92,7 +92,11 @@
                                                     <th scope="col" class="text-center">Medicine</th>
                                                     <th scope="col" style="width:20px;">Available</th>
                                                     <th scope="col" style="width:8px;" class="text-center">Quantity</th>
-                                                    <th scope="col" style="width:100px;" class="text-right">Price</th>
+                                                    <th scope="col" style="width:100px;" class="text-right">Unit Price</th>
+                                                    <th scope="col" v-if="customer_refund > 0" style="width:150px;" class="text-center">Refund Rate</th>
+                                                    <th scope="col" v-if="customer_refund > 0" style="width:100px;" class="text-center">Total</th>
+                                                    
+
                                                     <th style="width:8px;"> </th>
                                                 </tr>
                                             </thead>
@@ -106,6 +110,8 @@
                                                                 :min="1" :max="medicine.max" @change="event => pushToCart(medicine.id,event)" />
                                                     </td>
                                                     <td class="text-right">{{medicine.price}} DA</td>
+                                                    <td  v-if="customer_refund > 0" class="text-center">{{customer_refund}} %</td>
+                                                    <td  v-if="customer_refund > 0" class="text-center">{{medicine.price-(medicine.price * customer_refund/100)}} DA</td>
                                                     <td class="text-right" style="width:8px;">
                                                         <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete" @click="deleteMedicine(medicine.id)">
                                                             <img src="/img/icons/trash.png" width="24">
@@ -124,6 +130,11 @@
                                         <div class="row" style="margin-right:50px;">
                                             <div class="col-10 text-right">Sub-Total</div>
                                             <div class="col-2 text-right pr-2">{{invoice.sub_total}} DA</div>
+                                        </div>
+
+                                        <div class="row" v-if="customer_refund > 0" style="margin-right:50px;">
+                                            <div class="col-10 text-right" >Personal Refund Rate</div>
+                                            <div class="col-2 text-right pr-2">{{customer_refund}} %</div>
                                         </div>
 
                                         <div class="row" style="margin-right:50px;">
@@ -188,6 +199,7 @@
                     shipping:0,
                     total:0,
                 },
+                customer_refund:0
 
             }
         },
@@ -322,6 +334,7 @@
                        
                           this.medicines = Response.data.data
                           this.invoice = Response.data.invoice
+                          this.customer_refund = Response.data.customer_refund
 
                     
 

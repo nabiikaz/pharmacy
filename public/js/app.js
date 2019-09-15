@@ -6709,6 +6709,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getsales();
@@ -8750,6 +8769,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["medicine_id"],
   mounted: function mounted() {
@@ -8766,7 +8796,8 @@ __webpack_require__.r(__webpack_exports__);
         tax: 0,
         shipping: 0,
         total: 0
-      }
+      },
+      customer_refund: 0
     };
   },
   watch: {
@@ -8871,6 +8902,7 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('/api/cart').then(function (Response) {
         _this4.medicines = Response.data.data;
         _this4.invoice = Response.data.invoice;
+        _this4.customer_refund = Response.data.customer_refund;
       })["catch"](function (error) {
         if (error.response) {
           /**
@@ -75733,6 +75765,46 @@ var render = function() {
             _vm._v(" "),
             _c(
               "th",
+              {
+                staticClass: "text-center",
+                class: _vm.selected_column == "delivery" ? "select-search" : "",
+                on: {
+                  click: function($event) {
+                    _vm.selected_column == "delivery"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "delivery")
+                  }
+                }
+              },
+              [
+                _vm._v(
+                  "\n                        Is Delivery\n                     "
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              {
+                staticClass: "text-center",
+                class: _vm.selected_column == "paid" ? "select-search" : "",
+                on: {
+                  click: function($event) {
+                    _vm.selected_column == "paid"
+                      ? (_vm.selected_column = "")
+                      : (_vm.selected_column = "paid")
+                  }
+                }
+              },
+              [
+                _vm._v(
+                  "\n                        Payment\n                    "
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
               { staticClass: "text-center", staticStyle: { width: "170px" } },
               [_vm._v("Action")]
             )
@@ -75795,6 +75867,44 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
+              _c(
+                "td",
+                {
+                  staticClass: "d-flex justify-content-center",
+                  class:
+                    _vm.selected_column == "refund_rate"
+                      ? "select-search-data"
+                      : ""
+                },
+                [
+                  _c("img", {
+                    staticClass: "icon",
+                    attrs: {
+                      width: "22",
+                      height: "22",
+                      src: sale.delivery
+                        ? "/img/icons/checkmark.png"
+                        : "/img/icons/xmark.png",
+                      "data-tooltip": "tooltip",
+                      "data-original-title": sale.delivery
+                        ? "Purchase Made By Customer"
+                        : "Sale Made By Pharmacist",
+                      "data-deplacement": "left"
+                    }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c("td", {
+                staticClass: "text-center text-whi  ",
+                class:
+                  _vm.selected_column == "paid"
+                    ? "select-search-data " +
+                      (sale.paid ? "bg-success" : "bg-danger")
+                    : " " + (sale.paid ? "bg-success" : "bg-danger"),
+                domProps: { innerHTML: _vm._s(sale.paid ? "PAID" : "NOT PAID") }
+              }),
+              _vm._v(" "),
               _c("td", { staticClass: "text-center" }, [
                 _c(
                   "a",
@@ -75805,6 +75915,7 @@ var render = function() {
                       title: "",
                       "data-tooltip": "tooltip",
                       "data-original-title": "invoice",
+                      "data-placement": "left",
                       "data-toggle": "modal",
                       "data-target": "#modalinvoice"
                     },
@@ -79474,7 +79585,7 @@ var render = function() {
         }
       },
       [
-        _c("div", { staticClass: "modal-dialog modal-lg" }, [
+        _c("div", { staticClass: "modal-dialog modal-xl" }, [
           _c("div", { staticClass: "modal-content" }, [
             _vm._m(2),
             _vm._v(" "),
@@ -79484,7 +79595,73 @@ var render = function() {
                   _c("div", { staticClass: "col-12" }, [
                     _c("div", { staticClass: "table-responsive" }, [
                       _c("table", { staticClass: "table table-striped" }, [
-                        _vm._m(3),
+                        _c("thead", [
+                          _c("tr", [
+                            _c(
+                              "th",
+                              {
+                                staticClass: "text-center",
+                                attrs: { scope: "col" }
+                              },
+                              [_vm._v("Medicine")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              {
+                                staticStyle: { width: "20px" },
+                                attrs: { scope: "col" }
+                              },
+                              [_vm._v("Available")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              {
+                                staticClass: "text-center",
+                                staticStyle: { width: "8px" },
+                                attrs: { scope: "col" }
+                              },
+                              [_vm._v("Quantity")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "th",
+                              {
+                                staticClass: "text-right",
+                                staticStyle: { width: "100px" },
+                                attrs: { scope: "col" }
+                              },
+                              [_vm._v("Unit Price")]
+                            ),
+                            _vm._v(" "),
+                            _vm.customer_refund > 0
+                              ? _c(
+                                  "th",
+                                  {
+                                    staticClass: "text-center",
+                                    staticStyle: { width: "150px" },
+                                    attrs: { scope: "col" }
+                                  },
+                                  [_vm._v("Refund Rate")]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.customer_refund > 0
+                              ? _c(
+                                  "th",
+                                  {
+                                    staticClass: "text-center",
+                                    staticStyle: { width: "100px" },
+                                    attrs: { scope: "col" }
+                                  },
+                                  [_vm._v("Total")]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("th", { staticStyle: { width: "8px" } })
+                          ])
+                        ]),
                         _vm._v(" "),
                         _c(
                           "tbody",
@@ -79517,6 +79694,25 @@ var render = function() {
                               _c("td", { staticClass: "text-right" }, [
                                 _vm._v(_vm._s(medicine.price) + " DA")
                               ]),
+                              _vm._v(" "),
+                              _vm.customer_refund > 0
+                                ? _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(_vm._s(_vm.customer_refund) + " %")
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.customer_refund > 0
+                                ? _c("td", { staticClass: "text-center" }, [
+                                    _vm._v(
+                                      _vm._s(
+                                        medicine.price -
+                                          (medicine.price *
+                                            _vm.customer_refund) /
+                                            100
+                                      ) + " DA"
+                                    )
+                                  ])
+                                : _vm._e(),
                               _vm._v(" "),
                               _c(
                                 "td",
@@ -79576,6 +79772,27 @@ var render = function() {
                       ]
                     ),
                     _vm._v(" "),
+                    _vm.customer_refund > 0
+                      ? _c(
+                          "div",
+                          {
+                            staticClass: "row",
+                            staticStyle: { "margin-right": "50px" }
+                          },
+                          [
+                            _c("div", { staticClass: "col-10 text-right" }, [
+                              _vm._v("Personal Refund Rate")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "col-2 text-right pr-2" },
+                              [_vm._v(_vm._s(_vm.customer_refund) + " %")]
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c(
                       "div",
                       {
@@ -79617,7 +79834,7 @@ var render = function() {
                         staticStyle: { "margin-right": "50px" }
                       },
                       [
-                        _vm._m(4),
+                        _vm._m(3),
                         _vm._v(" "),
                         _c(
                           "div",
@@ -79639,7 +79856,7 @@ var render = function() {
             _c("div", { staticClass: "modal-footer" }, [
               _c("div", { staticClass: "col " }, [
                 _c("div", { staticClass: "row" }, [
-                  _vm._m(5),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-sm-12 col-md-6 text-right" }, [
                     _c(
@@ -79720,44 +79937,6 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { staticClass: "text-center", attrs: { scope: "col" } }, [
-          _vm._v("Medicine")
-        ]),
-        _vm._v(" "),
-        _c("th", { staticStyle: { width: "20px" }, attrs: { scope: "col" } }, [
-          _vm._v("Available")
-        ]),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-center",
-            staticStyle: { width: "8px" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Quantity")]
-        ),
-        _vm._v(" "),
-        _c(
-          "th",
-          {
-            staticClass: "text-right",
-            staticStyle: { width: "100px" },
-            attrs: { scope: "col" }
-          },
-          [_vm._v("Price")]
-        ),
-        _vm._v(" "),
-        _c("th", { staticStyle: { width: "8px" } })
-      ])
     ])
   },
   function() {

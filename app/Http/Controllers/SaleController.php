@@ -46,7 +46,7 @@ class SaleController extends Controller
         $sales = Sale::where($selected_column,"like", "%".$search."%")        
                             ->join("users as pharmacists","pharmacists.id","=","sales.user_id")
                             ->join("users as customers","customers.id","=","sales.customer_id")
-                            ->select("sales.id","total_price","pharmacists.name as pharmacist","customers.name as customer","sales.created_at as created_at")
+                            ->select("sales.id","total_price","pharmacists.name as pharmacist","customers.name as customer","sales.created_at as created_at","delivery","paid")
                             ->orderBy($selected_column,$orderby)
                             ->paginate(5);
 

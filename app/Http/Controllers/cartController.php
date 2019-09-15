@@ -30,37 +30,48 @@ class cartController extends Controller
         
         $result = Medicine::whereIn("batches.id",array_keys($client_session_array))
                             ->join("batches","batches.medicine_id","=","medicines.id")
-                            ->select("batches.id as id","medicine_name as name","dosage","family","form","quantity_stock","quantity_min","unit_price")
+                            ->select("batches.id as id","medicine_name as name","dosage","family","form","quantity_stock","quantity_min","unit_price","refund_rate")
                             ->get();
 
 
         //get tax percentage and shipping default price 
         $tax_shipping = Dashboard::orderBy("created_at","DESC")->select("tax","shipping_price")->first();
-        $sub_total = 0;
+        
 
-        if($customer == null)
+        $sub_total = 0;
+        $customer_refund = 0;
+        if($customer == null){
             foreach ($result as $value) {
                 $sub_total += $client_session_array[$value->id] * $value->unit_price;
             }
+
+            
+        }  
         else{
-            if($customer->refund_rate > 0)
+            $customer_refund = $customer->refund_rate;
+            if($customer->refund_rate > 0){
                 foreach ($result as $value) {
                     $sub_total += $client_session_array[$value->id] * ($value->unit_price-($value->unit_price * $value->refund_rate/100)*$customer->refund_rate/100);
                 }
+            
+                
+            }
             else 
                 foreach ($result as $value) {
                     $sub_total += $client_session_array[$value->id] * $value->unit_price;
                 }
         }
-
-       
+        
+        $total = 0;
+        if($result->count() > 0)        
+            $total = round(($sub_total +($sub_total * $tax_shipping->tax / 100)+ $tax_shipping->shipping_price),2);
         
         return CartResource::collection($result)->additional(['invoice' => [
                             'sub_total' => round($sub_total,2),
                             'tax' => round($sub_total * $tax_shipping->tax /100,2),
                             'shipping' =>  round($tax_shipping->shipping_price,2),
-                            'total' => round(($sub_total +($sub_total * $tax_shipping->tax / 100)+ $tax_shipping->shipping_price),2)
-                        ]]);
+                            'total' => $total
+        ],"customer_refund" => $customer_refund ]);
 
     }
 
