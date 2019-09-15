@@ -31,6 +31,7 @@ Route::apiResource('medicines_','MedicineFrontController');
 
 
 Route::apiResource("cart","cartController");
+Route::post("cart/checkout","cartController@checkout")->middleware("auth");
 
 
 

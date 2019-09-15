@@ -145,6 +145,8 @@
                             </div>
                         </div>
 
+                        <div :class="MessageStyle" v-html="Message"></div>
+
                     </div>
                     <div class="modal-footer">
                          <div class="col ">
@@ -153,8 +155,7 @@
                                             <button class="btn btn-block btn-primary "  data-dismiss="modal">Continue Shopping</button>
                                         </div>
                                         <div class="col-sm-12 col-md-6 text-right">
-                                            <button
-                                                class="btn btn-block btn-success ">Checkout</button>
+                                            <button class="btn btn-block btn-success " @click="checkOutCart">Checkout</button>
                                         </div>
                                     </div>
                                 </div>
@@ -177,7 +178,8 @@
         },
         data(){
             return {
-                
+                Message:"",
+                MessageStyle:"text-primary",
                 crsf:$("meta[name='csrf-token']").attr("content"),
                 medicines:[],
                 invoice:{
@@ -198,6 +200,48 @@
            
         },
         methods:{
+            checkOutCart: function(){
+                 axios.post('/api/cart/checkout')
+                    .then((Response)=>{
+                       
+                        this.getMedicines()
+                        if(Response.data == "empty"){
+                            this.Message = "Cart Empty"    
+                            this.MessageStyle = "text-danger"
+
+                        }else{
+                            this.Message = "Cart CheckedOut successefuly."
+                            this.MessageStyle = "text-primary"
+
+                        }
+
+
+                    }).catch(error => {
+                        
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+
+                                
+                            this.Message = "Error!: "+error.response.statusText+" <b> <a href='/login'>Click Here</a></b><span style='color:gray'>To Login :<span>"
+                            this.MessageStyle = "text-danger"
+                            
+                             switch (error.response.status) {
+                            case 404:
+
+                                
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                        }
+                    })
+            },
             pushToCart: function(id,event=null){
                let quantity=1;
                if (event != null) {
@@ -269,7 +313,7 @@
             },
 
             /**
-             * get medicines stored in the redis session
+             * get medicines stored in the  session
              */
             getMedicines: function(){
 

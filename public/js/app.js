@@ -8749,6 +8749,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["medicine_id"],
   mounted: function mounted() {
@@ -8756,6 +8757,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      Message: "",
+      MessageStyle: "text-primary",
       crsf: $("meta[name='csrf-token']").attr("content"),
       medicines: [],
       invoice: {
@@ -8773,8 +8776,40 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    pushToCart: function pushToCart(id) {
+    checkOutCart: function checkOutCart() {
       var _this = this;
+
+      axios.post('/api/cart/checkout').then(function (Response) {
+        _this.getMedicines();
+
+        if (Response.data == "empty") {
+          _this.Message = "Cart Empty";
+          _this.MessageStyle = "text-danger";
+        } else {
+          _this.Message = "Cart CheckedOut successefuly.";
+          _this.MessageStyle = "text-primary";
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          _this.Message = "Error!: " + error.response.statusText + " <b> <a href='/login'>Click Here</a></b><span style='color:gray'>To Login :<span>";
+          _this.MessageStyle = "text-danger";
+
+          switch (error.response.status) {
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
+    },
+    pushToCart: function pushToCart(id) {
+      var _this2 = this;
 
       var event = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       var quantity = 1;
@@ -8787,7 +8822,7 @@ __webpack_require__.r(__webpack_exports__);
         id: id,
         quantity: quantity
       }).then(function (Response) {
-        _this.getMedicines();
+        _this2.getMedicines();
       })["catch"](function (error) {
         if (error.response) {
           /**
@@ -8805,11 +8840,11 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     deleteMedicine: function deleteMedicine(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       //remove the item form the session cart
       axios["delete"]('/api/cart/' + id).then(function (Response) {
-        _this2.getMedicines();
+        _this3.getMedicines();
       })["catch"](function (error) {
         if (error.response) {
           /**
@@ -8828,14 +8863,14 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**
-     * get medicines stored in the redis session
+     * get medicines stored in the  session
      */
     getMedicines: function getMedicines() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.get('/api/cart').then(function (Response) {
-        _this3.medicines = Response.data.data;
-        _this3.invoice = Response.data.invoice;
+        _this4.medicines = Response.data.data;
+        _this4.invoice = Response.data.invoice;
       })["catch"](function (error) {
         if (error.response) {
           /**
@@ -79593,10 +79628,32 @@ var render = function() {
                     )
                   ])
                 ])
-              ])
+              ]),
+              _vm._v(" "),
+              _c("div", {
+                class: _vm.MessageStyle,
+                domProps: { innerHTML: _vm._s(_vm.Message) }
+              })
             ]),
             _vm._v(" "),
-            _vm._m(5)
+            _c("div", { staticClass: "modal-footer" }, [
+              _c("div", { staticClass: "col " }, [
+                _c("div", { staticClass: "row" }, [
+                  _vm._m(5),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-sm-12 col-md-6 text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-block btn-success ",
+                        on: { click: _vm.checkOutCart }
+                      },
+                      [_vm._v("Checkout")]
+                    )
+                  ])
+                ])
+              ])
+            ])
           ])
         ])
       ]
@@ -79715,27 +79772,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c("div", { staticClass: "col " }, [
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-sm-12  col-md-6" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-block btn-primary ",
-                attrs: { "data-dismiss": "modal" }
-              },
-              [_vm._v("Continue Shopping")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-sm-12 col-md-6 text-right" }, [
-            _c("button", { staticClass: "btn btn-block btn-success " }, [
-              _vm._v("Checkout")
-            ])
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "col-sm-12  col-md-6" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-block btn-primary ",
+          attrs: { "data-dismiss": "modal" }
+        },
+        [_vm._v("Continue Shopping")]
+      )
     ])
   }
 ]
