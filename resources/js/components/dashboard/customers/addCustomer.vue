@@ -164,6 +164,30 @@ methods: {
                     this.customer.geo_coord = e
 
                     
+                    //we correct the address with the the nearest address to the geo coordinates
+                    var platform = new H.service.Platform({
+                        /*"app_id": "APP-ID-HERE",
+                        "app_code": "APP-CODE-HERE"*/
+                        apikey: 'rGOxW4XB821m0ZE1YmUg3G9DzmwVjU57MflxIQqCdZk'
+                    });
+                    var geocoder = platform.getGeocodingService();
+
+
+                    geocoder.reverseGeocode({
+                        language: "en",
+                        mode: "retrieveAddresses",
+                        maxresults: 1,
+                        prox: e
+                    }, data => {
+                        let address = data.Response.View[0].Result[0].Location.Address;
+                        
+                        this.customer.address = address.State+", "+((address.County == address.City)? "":address.County)+" "+ address.Label;
+
+                    }, error => {
+                        console.error(error);
+                    });
+
+                    
                 }
             },
             showMap: function(){
