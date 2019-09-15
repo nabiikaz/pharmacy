@@ -16,7 +16,6 @@ class SaleController extends Controller
      */
     public function index(Request $request)
     {
-        
         $selected_column  = $request->get("selected_column");
 
         switch ($selected_column) {
@@ -53,6 +52,8 @@ class SaleController extends Controller
 
         foreach($sales as $sale)
             $sale->totalPrice();
+
+        
 
 
         return SaleResource::collection($sales);

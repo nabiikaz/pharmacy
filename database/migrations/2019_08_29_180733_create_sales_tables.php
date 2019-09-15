@@ -17,7 +17,10 @@ class CreateSalesTables extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned(); //this user_id is the pharmacist id that made the sale
             $table->integer('customer_id')->unsigned(); //this customer_id is the customer that did the purchase
-            $table->integer("total_price")->unsigned()->default(0);
+            $table->float("total_price")->unsigned()->default(0);
+            $table->boolean('paid')->default(false);
+            $table->boolean('delivery')->default(false);
+            //$table->integer('dashboard_id')->unsigned();
             
             $table->foreign("user_id")->references('id')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
@@ -37,6 +40,7 @@ class CreateSalesTables extends Migration
             $table->integer('sale_id')->unsigned(); 
             $table->integer('batche_id')->unsigned(); 
             $table->integer('quantity')->unsigned();
+            
 
             $table->foreign('batche_id')->references('id')->on('batches')
                 ->onUpdate('cascade')->onDelete('cascade');

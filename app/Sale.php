@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use App\Batche;
 use App\User as Customer;
 class Sale extends Model
@@ -26,12 +27,18 @@ class Sale extends Model
         if($this->total_price != 0)
             return;
         $totalPrice = 0;
+        $thisSale = Sale::findOrFail($this)->first();
+        $customerRefund_rate = User::findOrFail($thisSale->customer_id)->refund_rate/100;
         
         foreach ($this->Batches as  $batch) {
             
-            $totalPrice +=$batch->quantity_sold * ($batch->unit_price - ($batch->unit_price * $batch->refund_rate)/100) ;
+            $totalPrice +=$batch->quantity_sold * ($batch->unit_price - (($batch->unit_price * $batch->refund_rate)/100)*$customerRefund_rate) ;
         }
-        $this->total_price = $totalPrice;
+        $shipping = 0;
+        if($thisSale->delivery)
+            $shipping = $tax_shipping->shipping;
+        $tax_shipping = Dashboard::orderBy("created_at","DESC")->select("tax","shipping_price")->first();
+        $this->total_price = round($totalPrice+$totalPrice* $tax_shipping->tax /100+$shipping ,2);
         $this->save();
     }
 

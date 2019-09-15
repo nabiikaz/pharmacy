@@ -4065,6 +4065,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -4454,6 +4464,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4670,6 +4687,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['customerId'],
   mounted: function mounted() {},
@@ -4687,7 +4713,8 @@ __webpack_require__.r(__webpack_exports__);
         tel: "",
         address: "",
         email: "",
-        geo_coord: ""
+        geo_coord: "",
+        refund_rate: 0
       }
     };
   },
@@ -4795,6 +4822,15 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -70995,6 +71031,46 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
+                        _c("div", { staticClass: "pb-2" }, [
+                          _c("label", { attrs: { for: "refund" } }, [
+                            _vm._v("Refund")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.new_customer.refund_rate,
+                                expression: "new_customer.refund_rate"
+                              }
+                            ],
+                            staticClass: "form-control ",
+                            attrs: {
+                              name: "refund",
+                              type: "number",
+                              id: "refund",
+                              required: "",
+                              step: "0.01",
+                              min: "0",
+                              max: "100"
+                            },
+                            domProps: { value: _vm.new_customer.refund_rate },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.new_customer,
+                                  "refund_rate",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
                         _c("span", { class: _vm.MessageClass }, [
                           _vm._v(_vm._s(_vm.Message))
                         ]),
@@ -71554,6 +71630,23 @@ var render = function() {
                 [_vm._v("email")]
               ),
               _vm._v(" "),
+              _c(
+                "th",
+                {
+                  staticClass: "text-center",
+                  class:
+                    _vm.selected_column == "refund_rate" ? "select-search" : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column == "refund_rate"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "refund_rate")
+                    }
+                  }
+                },
+                [_vm._v("Refund")]
+              ),
+              _vm._v(" "),
               _c("th", [_vm._v("Action")])
             ])
           ]),
@@ -71604,6 +71697,34 @@ var render = function() {
                       _vm.selected_column == "email" ? "select-search-data" : ""
                   },
                   [_vm._v(_vm._s(customer.email))]
+                ),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  {
+                    staticClass: "d-flex justify-content-center",
+                    class:
+                      _vm.selected_column == "refund_rate"
+                        ? "select-search-data"
+                        : "",
+                    attrs: {
+                      "data-tooltip": "tooltip",
+                      "data-original-title": customer.refund_rate + " %"
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "icon",
+                      attrs: {
+                        width: "22",
+                        height: "22",
+                        src:
+                          customer.refund_rate > 0
+                            ? "/img/icons/checkmark.png"
+                            : "/img/icons/xmark.png"
+                      }
+                    })
+                  ]
                 ),
                 _vm._v(" "),
                 _c("td", [
@@ -72030,7 +72151,12 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control ",
-                          attrs: { name: "email", type: "email", id: "email" },
+                          attrs: {
+                            name: "email",
+                            type: "email",
+                            id: "email",
+                            required: ""
+                          },
                           domProps: { value: _vm.customer.email },
                           on: {
                             input: function($event) {
@@ -72040,6 +72166,46 @@ var render = function() {
                               _vm.$set(
                                 _vm.customer,
                                 "email",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "md-form mb-2" }, [
+                        _c("label", { attrs: { for: "refund" } }, [
+                          _vm._v("Refund")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.customer.refund_rate,
+                              expression: "customer.refund_rate"
+                            }
+                          ],
+                          staticClass: "form-control ",
+                          attrs: {
+                            name: "refund",
+                            type: "number",
+                            id: "refund",
+                            required: "",
+                            step: "0.01",
+                            min: "0",
+                            max: "100"
+                          },
+                          domProps: { value: _vm.customer.refund_rate },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.customer,
+                                "refund_rate",
                                 $event.target.value
                               )
                             }
@@ -72353,6 +72519,46 @@ var render = function() {
                               _vm.$set(
                                 _vm.customer,
                                 "email",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "md-form mb-2" }, [
+                        _c("label", { attrs: { for: "refund" } }, [
+                          _vm._v("Refund")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.customer.refund_rate,
+                              expression: "customer.refund_rate"
+                            }
+                          ],
+                          staticClass: "form-control ",
+                          attrs: {
+                            name: "refund",
+                            type: "number",
+                            id: "refund",
+                            required: "",
+                            step: "0.01",
+                            min: "0",
+                            max: "100"
+                          },
+                          domProps: { value: _vm.customer.refund_rate },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.customer,
+                                "refund_rate",
                                 $event.target.value
                               )
                             }
@@ -75707,7 +75913,7 @@ var render = function() {
       [
         _c(
           "div",
-          { staticClass: "modal-dialog modal-lg", attrs: { role: "document" } },
+          { staticClass: "modal-dialog modal-xl", attrs: { role: "document" } },
           [
             _c(
               "div",
@@ -75727,7 +75933,7 @@ var render = function() {
                         staticStyle: {
                           position: "absolute",
                           "margin-top": "150px",
-                          "margin-left": "350px"
+                          "margin-left": "550px"
                         },
                         attrs: { src: "/img/icons/load.gif" }
                       })
@@ -75743,7 +75949,7 @@ var render = function() {
                             _vm.invoiceAction
                           : "",
                       frameborder: "0",
-                      width: "770",
+                      width: "1106",
                       height: "400"
                     },
                     on: {

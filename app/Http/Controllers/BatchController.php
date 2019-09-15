@@ -81,9 +81,9 @@ class BatchController extends Controller
             "expiry_date" => $batch["expiry_date"],"unit_price" => $batch["unit_price"],
             "batch_price" => $batch["batch_price"],"quantity" => $batch["quantity"],"quantity_stock" => $batch["quantity"],"quantity_min" =>$batch["quantity_min"],"refund_rate"=>$batch["refund_rate"] ] ]);
 
-            //update previous batches with same medicine Id 
-            Batche::where("medicine_id","=",$medicine_id)
-                ->update(["unit_price" => $batch["unit_price"]]);
+            //update previous batches with same medicine Id so that all the batches with same medicine Id can have the same price of the last added batch 
+           /* Batche::where("medicine_id","=",$medicine_id)
+                ->update(["unit_price" => $batch["unit_price"]]);*/
         }
 
 
@@ -119,13 +119,13 @@ class BatchController extends Controller
         $customer = Customer::findOrFail($customer_id);
         $pharmacist = Auth::user();
         
-            
-        $pharmacist->Customers()->attach($customer);
+        //attach pharmacist with the sale customer 
+        $pharmacist->Customers()->attach([$customer->id =>["paid"=>true]]);
         $sale = Sale::where("user_id","=",$pharmacist->id)
                             ->where("customer_id","=",$customer_id)
                             ->orderBy('created_at', 'desc')->first();
 
-
+        //update batches's Quantities and attach batches to the current sale
         foreach($request->all() as $batch){
             
             $Batch = Batche::find($batch["id"]);

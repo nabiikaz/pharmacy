@@ -20,10 +20,10 @@
 
 </head>
 
-<body class="login-page" style="background: white">
-    <div class="container">
+<body class="login-page" style="background: white;zoom:95%;">
+    
 
-        <div>
+        <div style="padding-right:20px;">
             <div class="row">
                 <div class="col-xs-7">
                     
@@ -33,6 +33,8 @@
                     {{$store["address2"]}}<br>
                     Email: {{$store["store_email"]}} <br>
                     Tel: {{$store["tel"]}} <br>
+                   
+
     
                     <br>
                 </div>
@@ -61,6 +63,10 @@
                         @if (isset($customer["tel"]))
                         Tel :<span>{{$customer["tel"]}}</span> <br>
                         @endif
+
+                        @if ($customer["refund_rate"] > 0)
+                        Refund Rate :<span> {{$customer["refund_rate"]}}</span> %<br>
+                        @endif
     
                     </div>
                 </div>
@@ -68,6 +74,12 @@
                 <div class="col-xs-5 " style="height:130px">
                     <table class="align-bottom" style="width: 100%">
                         <tbody>
+                            @if(!$sale["delivery"])
+                                <tr>
+                                    <th>Pharmacist:</th>
+                                    <td class="text-right">{{$pharmacist}}</td>
+                                </tr>
+                            @endif
                             <tr>
                                 <th>Invoice Num:</th>
                                 <td class="text-right">#{{$sale["id"]}}</td>
@@ -105,13 +117,17 @@
                         
                         <th>Dosage</th>
                         <th class="text-center" >Quantity</th>
-                        <th class="text-right">Price</th>
+                        <th class="text-right">Price (DA)</th>
+                        @if ($customer["refund_rate"] > 0)
+                        <th class="text-right">Refund (%)</th>
+                        <th class="text-right">Total (DA)</th>
+                        @endif
                         
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($batches as $index =>$batch)
-                        <tr>
+                        <tr class="">
                             <td class="text-success">{{$index+1}}</td>
 
                             <td >
@@ -134,6 +150,13 @@
                                     {{$batch["quantity_sold"]}} 
                             </td>
                             <td class="text-right">{{$batch["unit_price"]}} DA</td>
+                            @if ($customer["refund_rate"] > 0)
+                            <td class="text-center {{ $batch["refund_rate"] == 0  ? 'bg-danger' : 'bg-success' }}">{{$batch["refund_rate"]}} </td>
+                            <td class="text-center {{ $batch["refund_rate"] == 0  ? 'bg-danger' : 'bg-success' }}">
+                                {{$batch["quantity_sold"] * ($batch["unit_price"]-($batch["unit_price"] * $batch["refund_rate"]/100)*$customer["refund_rate"]/100)}}
+                             </td>
+                            
+                            @endif
                         </tr>
                     @endforeach
                    
@@ -153,12 +176,17 @@
                                 </th>
                                 <td style="padding: 5px" class="text-right"><strong> {{$invoice["sub_total"]}} DA </strong></td>
                             </tr>
-                            <tr class="bg-success" style="padding: 5px">
+                            @if ($sale["delivery"])
+                                <tr class="bg-success" style="padding: 5px">
                                     <th style="padding: 5px">
                                         <div> Shipping </div>
                                     </th>
                                     <td style="padding: 5px" class="text-right"><strong> {{$invoice["shipping"]}} DA  </strong></td>
-                            </tr>
+                                </tr>
+                            @endif
+
+                            
+                            
                             <tr class="bg-danger" style="padding: 5px">
                                     <th style="padding: 5px">
                                         <div> Taxes </div>
@@ -185,7 +213,7 @@
                 </div>        
         </div>
         
-    </div>
+    
     
 
 </body>

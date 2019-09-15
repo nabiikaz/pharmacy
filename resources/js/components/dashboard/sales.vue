@@ -134,7 +134,7 @@
         </div>
 
         <div id="modalinvoice" class="modal fade" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content " style="border-top-left-radius:5px;border-top-right-radius:10px; ">
                     <div class="modal-header bg-success text-center">
                         <h4 class="modal-title  w-100 font-weight-bold text-white">View Invoice</h4>
@@ -143,9 +143,9 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <img src="/img/icons/load.gif" v-if="iframeStatus" style="position:absolute;margin-top:150px;margin-left:350px;">
+                        <img src="/img/icons/load.gif" v-if="iframeStatus" style="position:absolute;margin-top:150px;margin-left:550px;">
                         <iframe :src="(selectedSale_Id > -1)? '/invoice/sales/'+selectedSale_Id+'?action='+invoiceAction:''"
-                            frameborder="0" width="770" height="400" v-on:load="iframeStatus=false"></iframe>
+                            frameborder="0" width="1106" height="400" v-on:load="iframeStatus=false"></iframe>
                     </div>
 
                     <div class="modal-footer">

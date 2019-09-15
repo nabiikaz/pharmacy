@@ -251,6 +251,16 @@
                                     <input type="email" placeholder="email" class="form-control"
                                         v-model="new_customer.email" >
                                 </div>
+
+                                <div class="pb-2">
+
+
+                                    <label for="refund">Refund</label>
+
+                                    <input name="refund" type="number" id="refund" class="form-control "
+                                        v-model="new_customer.refund_rate" required step="0.01"   min="0" max="100">
+                                </div>
+
                                 <span :class="MessageClass">{{Message}}</span>
 
                                 <hr>

@@ -62,6 +62,7 @@ class SupplierController extends Controller
                 //validate email and tel uniqueness
                 $request->validate([
                     'email' => 'required|email|unique:suppliers,email',
+                    'email' => 'required|email|unique:users,email',
                     "supplier_name" => 'required|min:8|max:25',
                     "tel" =>"required|min:9|max:10",
                     "address" => "required|max:50"
