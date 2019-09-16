@@ -5099,8 +5099,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _suppliers_editSupplier_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./suppliers/editSupplier.vue */ "./resources/js/components/dashboard/suppliers/editSupplier.vue");
-/* harmony import */ var _suppliers_addSupplier_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./suppliers/addSupplier.vue */ "./resources/js/components/dashboard/suppliers/addSupplier.vue");
+/* harmony import */ var q__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! q */ "./node_modules/q/q.js");
+/* harmony import */ var q__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(q__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -5191,7 +5191,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -5209,6 +5218,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      selected_delivery_id: -1,
       selected_delivery: null,
       deliveries: [],
       deliveries_coords: [],
@@ -5218,12 +5228,20 @@ __webpack_require__.r(__webpack_exports__);
         lng: 0
       },
       gps_marker: null,
-      gps_marker_icon_svg: "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" id=\"Capa_1\" x=\"0px\" y=\"0px\" width=\"200\" height=\"40\" viewBox=\"0 0 263.335 263.335\" style=\"enable-background:new 0 0 263.335 263.335;\" xml:space=\"preserve\">\n                                <g>\n                                    <g xmlns=\"http://www.w3.org/2000/svg\">\n                                        <path d=\"M40.479,159.021c21.032,39.992,49.879,74.22,85.732,101.756c0.656,0.747,1.473,1.382,2.394,1.839   c0.838-0.396,1.57-0.962,2.178-1.647c80.218-61.433,95.861-125.824,96.44-128.34c2.366-9.017,3.57-18.055,3.57-26.864    C237.389,47.429,189.957,0,131.665,0C73.369,0,25.946,47.424,25.946,105.723c0,8.636,1.148,17.469,3.412,26.28\" fill=\"{{gps_marker_color}}\"/>\n                                    <text x=\"80\" y=\"130\" font-family=\"sans-serif\" font-size=\"5em\" fill=\"white\">{{gps_marker_text}}</text>\n                                    </g>\n                                </g></svg>",
       filter_flow: "Ascending",
       current_destination: null,
       destination_marker: null,
-      destination_marker_icon_svg: "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" version=\"1.1\" id=\"Capa_1\" x=\"0px\" y=\"0px\" width=\"200\" height=\"40\" viewBox=\"0 0 263.335 263.335\" style=\"enable-background:new 0 0 263.335 263.335;\" xml:space=\"preserve\">\n                                <g>\n                                    <g xmlns=\"http://www.w3.org/2000/svg\">\n                                        <path d=\"M40.479,159.021c21.032,39.992,49.879,74.22,85.732,101.756c0.656,0.747,1.473,1.382,2.394,1.839   c0.838-0.396,1.57-0.962,2.178-1.647c80.218-61.433,95.861-125.824,96.44-128.34c2.366-9.017,3.57-18.055,3.57-26.864    C237.389,47.429,189.957,0,131.665,0C73.369,0,25.946,47.424,25.946,105.723c0,8.636,1.148,17.469,3.412,26.28\" fill=\"{{gps_marker_color}}\"/>\n                                    <text x=\"80\" y=\"130\" font-family=\"sans-serif\" font-size=\"5em\" fill=\"white\">{{gps_marker_text}}</text>\n                                    </g>\n                                </g></svg>",
-      polylineObject: null
+      polylineObject: null,
+      startDelivery: false,
+      gpsSimulation: true,
+      gpsSimulationTimers: [],
+      gpsSimulationSpeed: 1000,
+      //1000 ms between two coordinates
+      gpsMarkerOnRouteZoom: false,
+      routeShape: null,
+      routeDistance: "N/A",
+      routeShape_lastPoint: -1,
+      gps_marker_object: null
     };
   },
   watch: {
@@ -5231,19 +5249,58 @@ __webpack_require__.r(__webpack_exports__);
       this.paginationCurrent = 1;
     },
     selected_delivery: function selected_delivery() {
+      /**
+       * disable the zoom on the gps marker so that when the delivery stops the view chanages to bound both 
+       * the gps marker and the selected delivery marker 
+       * 
+       **/
+      if (this.selected_delivery == null) return;
+      this.selected_delivery_id = this.selected_delivery.id;
+      this.gpsMarkerOnRouteZoom = false;
       this.destinationSelected();
     },
     filter_flow: function filter_flow() {
       this.getSuppliers();
+    },
+    startDelivery: function startDelivery() {
+      if (this.routeShape == null) {
+        alert("Please Choose A Delivery Destination With A Valid Geo Coordinates");
+        return;
+      }
+
+      if (this.startDelivery) {
+        //will start the delivery
+        //if gpsSimulation is true then start the simulation
+        if (this.gpsSimulation) this.startGpsSimulation();
+      } else {
+        //stop delivery
+        //activate the zoom on the gps marker so that when the gps stops the view stays where it left
+        this.gpsMarkerOnRouteZoom = true;
+        if (this.gpsSimulation) this.stopGpsSimulation();
+        this.destinationSelected();
+      }
+    },
+    gpsSimulationSpeed: function gpsSimulationSpeed() {
+      if (this.gpsSimulation) {
+        this.stopGpsSimulation(); //this.startGpsSimulation()
+      }
+    },
+    routeShape_lastPoint: function routeShape_lastPoint() {},
+    routeShape: function routeShape() {
+      //calculate the current Route Distance between where the last point of Route Visisted to the last point of the this.routeShape
+      this.getCurrentRouteDistance();
+    },
+    gps: function gps() {
+      console.log(this.gps);
     }
+  },
+  computed: {
+    routeDistancee: function routeDistancee() {}
   },
   updated: function updated() {
     $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
-    sortDeliveries: function sortDeliveries() {
-      console.log(this.deliveries_coords);
-    },
     getDeliveries: function getDeliveries() {
       var _this = this;
 
@@ -5307,30 +5364,15 @@ __webpack_require__.r(__webpack_exports__);
             mode: "retrieveAddresses",
             maxresults: 2,
             prox: position.coords.latitude + "," + position.coords.longitude
-          }, function (data) {
-            console.log(data.Response.View[0].Result[0].Location.Address.Label); //alert("The nearest address to your location is:\n" + data.Response.View[0].Result[0].Location.Address.Label);
+          }, function (data) {//console.log(data.Response.View[0].Result[0].Location.Address.Label);
+            //alert("The nearest address to your location is:\n" + data.Response.View[0].Result[0].Location.Address.Label);
           }, function (error) {
             console.error(error);
           });
           _this3.gps = {
             lat: position.coords.latitude,
-            lng: position.coords.longitude //draw gps marker 
-            //first we need to remove the marker from the previous position if it exist
-
+            lng: position.coords.longitude
           };
-          if (_this3.map.getObjects().length > 0) if (_this3.gps_marker != null) _this3.map.removeObject(_this3.gps_marker); //2ndly draw the gps_marker 
-
-          var gpsMarkerIcon = new H.map.Icon(_this3.gps_marker_icon_svg.replace('{{gps_marker_color}}', '#e3342f').replace('{{gps_marker_text}}', 'gps'));
-          _this3.gps_marker = new H.map.Marker(_this3.gps, {
-            icon: gpsMarkerIcon
-          });
-
-          _this3.map.addObject(_this3.gps_marker); //focus on the gps coordinates 
-
-
-          _this3.map.getViewModel().setLookAtData({
-            position: _this3.gps
-          }, true);
 
           _this3.destinationSelected();
         });
@@ -5338,11 +5380,40 @@ __webpack_require__.r(__webpack_exports__);
         console.error("Geolocation is not supported by this browser!");
       }
     },
-    drawDestinationMarker: function drawDestinationMarker() {
+    drawGpsMarker: function drawGpsMarker() {
+      //draw gps marker 
       //first we need to remove the marker from the previous position if it exist
+      if (this.map.getObjects().length > 0) if (this.gps_marker != null) {
+        this.gps_marker = null;
+      } //2ndly draw the gps_marker 
+
+      var gpsMarkerIcon = new H.map.Icon("/img/icons/delivery_marker.png", {
+        size: {
+          w: 56,
+          h: 56
+        }
+      });
+      this.gps_marker = new H.map.Marker(this.gps, {
+        icon: gpsMarkerIcon
+      });
+      this.gps_marker_object = this.map.addObject(this.gps_marker); //focus on the gps coordinates 
+
+      this.map.getViewModel().setLookAtData({
+        position: this.gps,
+        zoom: 15
+      }, true);
+    },
+    drawDestinationMarker: function drawDestinationMarker() {
+      if (this.current_destination == null) return; //first we need to remove the marker from the previous position if it exist
+
       if (this.map.getObjects().length > 0) if (this.destination_marker != null) this.map.removeObject(this.destination_marker); //2ndly draw the gps_marker 
 
-      var destinationMarkerIcon = new H.map.Icon(this.destination_marker_icon_svg.replace('{{gps_marker_color}}', 'green').replace('{{gps_marker_text}}', 'Cus'));
+      var destinationMarkerIcon = new H.map.Icon("/img/icons/destination_marker.png", {
+        size: {
+          w: 56,
+          h: 56
+        }
+      });
       this.destination_marker = new H.map.Marker(this.current_destination, {
         icon: destinationMarkerIcon
       });
@@ -5352,12 +5423,29 @@ __webpack_require__.r(__webpack_exports__);
         position: this.current_destination
       }, true);
     },
-    destinationSelected: function destinationSelected() {
-      console.log(this.map); //this.map.removeAll()
+    clearMap: function clearMap() {
+      var mapObjects = null;
 
-      this.init_gpsTracking();
-      if (this.selected_delivery == null) return;
-      console.log(this.selected_delivery.geo_coord);
+      if (this.map != null) {
+        mapObjects = this.map.getObjects();
+
+        if (mapObjects.length > 0) {
+          this.map.removeObjects(mapObjects);
+        }
+      }
+    },
+    destinationSelected: function destinationSelected() {
+      if (this.selected_delivery == null) {
+        //if no delivery is selected then  [clear the map] and redraw the GPS Marker on the current GPS Coordinates
+        this.clearMap();
+        this.drawGpsMarker();
+      }
+
+      this.clearMap();
+      this.drawDestinationMarker();
+      this.drawGpsMarker(); //this.init_gpsTracking()
+
+      if (this.selected_delivery == null) return; //console.log(this.selected_delivery.geo_coord)
 
       if (!RegExp("[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+").test(this.selected_delivery.geo_coord)) {
         alert("This Customer Does Not Have Geo Coordinates ,, Calling Customer for guidance is Advised Tel:" + this.selected_delivery.tel);
@@ -5385,21 +5473,24 @@ __webpack_require__.r(__webpack_exports__);
         waypoint0: this.gps.lat + "," + this.gps.lng,
         // Brandenburg Gate
         waypoint1: destination // Friedrichstraße Railway Station i.e "12.54641,11.54641"
+        //waypoint2: "34.989863041487766,-1.6352269285894379"  // Friedrichstraße Railway Station i.e "12.54641,11.54641"
 
       };
       router.calculateRoute(routeRequestParams, this.onSuccess, this.onError);
     },
     onSuccess: function onSuccess(result) {
       var route = result.response.route[0];
+      console.log("Route Calculation result");
+      console.log(result.response);
       /*
       * The styling of the route response on the map is entirely under the developer's control.
       * A representitive styling can be found the full JS + HTML code of this example
       * in the functions below:
       */
 
-      this.addRouteShapeToMap(route);
+      this.addRouteShapeToMap(route.shape);
       /*addManueversToMap(route);
-       addWaypointsToPanel(route.waypoint);
+        addWaypointsToPanel(route.waypoint);
       addManueversToPanel(route);
       addSummaryToPanel(route.summary);*/
       // ... etc.
@@ -5407,10 +5498,14 @@ __webpack_require__.r(__webpack_exports__);
     onError: function onError(error) {
       alert('Can\'t reach the remote server');
     },
-    addRouteShapeToMap: function addRouteShapeToMap(route) {
+    addRouteShapeToMap: function addRouteShapeToMap(routeShape) {
       var lineString = new H.geo.LineString(),
-          routeShape = route.shape,
-          polyline;
+          //routeShape = route.shape,
+      polyline,
+          lookAtDataOptions; //save the routeShape coordinates For later Moving on Road Simulations
+
+      this.routeShape = routeShape; //console.log(route)
+
       routeShape.forEach(function (point) {
         var parts = point.split(',');
         lineString.pushLatLngAlt(parts[0], parts[1]);
@@ -5422,11 +5517,97 @@ __webpack_require__.r(__webpack_exports__);
         }
       }); // Add the polyline to the map
 
-      this.polylineObject = this.map.addObject(polyline); // And zoom to its bounding rectangle
-
-      this.map.getViewModel().setLookAtData({
+      this.polylineObject = this.map.addObject(polyline);
+      lookAtDataOptions = {
         bounds: polyline.getBoundingBox()
+      };
+      if (this.gpsMarkerOnRouteZoom) lookAtDataOptions = {
+        position: this.gps,
+        zoom: 15 // And zoom to its bounding rectangle
+
+      };
+      this.map.getViewModel().setLookAtData(lookAtDataOptions, true);
+    },
+    getCurrentRouteDistance: function getCurrentRouteDistance() {
+      if (this.routeShape == null) return;
+
+      if (this.routeShape.length == 1) {
+        this.routeDistance = 0;
+        return;
+      }
+
+      var lineString = new H.geo.LineString(),
+          polyline;
+      this.routeShape.forEach(function (point) {
+        var parts = point.split(',');
+        lineString.pushLatLngAlt(parts[0], parts[1]);
       });
+      polyline = new H.map.Polyline(lineString);
+      var geometry = polyline.getGeometry();
+      var distance = 0;
+      var last = geometry.extractPoint(0);
+
+      for (var i = 1; i < geometry.getPointCount(); i++) {
+        var point = geometry.extractPoint(i);
+        distance += last.distance(point);
+        last = point;
+      }
+
+      if (polyline.isClosed()) {
+        distance += last.distance(geometry.extractPoint(0));
+      } //console.log((distance/1000).toFixed(3))
+
+
+      this.routeDistance = distance;
+    },
+    Deliver: function Deliver() {
+      if (this.routeShape == null) {
+        alert("Please Choose A Delivery Destination With A Valid Geo Coordinates");
+        return;
+      }
+
+      if (this.startDelivery) {
+        this.startDelivery = false;
+      } else {
+        this.startDelivery = true;
+      }
+    },
+    startGpsSimulation: function startGpsSimulation() {
+      var _this4 = this;
+
+      var current_coord_index = 0;
+      this.routeShape_lastPoint = this.routeShape.length;
+      this.routeShape.forEach(function (gpsCoordinates, index) {
+        var timer = setTimeout(function () {
+          //first we must remove the marker on last coordinates
+          if (_this4.gps_marker_object != null) _this4.map.removeObject(_this4.gps_marker_object);
+          var tmp = gpsCoordinates.split(",");
+          _this4.gps.lat = parseFloat(tmp[0]);
+          _this4.gps.lng = parseFloat(tmp[1]);
+
+          _this4.drawGpsMarker(); //remove the last geo position that has been drawn
+
+
+          _this4.routeShape.splice(index, 1);
+          /*if(this.polylineObject != null){
+              
+              //this.addRouteShapeToMap(this.routeShape)
+          }
+          
+              
+          console.log(this.routeShape.length);*/
+
+        }, index++ * _this4.gpsSimulationSpeed); //save the timer 
+
+        _this4.gpsSimulationTimers.push(timer);
+      });
+    },
+    stopGpsSimulation: function stopGpsSimulation() {
+      //to stop gps simulation we only need to remove all the timers created when startGpsSimulation
+      this.gpsSimulationTimers.forEach(function (timer) {
+        clearTimeout(timer);
+      });
+      this.gpsSimulationTimers = [];
     }
   },
   components: {}
@@ -23014,7 +23195,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\ntbody tr[data-v-2fc1571a], tbody td[data-v-2fc1571a]{\n}\n#map[data-v-2fc1571a],#_map[data-v-2fc1571a]{\r\n        width: 100%;\r\n    height: 400px;\r\n    background: grey;\n}\nbody[data-v-2fc1571a] {\r\n        color: #566787;\r\n        background: #f5f5f5;\r\n        font-family: 'Varela Round', sans-serif;\r\n        font-size: 13px;\n}\n.table-wrapper[data-v-2fc1571a] {\r\n        background: #fff;\r\n        padding: 20px 25px;\r\n        margin: 30px 0;\r\n        border-radius: 3px;\r\n        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-2fc1571a] {\r\n        padding-bottom: 15px;\r\n        background: #299be4;\r\n        color: #fff;\r\n        padding: 16px 30px;\r\n        margin: -20px -25px 10px;\r\n        border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-2fc1571a] {\r\n        margin: 5px 0 0;\r\n        font-size: 24px;\n}\n.table-title .btn[data-v-2fc1571a] {\r\n        color: #566787;\r\n        float: right;\r\n        font-size: 13px;\r\n        background: #fff;\r\n        border: none;\r\n        min-width: 50px;\r\n        border-radius: 2px;\r\n        border: none;\r\n        outline: none !important;\r\n        margin-left: 10px;\n}\n.table-title .btn[data-v-2fc1571a]:hover,\r\n    .table-title .btn[data-v-2fc1571a]:focus {\r\n        color: #566787;\r\n        background: #f2f2f2;\n}\n.table-title .btn i[data-v-2fc1571a] {\r\n        float: left;\r\n        font-size: 21px;\r\n        margin-right: 5px;\n}\n.table-title .btn span[data-v-2fc1571a] {\r\n        float: left;\r\n        margin-top: 2px;\n}\ntable.table tr th[data-v-2fc1571a],\r\n    table.table tr td[data-v-2fc1571a] {\r\n        border-color: #e9e9e9;\r\n        padding: 12px 15px;\r\n        vertical-align: middle;\n}\ntable.table tr th[data-v-2fc1571a]:last-child {\r\n        width: 100px;\n}\ntable.table-striped tbody tr[data-v-2fc1571a]:nth-of-type(odd) {\r\n        background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-2fc1571a]:hover {\r\n        background: #f5f5f5;\n}\ntable.table th i[data-v-2fc1571a] {\r\n        font-size: 13px;\r\n        margin: 0 5px;\r\n        cursor: pointer;\n}\ntable.table td:last-child i[data-v-2fc1571a] {\r\n        opacity: 0.9;\r\n        font-size: 22px;\r\n        margin: 0 5px;\n}\ntable.table td a[data-v-2fc1571a] {\r\n        font-weight: bold;\r\n        color: #566787;\r\n        display: inline-block;\r\n        text-decoration: none;\n}\ntable.table td a[data-v-2fc1571a]:hover {\r\n        color: #2196F3;\n}\ntable.table td a.settings[data-v-2fc1571a] {\r\n        color: #2196F3;\n}\ntable.table td a.delete[data-v-2fc1571a] {\r\n        color: #F44336;\n}\ntable.table td i[data-v-2fc1571a] {\r\n        font-size: 19px;\n}\ntable.table .avatar[data-v-2fc1571a] {\r\n        border-radius: 50%;\r\n        vertical-align: middle;\r\n        margin-right: 10px;\r\n        width: 40px;\n}\n.status[data-v-2fc1571a] {\r\n        font-size: 30px;\r\n        margin: 2px 2px 0 0;\r\n        display: inline-block;\r\n        vertical-align: middle;\r\n        line-height: 2px;\n}\n.text-success[data-v-2fc1571a] {\r\n        color: #10c469;\n}\n.text-info[data-v-2fc1571a] {\r\n        color: #62c9e8;\n}\n.text-warning[data-v-2fc1571a] {\r\n        color: #FFC107;\n}\n.text-danger[data-v-2fc1571a] {\r\n        color: #ff5b5b;\n}\n.pagination[data-v-2fc1571a] {\r\n        float: right;\r\n        margin: 0 0 5px;\n}\n.pagination li a[data-v-2fc1571a] {\r\n        border: none;\r\n        font-size: 13px;\r\n        min-width: 30px;\r\n        min-height: 30px;\r\n        color: #999;\r\n        margin: 0 2px;\r\n        line-height: 30px;\r\n        border-radius: 2px !important;\r\n        text-align: center;\r\n        padding: 0 6px;\n}\n.pagination li a[data-v-2fc1571a]:hover {\r\n        color: #666;\n}\n.pagination li.active a[data-v-2fc1571a],\r\n    .pagination li.active a.page-link[data-v-2fc1571a] {\r\n        background: #03A9F4;\n}\n.pagination li.active a[data-v-2fc1571a]:hover {\r\n        background: #0397d6;\n}\n.pagination li.disabled i[data-v-2fc1571a] {\r\n        color: #ccc;\n}\n.pagination li i[data-v-2fc1571a] {\r\n        font-size: 16px;\r\n        padding-top: 6px\n}\n.hint-text[data-v-2fc1571a] {\r\n        float: left;\r\n        margin-top: 10px;\r\n        font-size: 13px;\n}\n.select-search-data[data-v-2fc1571a] {\r\n\r\n        background-color: #c5e4b254;\n}\n.select-search[data-v-2fc1571a] {\r\n        background-color: #4e9cda;\n}\nth[data-v-2fc1571a]{\r\n        border-left:  1px solid  #dee2e6;\r\n        border-right:  1px solid  #dee2e6;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n#map[data-v-2fc1571a],#_map[data-v-2fc1571a]{\n    width: 100%;\nheight: 363px;\nbackground: grey;\n}\nbody[data-v-2fc1571a] {\n    color: #566787;\n    background: #f5f5f5;\n    font-family: 'Varela Round', sans-serif;\n    font-size: 13px;\n}\n.table-wrapper[data-v-2fc1571a] {\n    background: #fff;\n    padding: 20px 25px;\n    margin: 30px 0;\n    border-radius: 3px;\n    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);\n}\n.table-title[data-v-2fc1571a] {\n    padding-bottom: 15px;\n    background: #299be4;\n    color: #fff;\n    padding: 16px 30px;\n    margin: -20px -25px 10px;\n    border-radius: 3px 3px 0 0;\n}\n.table-title h2[data-v-2fc1571a] {\n    margin: 5px 0 0;\n    font-size: 24px;\n}\n.table-title .btn[data-v-2fc1571a] {\n    color: #566787;\n    float: right;\n    font-size: 13px;\n    background: #fff;\n    border: none;\n    min-width: 50px;\n    border-radius: 2px;\n    border: none;\n    outline: none !important;\n    margin-left: 10px;\n}\n.table-title .btn[data-v-2fc1571a]:hover,\n.table-title .btn[data-v-2fc1571a]:focus {\n    color: #566787;\n    background: #f2f2f2;\n}\n.table-title .btn i[data-v-2fc1571a] {\n    float: left;\n    font-size: 21px;\n    margin-right: 5px;\n}\n.table-title .btn span[data-v-2fc1571a] {\n    float: left;\n    margin-top: 2px;\n}\ntable.table tr th[data-v-2fc1571a],\ntable.table tr td[data-v-2fc1571a] {\n    border-color: #e9e9e9;\n    padding: 12px 15px;\n    vertical-align: middle;\n}\ntable.table tr th[data-v-2fc1571a]:last-child {\n    width: 100px;\n}\ntable.table-striped tbody tr[data-v-2fc1571a]:nth-of-type(odd) {\n    background-color: #fcfcfc;\n}\ntable.table-striped.table-hover tbody tr[data-v-2fc1571a]:hover {\n    background: #f5f5f5;\n}\ntable.table th i[data-v-2fc1571a] {\n    font-size: 13px;\n    margin: 0 5px;\n    cursor: pointer;\n}\ntable.table td:last-child i[data-v-2fc1571a] {\n    opacity: 0.9;\n    font-size: 22px;\n    margin: 0 5px;\n}\ntable.table td a[data-v-2fc1571a] {\n    font-weight: bold;\n    color: #566787;\n    display: inline-block;\n    text-decoration: none;\n}\ntable.table td a[data-v-2fc1571a]:hover {\n    color: #2196F3;\n}\ntable.table td a.settings[data-v-2fc1571a] {\n    color: #2196F3;\n}\ntable.table td a.delete[data-v-2fc1571a] {\n    color: #F44336;\n}\ntable.table td i[data-v-2fc1571a] {\n    font-size: 19px;\n}\ntable.table .avatar[data-v-2fc1571a] {\n    border-radius: 50%;\n    vertical-align: middle;\n    margin-right: 10px;\n    width: 40px;\n}\n.status[data-v-2fc1571a] {\n    font-size: 30px;\n    margin: 2px 2px 0 0;\n    display: inline-block;\n    vertical-align: middle;\n    line-height: 2px;\n}\n.text-success[data-v-2fc1571a] {\n    color: #10c469;\n}\n.text-info[data-v-2fc1571a] {\n    color: #62c9e8;\n}\n.text-warning[data-v-2fc1571a] {\n    color: #FFC107;\n}\n.text-danger[data-v-2fc1571a] {\n    color: #ff5b5b;\n}\n.pagination[data-v-2fc1571a] {\n    float: right;\n    margin: 0 0 5px;\n}\n.pagination li a[data-v-2fc1571a] {\n    border: none;\n    font-size: 13px;\n    min-width: 30px;\n    min-height: 30px;\n    color: #999;\n    margin: 0 2px;\n    line-height: 30px;\n    border-radius: 2px !important;\n    text-align: center;\n    padding: 0 6px;\n}\n.pagination li a[data-v-2fc1571a]:hover {\n    color: #666;\n}\n.pagination li.active a[data-v-2fc1571a],\n.pagination li.active a.page-link[data-v-2fc1571a] {\n    background: #03A9F4;\n}\n.pagination li.active a[data-v-2fc1571a]:hover {\n    background: #0397d6;\n}\n.pagination li.disabled i[data-v-2fc1571a] {\n    color: #ccc;\n}\n.pagination li i[data-v-2fc1571a] {\n    font-size: 16px;\n    padding-top: 6px\n}\n.hint-text[data-v-2fc1571a] {\n    float: left;\n    margin-top: 10px;\n    font-size: 13px;\n}\n.select-search-data[data-v-2fc1571a] {\n\n    background-color: #c5e4b254;\n}\n.select-search[data-v-2fc1571a] {\n    background-color: #4e9cda;\n}\nth[data-v-2fc1571a]{\n    border-left:  1px solid  #dee2e6;\n    border-right:  1px solid  #dee2e6;\n}\n\n", ""]);
 
 // exports
 
@@ -73252,7 +73433,7 @@ var render = function() {
       false ? undefined : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-5" }, [
+        _c("div", { staticClass: "col-lg-5 col-xs-12" }, [
           _c(
             "div",
             { staticClass: "overflow-auto", staticStyle: { height: "363px" } },
@@ -73274,6 +73455,10 @@ var render = function() {
                         "tr",
                         {
                           key: index,
+                          style:
+                            _vm.selected_delivery_id == delivery.id
+                              ? "color:white;background-color:#6cb2eb"
+                              : "",
                           on: {
                             click: function($event) {
                               _vm.selected_delivery = delivery
@@ -73286,7 +73471,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("td", { staticClass: "text-center" }, [
-                            _vm._v(_vm._s(delivery.total_price))
+                            _vm._v(_vm._s(delivery.total_price) + " DA")
                           ]),
                           _vm._v(" "),
                           _vm._m(3, true)
@@ -73301,26 +73486,64 @@ var render = function() {
           ),
           _vm._v(" "),
           _c(
-            "div",
-            { staticClass: "row d-flex justify-content-center align-bottom" },
+            "span",
+            {
+              staticClass: "text-primary",
+              staticStyle: { "font-size": "13px" }
+            },
             [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary w-75 ",
-                  on: { click: _vm.sortDeliveries }
-                },
-                [_vm._v("Sort By Closest")]
-              )
+              _vm._v("Trip Summary : \n                    "),
+              _vm.routeDistance == 0
+                ? _c("strong", { staticClass: "text-success" }, [
+                    _vm._v("You Have Arrived To The Delivery Destination")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.routeDistance > 0
+                ? _c("strong", [
+                    _vm._v(
+                      _vm._s(
+                        _vm.routeDistance > 1000
+                          ? parseInt(_vm.routeDistance / 1000) +
+                              " km , " +
+                              (parseInt(_vm.routeDistance) % 1000) +
+                              "meters"
+                          : parseFloat(_vm.routeDistance).toFixed(2) + " meters"
+                      )
+                    )
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.selected_delivery == null
+                ? _c("strong", { staticClass: "text-danger" }, [
+                    _vm._v("No Delivery Destination Is Selected")
+                  ])
+                : _vm._e()
             ]
           )
         ]),
         _vm._v(" "),
-        _vm._m(4)
-      ]),
-      _vm._v(" "),
-      _c("span", [
-        _vm._v("GPS Coordinates : " + _vm._s(_vm.gps.lat + " , " + _vm.gps.lng))
+        _c("div", { staticClass: "col-lg-7 col-xs-12" }, [
+          _c("div", { attrs: { id: "map" } }, [_vm._v("c")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row pt-2 justify-content-center" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary w-75",
+                class: !_vm.startDelivery ? "bg-primary" : "bg-danger",
+                on: { click: _vm.Deliver }
+              },
+              [
+                _vm._v(
+                  "\n                            " +
+                    _vm._s(!_vm.startDelivery ? "Start Delivery" : "Stop") +
+                    "\n                        "
+                )
+              ]
+            )
+          ])
+        ])
       ])
     ])
   ])
@@ -73401,14 +73624,6 @@ var staticRenderFns = [
           "data-placement": "top"
         }
       })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-7" }, [
-      _c("div", { attrs: { id: "map" } }, [_vm._v("c")])
     ])
   }
 ]

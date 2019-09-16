@@ -41,8 +41,10 @@
 
                 
             </div>
+            
             <div class="row">
-                <div class="col-5">
+                 
+                <div class="col-lg-5 col-xs-12">
                     <div class="overflow-auto" style="height:363px;">
                          <table class="table table-striped table-hover " style="max-height:363px;" >
                                 <thead  >
@@ -54,9 +56,9 @@
                                 </thead>
 
                                 <tbody  style="overflow-y:scroll;height:3px;">
-                                    <tr v-for="(delivery,index) in deliveries" :key="index" @click="selected_delivery= delivery">
+                                    <tr v-for="(delivery,index) in deliveries" :key="index" @click="selected_delivery= delivery" :style="selected_delivery_id == delivery.id ?'color:white;background-color:#6cb2eb':''">
                                         <td class="text-center">{{delivery.customer_name}}</td>
-                                        <td class="text-center">{{delivery.total_price}}</td>
+                                        <td class="text-center">{{delivery.total_price}} DA</td>
                                         <td>
                                             <img src="/img/icons/checkmark.png" width="20" alt="" data-tooltip="tooltip" data-title="Confirm Payment" data-placement="top" style="cursor:pointer">
                                             <img src="/img/icons/trash.png" width="20" alt="" data-tooltip="tooltip" data-title="Delete Delivery" data-placement="top" style="cursor:pointer">
@@ -67,19 +69,27 @@
                                 </tbody>
                             </table>
                     </div>
+                    <span class="text-primary" style="font-size:13px" >Trip Summary : 
+                        <strong class="text-success" v-if="routeDistance == 0" >You Have Arrived To The Delivery Destination</strong>
+                        <strong v-if="routeDistance > 0">{{routeDistance> 1000 ? parseInt(routeDistance/1000)+' km , '+(parseInt(routeDistance)%1000)+"meters":parseFloat(routeDistance).toFixed(2)+' meters' }}</strong>
+                        <strong class="text-danger" v-if="selected_delivery == null">No Delivery Destination Is Selected</strong>
+                    </span>
                     
-                    <div class="row d-flex justify-content-center align-bottom">
 
-                    <button class="btn btn-primary w-75 " @click="sortDeliveries">Sort By Closest</button>
+                </div>
+                <div class="col-lg-7 col-xs-12">
+                    <div id="map">c</div>
+                    <div class="row pt-2 justify-content-center">
+                            <button class="btn btn-primary w-75" :class="!startDelivery ? 'bg-primary':'bg-danger'" @click="Deliver">
+                                {{!startDelivery ? 'Start Delivery':'Stop'}}
+                            </button>
+                        
                     </div>
 
                 </div>
-                <div class="col-7">
-                    <div id="map">c</div>
-
-                </div>
             </div>
-            <span>GPS Coordinates : {{gps.lat+" , "+gps.lng}}</span>
+            
+            
            
         </div>
 
@@ -89,8 +99,8 @@
 
 
 <script>
-    import editsupplier from './suppliers/editSupplier.vue'
-    import addsupplier from './suppliers/addSupplier.vue'
+   
+import { timeout } from 'q'
     
 
     export default {
@@ -120,6 +130,7 @@
 
         data() {
             return {
+                selected_delivery_id:-1,
                 selected_delivery:null,
                 deliveries:[],
                 deliveries_coords:[],
@@ -130,28 +141,26 @@
                 },
 
                 gps_marker:null,
-                gps_marker_icon_svg : `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="200" height="40" viewBox="0 0 263.335 263.335" style="enable-background:new 0 0 263.335 263.335;" xml:space="preserve">
-                                    <g>
-                                        <g xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M40.479,159.021c21.032,39.992,49.879,74.22,85.732,101.756c0.656,0.747,1.473,1.382,2.394,1.839   c0.838-0.396,1.57-0.962,2.178-1.647c80.218-61.433,95.861-125.824,96.44-128.34c2.366-9.017,3.57-18.055,3.57-26.864    C237.389,47.429,189.957,0,131.665,0C73.369,0,25.946,47.424,25.946,105.723c0,8.636,1.148,17.469,3.412,26.28" fill="{{gps_marker_color}}"/>
-                                        <text x="80" y="130" font-family="sans-serif" font-size="5em" fill="white">{{gps_marker_text}}</text>
-                                        </g>
-                                    </g></svg>`,
+               
               
                 
                 filter_flow:"Ascending",
 
                 current_destination:null,
                 destination_marker:null,
-                destination_marker_icon_svg : `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" width="200" height="40" viewBox="0 0 263.335 263.335" style="enable-background:new 0 0 263.335 263.335;" xml:space="preserve">
-                                    <g>
-                                        <g xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M40.479,159.021c21.032,39.992,49.879,74.22,85.732,101.756c0.656,0.747,1.473,1.382,2.394,1.839   c0.838-0.396,1.57-0.962,2.178-1.647c80.218-61.433,95.861-125.824,96.44-128.34c2.366-9.017,3.57-18.055,3.57-26.864    C237.389,47.429,189.957,0,131.665,0C73.369,0,25.946,47.424,25.946,105.723c0,8.636,1.148,17.469,3.412,26.28" fill="{{gps_marker_color}}"/>
-                                        <text x="80" y="130" font-family="sans-serif" font-size="5em" fill="white">{{gps_marker_text}}</text>
-                                        </g>
-                                    </g></svg>`,
+                
               
                 polylineObject:null,
+
+                startDelivery:false,
+                gpsSimulation:true,
+                gpsSimulationTimers:[],
+                gpsSimulationSpeed:1000, //1000 ms between two coordinates
+                gpsMarkerOnRouteZoom:false,
+                routeShape:null,
+                routeDistance:"N/A",
+                routeShape_lastPoint:-1,
+                gps_marker_object:null,
                
 
             }
@@ -164,22 +173,72 @@
 
             },
            selected_delivery: function(){
-               this.destinationSelected()
+                /**
+                 * disable the zoom on the gps marker so that when the delivery stops the view chanages to bound both 
+                 * the gps marker and the selected delivery marker 
+                 * 
+                 **/
+                if(this.selected_delivery == null)
+                    return
+                this.selected_delivery_id = this.selected_delivery.id
+                this.gpsMarkerOnRouteZoom =false
+                this.destinationSelected()
            },
             filter_flow : function(){
                  this.getSuppliers();
             },
+            startDelivery: function(){
+                if(this.routeShape == null){
+                    alert("Please Choose A Delivery Destination With A Valid Geo Coordinates")
+                    return;
+                }
+                if(this.startDelivery){ //will start the delivery
+                        //if gpsSimulation is true then start the simulation
+
+                        if(this.gpsSimulation)
+                            this.startGpsSimulation();
+                }else{ //stop delivery
+                
+
+                 //activate the zoom on the gps marker so that when the gps stops the view stays where it left
+                this.gpsMarkerOnRouteZoom = true
+                        if(this.gpsSimulation)
+                            this.stopGpsSimulation();
+
+                        this.destinationSelected()
+                }
+            },
+            gpsSimulationSpeed : function(){
+
+                if(this.gpsSimulation){
+                    this.stopGpsSimulation()
+                    //this.startGpsSimulation()
+                }
+
+            },
+            routeShape_lastPoint:function(){
+                
+            },
+            routeShape: function(){
+                //calculate the current Route Distance between where the last point of Route Visisted to the last point of the this.routeShape
+                this.getCurrentRouteDistance()
+            },
             
+            gps :function(){
+                console.log(this.gps)
+            }
         },
-        
+        computed:{
+            routeDistancee:function(){
+
+            }
+        },
 
 
 
         updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
         methods: {
-            sortDeliveries: function(){
-                console.log(this.deliveries_coords)
-            },
+           
             getDeliveries: function(){
                 axios.get("/api/deliveries", {
                     params:{
@@ -253,7 +312,7 @@
                                 maxresults: 2,
                                 prox: position.coords.latitude + "," + position.coords.longitude
                             }, data => {
-                                console.log(data.Response.View[0].Result[0].Location.Address.Label);
+                                //console.log(data.Response.View[0].Result[0].Location.Address.Label);
                                 //alert("The nearest address to your location is:\n" + data.Response.View[0].Result[0].Location.Address.Label);
                             }, error => {
                                 console.error(error);
@@ -265,26 +324,11 @@
                                     lng:position.coords.longitude}
 
 
-                        //draw gps marker 
-                        //first we need to remove the marker from the previous position if it exist
-                        if(this.map.getObjects().length > 0)
-                            if(this.gps_marker != null)
-                                this.map.removeObject(this.gps_marker)
-
-                        //2ndly draw the gps_marker 
+                        
+                        this.destinationSelected()
                         
 
-                        var gpsMarkerIcon = new H.map.Icon(
-                                            this.gps_marker_icon_svg.replace('{{gps_marker_color}}', '#e3342f').replace('{{gps_marker_text}}', 'gps')
-                                            )
-                        this.gps_marker = new H.map.Marker(this.gps,
-                                        {icon: gpsMarkerIcon});
-
-                        this.map.addObject(this.gps_marker);
-
-                        //focus on the gps coordinates 
-                        this.map.getViewModel().setLookAtData({position:this.gps},true)
-                        this.destinationSelected()
+                        
 
 
 
@@ -293,7 +337,32 @@
                     console.error("Geolocation is not supported by this browser!");
                 }
             },
+            drawGpsMarker: function(){
+                //draw gps marker 
+                        //first we need to remove the marker from the previous position if it exist
+                        if(this.map.getObjects().length > 0)
+                            if(this.gps_marker != null){
+                                
+                                this.gps_marker = null
+                            }
+
+                        //2ndly draw the gps_marker 
+                        
+                        var gpsMarkerIcon = new H.map.Icon("/img/icons/delivery_marker.png",{size: {w: 56, h: 56}});      
+
+                        
+                        this.gps_marker = new H.map.Marker(this.gps,
+                                        {icon: gpsMarkerIcon});
+
+                        this.gps_marker_object = this.map.addObject(this.gps_marker);
+
+                        //focus on the gps coordinates 
+                        this.map.getViewModel().setLookAtData({position:this.gps,zoom:15},true)
+
+            },
             drawDestinationMarker: function(){
+                if(this.current_destination == null)
+                            return;
                 //first we need to remove the marker from the previous position if it exist
                         if(this.map.getObjects().length > 0)
                             if(this.destination_marker != null)
@@ -301,10 +370,9 @@
 
                         //2ndly draw the gps_marker 
                         
-
-                        var destinationMarkerIcon = new H.map.Icon(
-                                            this.destination_marker_icon_svg.replace('{{gps_marker_color}}', 'green').replace('{{gps_marker_text}}', 'Cus')
-                                            )
+                        var destinationMarkerIcon = new H.map.Icon("/img/icons/destination_marker.png",{size: {w: 56, h: 56}});      
+                        
+                       
                         this.destination_marker = new H.map.Marker(this.current_destination,
                                         {icon: destinationMarkerIcon});
 
@@ -313,13 +381,40 @@
                         //focus on the gps coordinates 
                         this.map.getViewModel().setLookAtData({position:this.current_destination},true)
             },
+            clearMap: function(){
+                var mapObjects = null
+                if(this.map != null){
+                    mapObjects = this.map.getObjects()
+                    if(mapObjects.length > 0){
+                      
+                        this.map.removeObjects(mapObjects) 
+                       
+                        
+                    }
+
+                }
+            },
             destinationSelected : function(){
-                console.log(this.map)
-                //this.map.removeAll()
-                this.init_gpsTracking()
+                
+              if(this.selected_delivery == null){
+                  //if no delivery is selected then  [clear the map] and redraw the GPS Marker on the current GPS Coordinates
+                    this.clearMap()
+                    this.drawGpsMarker()
+              }
+                    
+
+                this.clearMap()
+                this.drawDestinationMarker()
+                
+                this.drawGpsMarker()
+                        
+                
+
+                //this.init_gpsTracking()
                 if(this.selected_delivery == null)
                     return;
-                console.log(this.selected_delivery.geo_coord)
+               
+                //console.log(this.selected_delivery.geo_coord)
                 if(!RegExp("[-+]?[0-9]*\.?[0-9]+,[-+]?[0-9]*\.?[0-9]+").test(this.selected_delivery.geo_coord)){
                     alert("This Customer Does Not Have Geo Coordinates ,, Calling Customer for guidance is Advised Tel:"+this.selected_delivery.tel)
                     return;
@@ -343,7 +438,8 @@
                     routeattributes : 'waypoints,summary,shape,legs',
                     maneuverattributes: 'direction,action',
                     waypoint0: this.gps.lat+","+this.gps.lng, // Brandenburg Gate
-                    waypoint1: destination  // Friedrichstraße Railway Station i.e "12.54641,11.54641"
+                    waypoint1: destination,  // Friedrichstraße Railway Station i.e "12.54641,11.54641"
+                    //waypoint2: "34.989863041487766,-1.6352269285894379"  // Friedrichstraße Railway Station i.e "12.54641,11.54641"
                     };
 
 
@@ -356,13 +452,15 @@
             },
             onSuccess: function(result) {
                 var route = result.response.route[0];
+                console.log("Route Calculation result")
+                console.log(result.response)
                 
                 /*
                 * The styling of the route response on the map is entirely under the developer's control.
                 * A representitive styling can be found the full JS + HTML code of this example
                 * in the functions below:
                 */
-                this.addRouteShapeToMap(route);
+                this.addRouteShapeToMap(route.shape);
                 /*addManueversToMap(route);
 
                 addWaypointsToPanel(route.waypoint);
@@ -375,10 +473,15 @@
                 alert('Can\'t reach the remote server');
             },
 
-            addRouteShapeToMap: function(route){
+            addRouteShapeToMap: function(routeShape){
                 var lineString = new H.geo.LineString(),
-                    routeShape = route.shape,
-                    polyline;
+                    //routeShape = route.shape,
+                    polyline,
+                    lookAtDataOptions
+
+                //save the routeShape coordinates For later Moving on Road Simulations
+                this.routeShape = routeShape
+                //console.log(route)
 
                 routeShape.forEach(function(point) {
                     var parts = point.split(',');
@@ -391,15 +494,123 @@
                     strokeColor: 'rgba(0, 128, 255, 0.7)'
                     }
                 });
+
+                
                 
                 // Add the polyline to the map
                 this.polylineObject = this.map.addObject(polyline);
-                // And zoom to its bounding rectangle
-                this.map.getViewModel().setLookAtData({
-                    bounds: polyline.getBoundingBox()
-                    });
-            }
+                lookAtDataOptions = {bounds: polyline.getBoundingBox()}
+                if(this.gpsMarkerOnRouteZoom)
+                lookAtDataOptions = {position:this.gps,zoom:15}
                 
+                    
+
+                // And zoom to its bounding rectangle
+                this.map.getViewModel().setLookAtData(lookAtDataOptions,true);
+            },
+            getCurrentRouteDistance: function() {
+                if(this.routeShape == null)
+                    return;
+                if(this.routeShape.length == 1)
+                {
+                    
+                this.routeDistance = 0;
+                return
+
+                }
+                
+                var lineString = new H.geo.LineString(),
+                    polyline
+
+                this.routeShape.forEach(function(point) {
+                    var parts = point.split(',');
+                    lineString.pushLatLngAlt(parts[0], parts[1]);
+                });
+
+                polyline = new H.map.Polyline(lineString);
+
+
+                const geometry = polyline.getGeometry();
+                let distance = 0;
+                let last = geometry.extractPoint(0);
+                for (let i=1; i < geometry.getPointCount(); i++) {
+                    const point = geometry.extractPoint(i);
+                    distance += last.distance(point);
+                    last = point;
+                }
+                if (polyline.isClosed()) {
+                    distance += last.distance(geometry.extractPoint(0));
+                }
+                //console.log((distance/1000).toFixed(3))
+                this.routeDistance = distance;
+            },
+
+
+            Deliver : function(){
+                if(this.routeShape == null){
+                    alert("Please Choose A Delivery Destination With A Valid Geo Coordinates")
+                    return;
+                }
+                
+                if(this.startDelivery){
+                    
+                    this.startDelivery = false
+                }else{
+                    this.startDelivery = true
+                }
+            },
+            startGpsSimulation: function(){
+               
+                var current_coord_index = 0
+                
+                
+                this.routeShape_lastPoint = this.routeShape.length
+                this.routeShape.forEach((gpsCoordinates,index) => {
+                   var timer = setTimeout(() => {
+                                //first we must remove the marker on last coordinates
+                                if(this.gps_marker_object != null)
+                                        this.map.removeObject(this.gps_marker_object)
+                                let tmp = gpsCoordinates.split(",")
+                                    this.gps.lat = parseFloat(tmp[0])
+                                    this.gps.lng  = parseFloat(tmp[1])
+                                    
+                                    this.drawGpsMarker()
+                                    
+                                    //remove the last geo position that has been drawn
+                                    this.routeShape.splice(index,1)
+                                    
+                                    /*if(this.polylineObject != null){
+                                        
+                                        //this.addRouteShapeToMap(this.routeShape)
+                                    }
+                                    
+                                        
+                                    console.log(this.routeShape.length);*/
+
+
+                                    
+                                
+                                
+                             }, (index++)*this.gpsSimulationSpeed);
+                    //save the timer 
+                    this.gpsSimulationTimers.push(timer)
+                        
+                })
+
+            },
+            stopGpsSimulation: function(){
+                //to stop gps simulation we only need to remove all the timers created when startGpsSimulation
+                this.gpsSimulationTimers.forEach(timer => {
+                    clearTimeout(timer)
+                })
+                this.gpsSimulationTimers = []
+               
+
+
+            },
+           
+
+          
           
         },
         components: {
@@ -413,13 +624,10 @@
 
 
 <style scoped>
-tbody tr, tbody td{
-    
-    
-}
+
     #map,#_map{
         width: 100%;
-    height: 400px;
+    height: 363px;
     background: grey;
     }
     body {
