@@ -25,6 +25,9 @@ Route::prefix("/")->middleware("role:admin|moderator|customer,api","auth")->grou
     Route::apiResource('customers','CustomerController');
     Route::apiResource('purchases','PurchaseController');
     Route::apiResource('sales','SaleController');
+
+
+    Route::apiResource('deliveries','deliveryController');
 });
 
 Route::apiResource('medicines_','MedicineFrontController');

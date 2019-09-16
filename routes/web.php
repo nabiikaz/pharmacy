@@ -117,6 +117,14 @@ Route::prefix('dashboard')->middleware("auth","role:admin|moderator,api")->group
     Route::get('customers/{id}',function($id){
         return view('customers')->with('id',$id);
     });
+
+
+    //delivery ----------------------------------------------------
+    Route::get('delivery',function(){
+        $id= -1;    
+        return view('delivery')->with('id',$id);
+    });
+    
 });
 
 Auth::routes();

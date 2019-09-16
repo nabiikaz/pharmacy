@@ -56,6 +56,10 @@ Vue.component("geoCoordinates",require('./components/maps/geo-feature.vue').defa
 Vue.component("register",require('./components/geo-coord_register.vue').default);
 
 
+Vue.component("dashboard_delivery",require('./components/dashboard/delivery.vue').default);
+
+
+
 
 
 /**
