@@ -174,14 +174,15 @@ import { timeout } from 'q'
                  * the gps marker and the selected delivery marker 
                  * 
                  **/
-                if(this.selected_delivery == null)
+                
+               if(this.selected_delivery == null)
                     return
                 this.selected_delivery_id = this.selected_delivery.id
                 this.gpsMarkerOnRouteZoom =false
                 this.destinationSelected()
            },
             filter_flow : function(){
-                 this.getSuppliers();
+               
             },
             startDelivery: function(){
                 if(this.routeShape == null){
@@ -450,7 +451,10 @@ import { timeout } from 'q'
                     alert("This Customer Does Not Have Geo Coordinates ,, Calling Customer for guidance is Advised Tel:"+this.selected_delivery.tel)
                     return;
                 }
-                this.current_destination = this.deliveries_coords[this.selected_delivery.id]
+                
+                var coord_str_split = this.deliveries_coords[this.selected_delivery.id].split(",")
+                this.current_destination = {lat:parseFloat(coord_str_split[0]),lng:parseFloat(coord_str_split[1])}
+                
                 this.drawDestinationMarker();
                 this.calculateRouteFromAtoB(this.selected_delivery.geo_coord,this.selected_delivery.tel)
             },
