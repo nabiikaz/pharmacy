@@ -124,6 +124,12 @@ Route::prefix('dashboard')->middleware("auth","role:admin|moderator,api")->group
         $id= -1;    
         return view('delivery')->with('id',$id);
     });
+
+    //delivery ----------------------------------------------------
+    Route::get('statistics',function(){
+        $id= -1;    
+        return view('statistics')->with('id',$id);
+    });
     
 });
 
