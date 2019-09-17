@@ -10,6 +10,7 @@ use App\Dashboard;
 use App\Sale;
 use App\Http\Resources\Cart as CartResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class cartController extends Controller
 {
@@ -24,7 +25,7 @@ class cartController extends Controller
 
         $client_session_array = Cache::get($client_session);
         
-/*        if(empty($client_session_array))
+        /*        if(empty($client_session_array))
             return "empty";*/
         $customer = Auth::user();
         
@@ -116,7 +117,20 @@ class cartController extends Controller
         
         $customer =  Auth::user();
         $pharmacist = Auth::user();
+        
 
+        foreach($batche_ids as $key => $batch){
+            $Batch = Batche::find($batch);
+            if($Batch == null)
+                continue;
+            $max = $Batch->quantity_stock - $Batch->quantity_min;
+            if($batche_quantities[$key] > $max)
+                return Response()->json([
+                    'message' => "Quantity Cannot Exceed the Max:".$max,
+                    'batch_id'=> $batch
+                ], 412); 
+
+        }
         //attach pharmacist with the sale customer 
         $pharmacist->Customers()->attach([$customer->id =>["paid"=>false,"delivery"=>true]]);
 
@@ -130,12 +144,15 @@ class cartController extends Controller
             if($Batch == null)
                 continue;
             
-            if($batche_quantities[$key] > $Batch->quantity_stock)
-                $batche_quantities[$key] = $Batch->quantity_stock;
+            /*if($batche_quantities[$key] > $Batch->quantity_stock)
+                $batche_quantities[$key] = $Batch->quantity_stock;*/
             
                 /*$Batch->quantity_stock -= $batche_quantities[$key];
                 $Batch->timestamps = false;
                 $Batch->save();*/
+
+                $Batch->quantity_min = $Batch->quantity_min +$batche_quantities[$key];
+                $Batch->save();
 
             if($Batch != null)
                 $sale->Batches()->attach([$Batch->id => ["quantity" => $batche_quantities[$key]]]);

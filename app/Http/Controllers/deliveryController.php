@@ -21,6 +21,9 @@ class deliveryController extends Controller
                             ->where("paid",false)
                             ->select("sales.id","users.name as customer_name","total_price","geo_coord","address","tel")
                             ->get();
+
+        foreach($deliveries as $delivery)
+            $delivery->totalPrice();
         
         $geo_coord = $deliveries->pluck("geo_coord","id")->toArray();
         $keys =  array_keys($geo_coord);
@@ -68,7 +71,24 @@ class deliveryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $delivery = Deliveries::findOrFail($id);
+        
+
+        foreach ($delivery->Batches as $key => $Batch) {
+            
+            $Batch->quantity_min = $Batch->quantity_min - $Batch->quantity_sold;
+            $Batch->quantity_stock = $Batch->quantity_stock - $Batch->quantity_sold;
+            $Batch->save();
+            
+            
+            
+
+            
+        }
+
+        $delivery->paid = true;
+        $delivery->save();
+        
     }
 
     /**

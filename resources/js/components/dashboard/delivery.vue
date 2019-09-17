@@ -7,16 +7,7 @@
                     <div class="col-sm-4">
                         <h2>Deliveries <b>Manager</b></h2>
                     </div>
-                    <div class="col-sm-3">
-                        <input class="form-control form-control-dark w-100" type="text" placeholder="Search"
-                            aria-label="Search" v-model="search">
-
-                    </div>
-                    <div class="col-sm-1 ml-0 pl-0">
-                        <img class="" style="cursor:pointer;color:white;" :src="'/img/icons/'+filter_flow+'.png'" width="38"
-                                @click="(filter_flow == 'Ascending' )? filter_flow='Descending':filter_flow='Ascending'"
-                                :title="filter_flow">
-                    </div>
+                    
                     
                 </div>
             </div>
@@ -47,7 +38,7 @@
                 <div class="col-lg-5 col-xs-12">
                     <div class="overflow-auto" style="height:363px;">
                          <table class="table table-striped table-hover " style="max-height:363px;" >
-                                <thead  >
+                                <thead class="mb-3" >
                                     <tr >
                                         <th class="text-center">Customer Name</th>
                                         <th class="text-center">Balance Due</th>
@@ -55,15 +46,20 @@
                                     </tr>
                                 </thead>
 
-                                <tbody  style="overflow-y:scroll;height:3px;">
+                                <tbody  style="overflow-y:scroll;height:363px;">
+                                    <tr v-if="deliveries.length == 1" >
+                                        <td style="width:2px;"><br></td>
+                                    </tr>
                                     <tr v-for="(delivery,index) in deliveries" :key="index" @click="selected_delivery= delivery" :style="selected_delivery_id == delivery.id ?'color:white;background-color:#6cb2eb':''">
                                         <td class="text-center">{{delivery.customer_name}}</td>
                                         <td class="text-center">{{delivery.total_price}} DA</td>
                                         <td>
-                                            <img src="/img/icons/checkmark.png" width="20" alt="" data-tooltip="tooltip" data-title="Confirm Payment" data-placement="top" style="cursor:pointer">
+                                            <img src="/img/icons/checkmark.png" width="20" alt="" data-tooltip="tooltip" data-title="Confirm Payment" data-placement="top" style="cursor:pointer" @click="confirmPayment(delivery.id)">
                                             <img src="/img/icons/trash.png" width="20" alt="" data-tooltip="tooltip" data-title="Delete Delivery" data-placement="top" style="cursor:pointer">
                                         </td>
                                     </tr>
+
+                                    
                                     
 
                                 </tbody>
@@ -238,6 +234,41 @@ import { timeout } from 'q'
 
         updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
         methods: {
+            confirmPayment: function(delivery_id){
+                axios.patch('/api/deliveries/'+delivery_id)
+                    .then((Response)=>{
+                        
+                       //refresh Deliveries Display
+                         this.getDeliveries();
+                
+
+                         
+
+                    }).catch(error => {
+                        
+                        if(error.response){
+                            /**
+                             * the request was made and the server responded with  a
+                             * status code that falls out of the range of 2**
+                             *  */
+                            console.log(error.response)
+                            this.Message = "Error : "+ error.response.data.errors
+                            this.MessageClass = "text-danger"
+                             switch (error.response.status) {
+                            case 404:
+
+                                
+
+                                
+                                break;
+                        
+                            default:
+                                break;
+                            }   
+                        }
+                        
+                    });
+            },
            
             getDeliveries: function(){
                 axios.get("/api/deliveries", {

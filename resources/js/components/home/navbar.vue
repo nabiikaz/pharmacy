@@ -107,7 +107,7 @@
                                                     <td>{{medicine.status}}</td>
                                                     <td style="width:130px;">
                                                         <input class="form-control" type="number" step="1" :value="medicine.quantity" 
-                                                                :min="1" :max="medicine.max" @change="event => pushToCart(medicine.id,event)" />
+                                                                :min="1" :max="medicine.max" @change="event => pushToCart(medicine.id,event)" :class="(error_batch_id ==medicine.id) ?'is-invalid':''"/>
                                                     </td>
                                                     <td class="text-right">{{medicine.price}} DA</td>
                                                     <td  v-if="customer_refund > 0" class="text-center">{{customer_refund}} %</td>
@@ -189,6 +189,7 @@
         },
         data(){
             return {
+                error_batch_id:-1,
                 Message:"",
                 MessageStyle:"text-primary",
                 crsf:$("meta[name='csrf-token']").attr("content"),
@@ -237,13 +238,15 @@
                              *  */
 
                                 
-                            this.Message = "Error!: "+error.response.statusText+" <b> <a href='/login'>Click Here</a></b><span style='color:gray'>To Login :<span>"
-                            this.MessageStyle = "text-danger"
+                           
                             
                              switch (error.response.status) {
-                            case 404:
+                            case 412:
 
-                                
+                                this.Message = "Error!: "+error.response.statusText+" <b> >> <span>"+error.response.data.message+"</span>"
+                                this.error_batch_id = error.response.data.batch_id
+                            this.MessageStyle = "text-danger"
+                                return
 
                                 
                                 break;
@@ -251,6 +254,9 @@
                             default:
                                 break;
                             }   
+
+                             this.Message = "Error!: "+error.response.statusText+" <b> <a href='/login'>Click Here</a></b><span style='color:gray'>To Login Checkout Your Cart<span>"
+                            this.MessageStyle = "text-danger"
                         }
                     })
             },

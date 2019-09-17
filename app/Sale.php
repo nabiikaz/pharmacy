@@ -35,9 +35,11 @@ class Sale extends Model
             $totalPrice +=$batch->quantity_sold * ($batch->unit_price - (($batch->unit_price * $batch->refund_rate)/100)*$customerRefund_rate) ;
         }
         $shipping = 0;
+        
         $tax_shipping = Dashboard::orderBy("created_at","DESC")->select("tax","shipping_price")->first();
         if($thisSale->delivery)
-            $shipping = $tax_shipping->shipping;
+            $shipping = $tax_shipping->shipping_price;
+
         $this->total_price = round($totalPrice+$totalPrice* $tax_shipping->tax /100+$shipping ,2);
         $this->save();
     }

@@ -336,7 +336,7 @@
                                     <td class="text-center">{{batch.unit_price }}</td>
                                     <td class="text-center">{{batch.batch_price }}</td>
                                     <td class="text-center">
-                                        <input type="number" class="form-control" v-model.number="batch.quantity" :max="batch.quantity_stock" min="1">
+                                        <input type="number" class="form-control" :class="(error_batch_id ==batch.id) ?'is-invalid':''" v-model.number="batch.quantity" :max="batch.quantity_stock" min="1">
                                     </td>
 
 
@@ -731,9 +731,7 @@ import { constants } from 'crypto';
                              * the request was made and the server responded with  a
                              * status code that falls out of the range of 2**
                              *  */
-                            console.log(error.response)
-                            this.Message = "Error : "+ error.response.data.errors
-                            this.MessageClass = "text-danger"
+                           
                              switch (error.response.status) {
                             case 404:
 
@@ -741,10 +739,23 @@ import { constants } from 'crypto';
 
                                 
                                 break;
+
+                                case 412:
+
+                                    this.Message = "Error!: "+error.response.statusText+" "+error.response.data.message
+                                    this.error_batch_id = error.response.data.batch_id
+                                    this.MessageClass = "text-danger"
+                                    return
+
+                                
+                                break;
                         
                             default:
                                 break;
                             }   
+                             console.log(error.response)
+                            this.Message = "Error : "+ error.response.data.errors
+                            this.MessageClass = "text-danger"
                         }
                         
                     });

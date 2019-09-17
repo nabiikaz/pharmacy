@@ -119,19 +119,36 @@ class BatchController extends Controller
         $customer = Customer::findOrFail($customer_id);
         $pharmacist = Auth::user();
         
-        //attach pharmacist with the sale customer 
-        $pharmacist->Customers()->attach([$customer->id =>["paid"=>true]]);
+        
         $sale = Sale::where("user_id","=",$pharmacist->id)
                             ->where("customer_id","=",$customer_id)
                             ->orderBy('created_at', 'desc')->first();
+
+        foreach($request->all() as $batch){
+
+            $Batch = Batche::find($batch["id"]);
+
+            $max = $Batch->quantity_stock - $Batch->quantity_min;
+            if($batch["quantity"]  > $max)
+                return Response()->json([
+                    'message' => "Quantity Cannot Exceed the Max:".$max,
+                    'batch_id'=> $batch["id"]
+                ], 412);
+        }
+
+        //attach pharmacist with the sale customer 
+        $pharmacist->Customers()->attach([$customer->id =>["paid"=>true]]);
+
 
         //update batches's Quantities and attach batches to the current sale
         foreach($request->all() as $batch){
             
             $Batch = Batche::find($batch["id"]);
+
+           
             
-            if($batch["quantity"] > $Batch->quantity_stock)
-                $batch["quantity"] = $Batch->quantity_stock;
+            /*if($batch["quantity"] > $Batch->quantity_stock)
+                $batch["quantity"] = $Batch->quantity_stock;*/
             
                 $Batch->quantity_stock -= $batch["quantity"];
                 $Batch->timestamps = false;

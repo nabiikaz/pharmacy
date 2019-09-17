@@ -4315,17 +4315,24 @@ __webpack_require__.r(__webpack_exports__);
            * the request was made and the server responded with  a
            * status code that falls out of the range of 2**
            *  */
-          console.log(error.response);
-          _this5.Message = "Error : " + error.response.data.errors;
-          _this5.MessageClass = "text-danger";
-
           switch (error.response.status) {
             case 404:
+              break;
+
+            case 412:
+              _this5.Message = "Error!: " + error.response.statusText + " " + error.response.data.message;
+              _this5.error_batch_id = error.response.data.batch_id;
+              _this5.MessageClass = "text-danger";
+              return;
               break;
 
             default:
               break;
           }
+
+          console.log(error.response);
+          _this5.Message = "Error : " + error.response.data.errors;
+          _this5.MessageClass = "text-danger";
         }
       });
     },
@@ -5197,10 +5204,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -5301,20 +5304,46 @@ __webpack_require__.r(__webpack_exports__);
     $('[data-tooltip=tooltip]').tooltip();
   },
   methods: {
-    getDeliveries: function getDeliveries() {
+    confirmPayment: function confirmPayment(delivery_id) {
       var _this = this;
+
+      axios.patch('/api/deliveries/' + delivery_id).then(function (Response) {
+        //refresh Deliveries Display
+        _this.getDeliveries();
+      })["catch"](function (error) {
+        if (error.response) {
+          /**
+           * the request was made and the server responded with  a
+           * status code that falls out of the range of 2**
+           *  */
+          console.log(error.response);
+          _this.Message = "Error : " + error.response.data.errors;
+          _this.MessageClass = "text-danger";
+
+          switch (error.response.status) {
+            case 404:
+              break;
+
+            default:
+              break;
+          }
+        }
+      });
+    },
+    getDeliveries: function getDeliveries() {
+      var _this2 = this;
 
       axios.get("/api/deliveries", {
         params: {}
       }).then(function (response) {
-        _this.deliveries = response.data.deliveries;
-        _this.deliveries_coords = response.data.geo_coords;
+        _this2.deliveries = response.data.deliveries;
+        _this2.deliveries_coords = response.data.geo_coords;
       }, function (error) {
         console.log(error);
       });
     },
     init_map: function init_map() {
-      var _this2 = this;
+      var _this3 = this;
 
       document.getElementById('map').innerHTML = "";
       /**
@@ -5338,7 +5367,7 @@ __webpack_require__.r(__webpack_exports__);
       }); // add a resize listener to make sure that the map occupies the whole container
 
       window.addEventListener('resize', function () {
-        return _this2.map.getViewPort().resize();
+        return _this3.map.getViewPort().resize();
       }); //Step 3: make the map interactive
       // MapEvents enables the event system
       // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
@@ -5348,7 +5377,7 @@ __webpack_require__.r(__webpack_exports__);
       // Helper for logging events
     },
     init_gpsTracking: function init_gpsTracking() {
-      var _this3 = this;
+      var _this4 = this;
 
       var platform = new H.service.Platform({
         apikey: 'rGOxW4XB821m0ZE1YmUg3G9DzmwVjU57MflxIQqCdZk'
@@ -5369,12 +5398,12 @@ __webpack_require__.r(__webpack_exports__);
           }, function (error) {
             console.error(error);
           });
-          _this3.gps = {
+          _this4.gps = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
 
-          _this3.destinationSelected();
+          _this4.destinationSelected();
         });
       } else {
         console.error("Geolocation is not supported by this browser!");
@@ -5573,22 +5602,22 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     startGpsSimulation: function startGpsSimulation() {
-      var _this4 = this;
+      var _this5 = this;
 
       var current_coord_index = 0;
       this.routeShape_lastPoint = this.routeShape.length;
       this.routeShape.forEach(function (gpsCoordinates, index) {
         var timer = setTimeout(function () {
           //first we must remove the marker on last coordinates
-          if (_this4.gps_marker_object != null) _this4.map.removeObject(_this4.gps_marker_object);
+          if (_this5.gps_marker_object != null) _this5.map.removeObject(_this5.gps_marker_object);
           var tmp = gpsCoordinates.split(",");
-          _this4.gps.lat = parseFloat(tmp[0]);
-          _this4.gps.lng = parseFloat(tmp[1]);
+          _this5.gps.lat = parseFloat(tmp[0]);
+          _this5.gps.lng = parseFloat(tmp[1]);
 
-          _this4.drawGpsMarker(); //remove the last geo position that has been drawn
+          _this5.drawGpsMarker(); //remove the last geo position that has been drawn
 
 
-          _this4.routeShape.splice(index, 1);
+          _this5.routeShape.splice(index, 1);
           /*if(this.polylineObject != null){
               
               //this.addRouteShapeToMap(this.routeShape)
@@ -5597,9 +5626,9 @@ __webpack_require__.r(__webpack_exports__);
               
           console.log(this.routeShape.length);*/
 
-        }, index++ * _this4.gpsSimulationSpeed); //save the timer 
+        }, index++ * _this5.gpsSimulationSpeed); //save the timer 
 
-        _this4.gpsSimulationTimers.push(timer);
+        _this5.gpsSimulationTimers.push(timer);
       });
     },
     stopGpsSimulation: function stopGpsSimulation() {
@@ -9384,6 +9413,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      error_batch_id: -1,
       Message: "",
       MessageStyle: "text-primary",
       crsf: $("meta[name='csrf-token']").attr("content"),
@@ -9423,16 +9453,20 @@ __webpack_require__.r(__webpack_exports__);
            * the request was made and the server responded with  a
            * status code that falls out of the range of 2**
            *  */
-          _this.Message = "Error!: " + error.response.statusText + " <b> <a href='/login'>Click Here</a></b><span style='color:gray'>To Login :<span>";
-          _this.MessageStyle = "text-danger";
-
           switch (error.response.status) {
-            case 404:
+            case 412:
+              _this.Message = "Error!: " + error.response.statusText + " <b> >> <span>" + error.response.data.message + "</span>";
+              _this.error_batch_id = error.response.data.batch_id;
+              _this.MessageStyle = "text-danger";
+              return;
               break;
 
             default:
               break;
           }
+
+          _this.Message = "Error!: " + error.response.statusText + " <b> <a href='/login'>Click Here</a></b><span style='color:gray'>To Login Checkout Your Cart<span>";
+          _this.MessageStyle = "text-danger";
         }
       });
     },
@@ -71865,6 +71899,10 @@ var render = function() {
                                   }
                                 ],
                                 staticClass: "form-control",
+                                class:
+                                  _vm.error_batch_id == batch.id
+                                    ? "is-invalid"
+                                    : "",
                                 attrs: {
                                   type: "number",
                                   max: batch.quantity_stock,
@@ -73371,64 +73409,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "table-wrapper" }, [
-      _c(
-        "div",
-        {
-          staticClass: "table-title",
-          staticStyle: { "background-color": "#272b30" }
-        },
-        [
-          _c("div", { staticClass: "row" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-sm-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.search,
-                    expression: "search"
-                  }
-                ],
-                staticClass: "form-control form-control-dark w-100",
-                attrs: {
-                  type: "text",
-                  placeholder: "Search",
-                  "aria-label": "Search"
-                },
-                domProps: { value: _vm.search },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.search = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-sm-1 ml-0 pl-0" }, [
-              _c("img", {
-                staticStyle: { cursor: "pointer", color: "white" },
-                attrs: {
-                  src: "/img/icons/" + _vm.filter_flow + ".png",
-                  width: "38",
-                  title: _vm.filter_flow
-                },
-                on: {
-                  click: function($event) {
-                    _vm.filter_flow == "Ascending"
-                      ? (_vm.filter_flow = "Descending")
-                      : (_vm.filter_flow = "Ascending")
-                  }
-                }
-              })
-            ])
-          ])
-        ]
-      ),
+      _vm._m(0),
       _vm._v(" "),
       false ? undefined : _vm._e(),
       _vm._v(" "),
@@ -73449,36 +73430,73 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "tbody",
-                    { staticStyle: { "overflow-y": "scroll", height: "3px" } },
-                    _vm._l(_vm.deliveries, function(delivery, index) {
-                      return _c(
-                        "tr",
-                        {
-                          key: index,
-                          style:
-                            _vm.selected_delivery_id == delivery.id
-                              ? "color:white;background-color:#6cb2eb"
-                              : "",
-                          on: {
-                            click: function($event) {
-                              _vm.selected_delivery = delivery
+                    {
+                      staticStyle: { "overflow-y": "scroll", height: "363px" }
+                    },
+                    [
+                      _vm.deliveries.length == 1
+                        ? _c("tr", [_vm._m(3)])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm._l(_vm.deliveries, function(delivery, index) {
+                        return _c(
+                          "tr",
+                          {
+                            key: index,
+                            style:
+                              _vm.selected_delivery_id == delivery.id
+                                ? "color:white;background-color:#6cb2eb"
+                                : "",
+                            on: {
+                              click: function($event) {
+                                _vm.selected_delivery = delivery
+                              }
                             }
-                          }
-                        },
-                        [
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(_vm._s(delivery.customer_name))
-                          ]),
-                          _vm._v(" "),
-                          _c("td", { staticClass: "text-center" }, [
-                            _vm._v(_vm._s(delivery.total_price) + " DA")
-                          ]),
-                          _vm._v(" "),
-                          _vm._m(3, true)
-                        ]
-                      )
-                    }),
-                    0
+                          },
+                          [
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(delivery.customer_name))
+                            ]),
+                            _vm._v(" "),
+                            _c("td", { staticClass: "text-center" }, [
+                              _vm._v(_vm._s(delivery.total_price) + " DA")
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c("img", {
+                                staticStyle: { cursor: "pointer" },
+                                attrs: {
+                                  src: "/img/icons/checkmark.png",
+                                  width: "20",
+                                  alt: "",
+                                  "data-tooltip": "tooltip",
+                                  "data-title": "Confirm Payment",
+                                  "data-placement": "top"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.confirmPayment(delivery.id)
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("img", {
+                                staticStyle: { cursor: "pointer" },
+                                attrs: {
+                                  src: "/img/icons/trash.png",
+                                  width: "20",
+                                  alt: "",
+                                  "data-tooltip": "tooltip",
+                                  "data-title": "Delete Delivery",
+                                  "data-placement": "top"
+                                }
+                              })
+                            ])
+                          ]
+                        )
+                      })
+                    ],
+                    2
                   )
                 ]
               )
@@ -73553,9 +73571,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-4" }, [
-      _c("h2", [_vm._v("Deliveries "), _c("b", [_vm._v("Manager")])])
-    ])
+    return _c(
+      "div",
+      {
+        staticClass: "table-title",
+        staticStyle: { "background-color": "#272b30" }
+      },
+      [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-sm-4" }, [
+            _c("h2", [_vm._v("Deliveries "), _c("b", [_vm._v("Manager")])])
+          ])
+        ])
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -73586,7 +73615,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
+    return _c("thead", { staticClass: "mb-3" }, [
       _c("tr", [
         _c("th", { staticClass: "text-center" }, [_vm._v("Customer Name")]),
         _vm._v(" "),
@@ -73600,31 +73629,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("img", {
-        staticStyle: { cursor: "pointer" },
-        attrs: {
-          src: "/img/icons/checkmark.png",
-          width: "20",
-          alt: "",
-          "data-tooltip": "tooltip",
-          "data-title": "Confirm Payment",
-          "data-placement": "top"
-        }
-      }),
-      _vm._v(" "),
-      _c("img", {
-        staticStyle: { cursor: "pointer" },
-        attrs: {
-          src: "/img/icons/trash.png",
-          width: "20",
-          alt: "",
-          "data-tooltip": "tooltip",
-          "data-title": "Delete Delivery",
-          "data-placement": "top"
-        }
-      })
-    ])
+    return _c("td", { staticStyle: { width: "2px" } }, [_c("br")])
   }
 ]
 render._withStripped = true
@@ -80650,6 +80655,10 @@ var render = function() {
                               _c("td", { staticStyle: { width: "130px" } }, [
                                 _c("input", {
                                   staticClass: "form-control",
+                                  class:
+                                    _vm.error_batch_id == medicine.id
+                                      ? "is-invalid"
+                                      : "",
                                   attrs: {
                                     type: "number",
                                     step: "1",
