@@ -92,6 +92,8 @@
                         
                         <th class="text-center " :class="(selected_column == 'family')? 'select-search':''"
                             @click="(selected_column == 'family')? selected_column='':selected_column = 'family'">Family</th>
+
+                        <th class="text-center " >Quantity</th>
                             
 
                       
@@ -107,6 +109,7 @@
                         <td class="text-center"  :class="(selected_column == 'dosage')? 'select-search-data':''">{{medicine.dosage}}</td>
                         <td class="text-center"  :class="(selected_column == 'form')? 'select-search-data':''">{{medicine.form}}</td>
                         <td class="text-center"  :class="(selected_column == 'family')? 'select-search-data':''">{{medicine.family}}</td>
+                        <td class="text-center" :class="medicine.quantity < 1 ? 'text-danger':''" data-tooltip="tooltip" :data-original-title="medicine.quantity < 1 ? 'Medicine In Rupture':''">{{medicine.quantity}}</td>
                         
                        
                         
