@@ -452,7 +452,7 @@ import { timeout } from 'q'
                     return;
                 }
                 
-                var coord_str_split = this.deliveries_coords[this.selected_delivery.id].split(",")
+                var coord_str_split = this.selected_delivery.geo_coord.split(",")
                 this.current_destination = {lat:parseFloat(coord_str_split[0]),lng:parseFloat(coord_str_split[1])}
                 
                 this.drawDestinationMarker();
