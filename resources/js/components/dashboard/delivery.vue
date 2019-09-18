@@ -100,6 +100,7 @@ import { timeout } from 'q'
     
 
     export default {
+       
         mounted() {
             //display deliveries 
             this.getDeliveries()
@@ -235,12 +236,17 @@ import { timeout } from 'q'
 
         updated: function(){$('[data-tooltip=tooltip]').tooltip();}, 
         methods: {
+            
             confirmPayment: function(delivery_id){
                 axios.patch('/api/deliveries/'+delivery_id)
                     .then((Response)=>{
                         
                        //refresh Deliveries Display
                          this.getDeliveries();
+                         this.$forceUpdate();
+                         this.clearMap();
+                         this.drawGpsMarker();
+                         
                 
 
                          
@@ -420,6 +426,12 @@ import { timeout } from 'q'
                     if(mapObjects.length > 0){
                       
                         this.map.removeObjects(mapObjects) 
+
+                        //clear road
+                        this.stopGpsSimulation()
+                        this.routeShape=null
+                        this.routeDistance="N/A"
+                        this.routeShape_lastPoint=-1
                        
                         
                     }
@@ -452,7 +464,7 @@ import { timeout } from 'q'
                     return;
                 }
                 
-                var coord_str_split = this.deliveries_coords[this.selected_delivery.id].split(",")
+                var coord_str_split = this.selected_delivery.geo_coord.split(",")
                 this.current_destination = {lat:parseFloat(coord_str_split[0]),lng:parseFloat(coord_str_split[1])}
                 
                 this.drawDestinationMarker();
