@@ -93,7 +93,8 @@
                         <th class="text-center " :class="(selected_column == 'family')? 'select-search':''"
                             @click="(selected_column == 'family')? selected_column='':selected_column = 'family'">Family</th>
 
-                        <th class="text-center " >Quantity</th>
+                        <th class="text-center " :class="(selected_column == 'total_quantity')? 'select-search':''"
+                            @click="(selected_column == 'total_quantity')? selected_column='':selected_column = 'total_quantity'">Quantity</th>
                             
 
                       
@@ -109,7 +110,10 @@
                         <td class="text-center"  :class="(selected_column == 'dosage')? 'select-search-data':''">{{medicine.dosage}}</td>
                         <td class="text-center"  :class="(selected_column == 'form')? 'select-search-data':''">{{medicine.form}}</td>
                         <td class="text-center"  :class="(selected_column == 'family')? 'select-search-data':''">{{medicine.family}}</td>
-                        <td class="text-center" :class="medicine.quantity < 1 ? 'text-danger':''" data-tooltip="tooltip" :data-original-title="medicine.quantity < 1 ? 'Medicine In Rupture':''">{{medicine.quantity}}</td>
+                        <td class="text-center" :class="(selected_column == 'total_quantity')? 'select-search-data':''" 
+                                                data-tooltip="tooltip" :data-original-title="medicine.total_quantity < 1 ? 'Medicine In Rupture':''"> 
+                            <b :class="medicine.total_quantity < 1 ? 'text-danger':'text-success'">{{medicine.total_quantity}}</b> 
+                        </td>
                         
                        
                         
@@ -580,6 +584,7 @@
                                     this.MessageClass = "text-success"
                                     //clear all inputs 
                                     this.batches_in_cart.splice(0,this.batches_in_cart.length)
+                                    this.getMedicines();
 
                                     $("#modalCart").modal("hide")
                                     

@@ -4086,6 +4086,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      error_batch_id: -1,
       Message: "",
       MessageClass: "text-success",
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -5308,6 +5309,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.patch('/api/deliveries/' + delivery_id).then(function (Response) {
         //refresh Deliveries Display
         _this.getDeliveries();
+
+        _this.$forceUpdate();
+
+        _this.clearMap();
+
+        _this.drawGpsMarker();
       })["catch"](function (error) {
         if (error.response) {
           /**
@@ -5457,7 +5464,12 @@ __webpack_require__.r(__webpack_exports__);
         mapObjects = this.map.getObjects();
 
         if (mapObjects.length > 0) {
-          this.map.removeObjects(mapObjects);
+          this.map.removeObjects(mapObjects); //clear road
+
+          this.stopGpsSimulation();
+          this.routeShape = null;
+          this.routeDistance = "N/A";
+          this.routeShape_lastPoint = -1;
         }
       }
     },
@@ -5479,7 +5491,7 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      var coord_str_split = this.deliveries_coords[this.selected_delivery.id].split(",");
+      var coord_str_split = this.selected_delivery.geo_coord.split(",");
       this.current_destination = {
         lat: parseFloat(coord_str_split[0]),
         lng: parseFloat(coord_str_split[1])
@@ -6090,6 +6102,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6193,6 +6209,8 @@ __webpack_require__.r(__webpack_exports__);
           _this.MessageClass = "text-success"; //clear all inputs 
 
           _this.batches_in_cart.splice(0, _this.batches_in_cart.length);
+
+          _this.getMedicines();
 
           $("#modalCart").modal("hide");
         })["catch"](function (error) {
@@ -73979,7 +73997,24 @@ var render = function() {
                 [_vm._v("Family")]
               ),
               _vm._v(" "),
-              _c("th", { staticClass: "text-center " }, [_vm._v("Quantity")]),
+              _c(
+                "th",
+                {
+                  staticClass: "text-center ",
+                  class:
+                    _vm.selected_column == "total_quantity"
+                      ? "select-search"
+                      : "",
+                  on: {
+                    click: function($event) {
+                      _vm.selected_column == "total_quantity"
+                        ? (_vm.selected_column = "")
+                        : (_vm.selected_column = "total_quantity")
+                    }
+                  }
+                },
+                [_vm._v("Quantity")]
+              ),
               _vm._v(" "),
               _c(
                 "th",
@@ -74046,14 +74081,28 @@ var render = function() {
                   "td",
                   {
                     staticClass: "text-center",
-                    class: medicine.quantity < 1 ? "text-danger" : "",
+                    class:
+                      _vm.selected_column == "total_quantity"
+                        ? "select-search-data"
+                        : "",
                     attrs: {
                       "data-tooltip": "tooltip",
                       "data-original-title":
-                        medicine.quantity < 1 ? "Medicine In Rupture" : ""
+                        medicine.total_quantity < 1 ? "Medicine In Rupture" : ""
                     }
                   },
-                  [_vm._v(_vm._s(medicine.quantity))]
+                  [
+                    _c(
+                      "b",
+                      {
+                        class:
+                          medicine.total_quantity < 1
+                            ? "text-danger"
+                            : "text-success"
+                      },
+                      [_vm._v(_vm._s(medicine.total_quantity))]
+                    )
+                  ]
                 ),
                 _vm._v(" "),
                 _c("td", { staticClass: "text-center" }, [

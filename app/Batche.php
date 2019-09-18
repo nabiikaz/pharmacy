@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Sale;
+use App\Medicine;
 class Batche extends Model
 {
     //
@@ -21,4 +22,10 @@ class Batche extends Model
     public function Sales(){
         return $this->belongsToMany(Sale::class,'sale_batches');
     }
+
+    public function Medicine(){
+        return $this->belongsTo(Medicine::class);
+    }
+
+   
 }
