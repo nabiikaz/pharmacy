@@ -5312,6 +5312,13 @@ __webpack_require__.r(__webpack_exports__);
 
         _this.$forceUpdate();
 
+        _this.startDelivery = false;
+        _this.selected_delivery = null;
+        _this.current_destination = null;
+        _this.routeShape = null;
+        _this.destination_marker = null;
+        _this.selected_delivery_id = -1;
+
         _this.clearMap();
 
         _this.drawGpsMarker();

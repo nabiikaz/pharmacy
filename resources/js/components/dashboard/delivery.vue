@@ -244,6 +244,13 @@ import { timeout } from 'q'
                        //refresh Deliveries Display
                          this.getDeliveries();
                          this.$forceUpdate();
+                        
+                        this.startDelivery = false
+                        this.selected_delivery = null
+                        this.current_destination = null
+                        this.routeShape = null
+                        this.destination_marker =null
+                        this.selected_delivery_id = -1
                          this.clearMap();
                          this.drawGpsMarker();
                          
