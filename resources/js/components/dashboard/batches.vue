@@ -394,6 +394,7 @@ import { constants } from 'crypto';
         data() {
 
             return {
+                error_batch_id:-1,
                  Message:"",
                 MessageClass:"text-success",
 

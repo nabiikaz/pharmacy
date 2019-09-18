@@ -72,19 +72,45 @@ class BatchController extends Controller
         $purchase = Purchase::where("user_id","=",$auth_user->id)
                             ->where("supplier_id","=",$supplier_id)
                             ->orderBy('created_at', 'desc')->first();
-
-        foreach($batches as $batch){
-
+        
+        $quantity_added_per_medicine = [];
+        foreach($batches as $key => $batch){
             $medicine_id = $batch["medicineId"];
+
+            if(!isset($quantity_added_per_medicine[$medicine_id]))
+                $quantity_added_per_medicine[$medicine_id] = intval($batch["quantity"]);
+            else {
+                $quantity_added_per_medicine[$medicine_id] += intval($batch["quantity"]); 
+            }
+
+
+
+
+            
+
+
             
             $purchase->Medicines()->attach([$medicine_id => ["fabrication_date"=>$batch["fabrication_date"],
             "expiry_date" => $batch["expiry_date"],"unit_price" => $batch["unit_price"],
             "batch_price" => $batch["batch_price"],"quantity" => $batch["quantity"],"quantity_stock" => $batch["quantity"],"quantity_min" =>$batch["quantity_min"],"refund_rate"=>$batch["refund_rate"] ] ]);
 
-            //update previous batches with same medicine Id so that all the batches with same medicine Id can have the same price of the last added batch 
-           /* Batche::where("medicine_id","=",$medicine_id)
-                ->update(["unit_price" => $batch["unit_price"]]);*/
+            
+
+           
         }
+        $purchase = Purchase::find($purchase)->last();
+
+        //update medicine total_quantity to be equals to the sum of the medicine's batches quantity_stock
+        foreach ($purchase->Batches as  $Batche) {
+            
+            $medicine = Medicine::find($Batche->pivot->medicine_id);
+            
+            Medicine::where('id',$Batche->pivot->medicine_id)
+                    ->update(["total_quantity" => $medicine->total_quantity + $quantity_added_per_medicine[$Batche->pivot->medicine_id]]);
+            
+        }
+
+        
 
 
 
@@ -101,9 +127,12 @@ class BatchController extends Controller
      */
     public function show(Batche $batch)
     {
-        //$batch = Batche::findOrFail($batch->id);
-        return (new BatchResource(Batche::where("batches.id","=",$batch->id)
-        ->join('medicines',"medicines.id","=","batches.id")->first()));
+        
+        
+        
+        return (new BatchResource(Medicine::join('batches',"batches.medicine_id","=","medicines.id")
+                                    ->where("batches.id","=",$batch->id)
+                                    ->first()));
     }
 
     
@@ -119,7 +148,7 @@ class BatchController extends Controller
         $customer = Customer::findOrFail($customer_id);
         $pharmacist = Auth::user();
         
-        
+        $pharmacist->Customers()->attach([$customer->id =>["paid"=>true]]);        
         $sale = Sale::where("user_id","=",$pharmacist->id)
                             ->where("customer_id","=",$customer_id)
                             ->orderBy('created_at', 'desc')->first();
@@ -137,7 +166,6 @@ class BatchController extends Controller
         }
 
         //attach pharmacist with the sale customer 
-        $pharmacist->Customers()->attach([$customer->id =>["paid"=>true]]);
 
 
         //update batches's Quantities and attach batches to the current sale
@@ -156,6 +184,9 @@ class BatchController extends Controller
 
             if($Batch != null)
                 $sale->Batches()->attach([$Batch->id => ["quantity" => $batch["quantity"]]]);
+            //update Batch's Medicine total_quantity with the quantity of this batch in this Sale
+            $medicine = Medicine::where('id',$Batch->Medicine->id)->update(["total_quantity" => $Batch->Medicine->total_quantity - $batch["quantity"]]);
+            
         }
         
         
@@ -169,6 +200,13 @@ class BatchController extends Controller
      */
     public function destroy(Batche $batch)
     {
+        $quantity_stock = $batch->quantity_stock;
+        $medicine = Medicine::find($batch->Medicine)->first();
+        
+        $medicine->total_quantity -= $quantity_stock;
+        $medicine->save();
         $batch->delete();
+        
+        
     }
 }

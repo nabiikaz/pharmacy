@@ -20,6 +20,7 @@ class CreateMedicinesTable extends Migration
             $table->string('form');
             $table->string('family');
             $table->string('Img');
+            $table->integer('total_quantity')->unsigned()->default(0);
             $table->text('description');
             $table->timestamps();
         });

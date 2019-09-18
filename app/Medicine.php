@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Medicine extends Model
 {
-    protected $appends = ["quantity"];
+    //protected $appends = ["quantity"];
     
     //
     /**
@@ -22,15 +22,18 @@ class Medicine extends Model
         return $this->belongsToMany(Batche::class,"batches");
     }
 
-    public function getQuantityAttribute(){
-        //dd(Medicine::find($this->id)->Batches);
+    /*public function totalPrice(){
+       //get all Batches associated with $this medicine
         $batches = Batche::join("medicines","medicines.id","=","batches.medicine_id")
                          ->where("medicines.id","=",$this->id)->get();
         $quantity = 0;
         foreach ($batches as $key => $batch) {
             $quantity = $batch->quantity_stock;
         }
-        return $quantity;
-    }
+        
+        //and now we save it $this medicine's total_quantity column 
+        $this->total_quantity = $quantity;
+        $this->save();
+    }*/
 
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Sale as Deliveries;
+use App\Medicine;
 class deliveryController extends Controller
 {
     /**
@@ -73,12 +74,19 @@ class deliveryController extends Controller
     {
         $delivery = Deliveries::findOrFail($id);
         
-
+        
         foreach ($delivery->Batches as $key => $Batch) {
             
             $Batch->quantity_min = $Batch->quantity_min - $Batch->quantity_sold;
             $Batch->quantity_stock = $Batch->quantity_stock - $Batch->quantity_sold;
             $Batch->save();
+
+
+            $medicine = Medicine::find($Batch->medicine_id);
+            
+            Medicine::where('id',$Batch->medicine_id)
+                    ->update(["total_quantity" => $medicine->total_quantity - $Batch->quantity_sold]);
+            
             
             
             

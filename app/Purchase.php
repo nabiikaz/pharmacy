@@ -27,7 +27,7 @@ class Purchase extends Model
     * retrieve all medicines Batches Associated with purchase;
     */
     public function Batches(){
-        return $this->belongsToMany(Medicine::class,"batches")->withPivot("fabrication_date as fabrication_date","expiry_date as expiry_date","unit_price as unit_price","batch_price as batch_price","quantity as quantity");
+        return $this->belongsToMany(Medicine::class,"batches")->withPivot("id","fabrication_date as fabrication_date","expiry_date as expiry_date","unit_price as unit_price","batch_price as batch_price","quantity as quantity");
 
     }
 
