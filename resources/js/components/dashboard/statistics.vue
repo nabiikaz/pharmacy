@@ -1,51 +1,109 @@
 <template>
-    <div class="mt-5">
+    <div class="mt-2">
+        <div class="row mb-3">
 
-        <div class="row">
-            <div class="col-lg-4 col-xs-12">
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body bg-dark text-white">
-                        <div class="row " >
-                            <div class="col-7 " style="padding-bottom:0px;">
-                                <h5 class="card-title">TODAYS SALES</h5>
-                            </div>
+            <div class="col-xl-3 col-ml-3 col-md-6 mt-5 ">
+                <div class="single-report product-sold-report">
+                    <div class="s-sale-inner  mb-3 pl-3 pr-3 pt--30 ">
+                        <div class="s-report-title d-flex justify-content-between">
+                            <h4 class="header-title mb-0">Product Sold</h4>
+                            
 
-                            <div class="col-5">
-                                <h6 class="card-title text-success">142000.00 DA</h6>
-                            </div>
+                            <select class="custome-select border-0 pr-3" v-model="main_statistics.controllers.product_sold"  >
+                                <option selected  value="today">Today</option>
+                                <option  value="last_week" >Last 7 Days</option>
+                                <option  value="last_month" >Last Month</option>
+                                <option  value="last_year" >Last Year</option>
+                            </select>
                         </div>
-                        
+                    </div>
+                    <div class="row pb--20 ">
+                        <span class="w-100 text-center">
+                            <h1 class="report-value ">
+                                {{main_statistics_product_sold}}
+                            </h1>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-xs-12">
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body bg-dark text-white" >
-                       <div class="row " >
-                            <div class="col-8 " style="padding-bottom:0px;">
-                                <h5 class="card-title">NEW CUSTOMERS</h5>
-                            </div>
+            <div class="col-xl-3 col-ml-3 col-md-6 mt-5">
+                <div class="single-report gross-profit-report">
+                    <div class="s-sale-inner  mb-3 pl-3 pr-3 pt--30 ">
+                        <div class="s-report-title d-flex justify-content-between">
+                            <h4 class="header-title mb-0">Gross Profit</h4>
+                            
 
-                            <div class="col-4">
-                                <h6 class="card-title text-white">10</h6>
-                            </div>
+                            <select class="custome-select border-0 pr-3"  v-model="main_statistics.controllers.gross_profit" >
+                                <option selected  value="today">Today</option>
+                                <option  value="last_week" >Last 7 Days</option>
+                                <option  value="last_month" >Last Month</option>
+                                <option  value="last_year" >Last Year</option>
+                            </select>
                         </div>
-
-                        
-                        
+                    </div>
+                    <div class="row pb--20 ">
+                        <span class="w-100 text-center ">
+                            <h1 class="report-value ">
+                                {{main_statistics_gross_profit}} DA
+                            </h1>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-4 col-xs-12">
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body bg-dark text-white" >
-                        <h5 class="card-title">TODAYS SALES</h5>
+            <div class="col-xl-3 col-ml-3 col-md-6 mt-5">
+                <div class="single-report orders-report">
+                    <div class="s-sale-inner  mb-3 pl-3 pr-3 pt--30 ">
+                        <div class="s-report-title d-flex justify-content-between">
+                            <h4 class="header-title mb-0">Delivery Orders</h4>
+                            
 
+                            <select class="custome-select border-0 pr-3" v-model="main_statistics.controllers.delivery_orders" >
+                                <option selected  value="today">Today</option>
+                                <option  value="last_week" >Last 7 Days</option>
+                                <option  value="last_month" >Last Month</option>
+                                <option  value="last_year" >Last Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row pb--20 ">
+                        <span class="w-100 text-center ">
+                            <h1 class="report-value ">
+                                {{main_statistics_delivery_orders}}
+                            </h1>
+                        </span>
                     </div>
                 </div>
             </div>
+
+            <div class="col-xl-3 col-ml-3 col-md-6 mt-5">
+                <div class="single-report new-customers-report">
+                    <div class="s-sale-inner  mb-3 pl-3 pr-3 pt--30 ">
+                        <div class="s-report-title d-flex justify-content-between">
+                            <h4 class="header-title mb-0">New Customers</h4>
+                            
+
+                            <select class="custome-select border-0 pr-3" v-model="main_statistics.controllers.new_customers"  >
+                                <option selected  value="today">Today</option>
+                                <option  value="last_week" >Last 7 Days</option>
+                                <option  value="last_month" >Last Month</option>
+                                <option  value="last_year" >Last Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row pb--20 ">
+                        <span class="w-100 text-center ">
+                            <h1 class="report-value ">
+                                {{main_statistics_new_customers}} 
+                            </h1>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+
+
         </div>
 
     </div>
@@ -53,16 +111,204 @@
 
 
 <script>
+    import chart from 'chart.js'
     export default {
 
+        mounted() {
+            this.initServerSE();
+        },
+        data() {
+            return {
+                serverStream:{
+                    status:false, //false => closed
+                    reconnect_count:0 
+                },
+                main_statistics:{
+                    controllers:{ //0 => today , 1 => last 7 days , 2 => last month , 3 => last year
+                        product_sold:'today',
+                        gross_profit:'today',
+                        delivery_orders:'today',
+                        new_customers:'today',
+                        
+                    },
+                   
+                    model:{
+                        product_sold:{//unit is N/A
+                            today:0,
+                            last_week:12,
+                            last_month:325,
+                            last_year:145,
+                        },
+                        gross_profit:{//unit is DA
+                           today:0,
+                            last_week:12,
+                            last_month:325,
+                            last_year:145,
+                        },
+                        delivery_orders:{
+                           today:0,
+                            last_week:12,
+                            last_month:325,
+                            last_year:145,
+                        },
+                        new_customers:{
+                            today:0,
+                            last_week:12,
+                            last_month:45,
+                            last_year:145,
+                        }
+                    }
+                    
+                }
+               
+
+
+            }
+        },
+        watch: {
+           
+        },
+        computed:{
+            main_statistics_product_sold:function(){
+                var option = this.main_statistics.controllers.product_sold //get the select option from the binding object property
+               return this.main_statistics.model.product_sold[option];
+            },
+            main_statistics_gross_profit:function(){
+               var option = this.main_statistics.controllers.gross_profit //get the select option from the binding object property
+               return this.main_statistics.model.gross_profit[option];
+            },
+            main_statistics_delivery_orders:function(){
+               var option = this.main_statistics.controllers.delivery_orders //get the select option from the binding object property
+               return this.main_statistics.model.delivery_orders[option];
+            },
+            main_statistics_new_customers:function(){
+              var option = this.main_statistics.controllers.new_customers //get the select option from the binding object property
+               return this.main_statistics.model.new_customers[option];
+            }
+        },
+
+
+
+
+
+        methods: {
+            /**
+             * initiate SSE server sent event
+             */
+            initServerSE: function(){ 
+
+                var serverEvent  = new EventSource('/api/stream');
+
+                serverEvent.addEventListener("message",event => {
+                    console.log(JSON.parse(event.data).product_sold)
+                    /*let data = JSON.parse(event.data);
+                    //extract and assigne the main_statistics
+                    this.main_statistics.model = data.main_statistics;*/
+
+                },false)
+
+                serverEvent.addEventListener("error" ,event => {
+                    if(event.readyState == EventSource.CLOSED){
+                        console.log("Connection Closed : trying to reconnect ....")
+                        this.serverStream.status = false
+                        //if(this.serverStream.reconnect_count < 10)
+
+                    }
+                })
+                
+                serverEvent.addEventListener("open",event => {
+                    this.serverStream.status = true
+                })
+
+            }
+
+            
+        }
     }
 
 </script>
 
 <style scoped>
-    .card-body {
-        border-radius: 10px;
 
+
+.single-report {
+    overflow: hidden;
+    position: relative;
+    margin:5px;
+    cursor: pointer;
+}
+.single-report:hover/deep/{
+    margin:0px;
+}
+.gross-profit-report,.gross-profit-report/deep/.custome-select{
+    background: #e91e63;
+    
+}
+
+.product-sold-report,.product-sold-report/deep/.custome-select{
+    background: #9c27b0;
+    
+}
+
+.orders-report,.orders-report/deep/.custome-select{
+    background: #673ab7;
+
+}
+
+.new-customers-report,.new-customers-report/deep/.custome-select{
+    background: #3f51b5;
+
+}
+
+.single-report:hover/deep/.report-value{
+    color: #000000;
+}
+
+.report-value{
+    color: #0000009c;
+}
+
+
+.sales-style-two .single-report {
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+    padding: 10px 15px 10px;
+}
+
+.s-report-title {
+        margin-bottom: 19px;
     }
+   
+    .header-title {
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: white;
+    text-transform: capitalize;
+    margin-bottom: 17px;
+}
+
+.s-report-title .header-title {
+        font-size: 15px;
+    }
+.custome-select {
+    margin-right: -30px;
+width: 110px;
+    font-size: 13px;
+    color: white;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.custome-select>option{
+
+    color:gray;
+    background-color: white;
+}
+
+
+
 
 </style>

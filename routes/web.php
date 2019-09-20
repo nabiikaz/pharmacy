@@ -52,7 +52,7 @@ Route::prefix('dashboard')->middleware("auth","role:admin|moderator,api")->group
 
     Route::get('pharmacists',function(){
         return view('users');
-    });
+    })->name("dashboard.users");
 
 
     Route::get('medicines',function(){
@@ -123,13 +123,13 @@ Route::prefix('dashboard')->middleware("auth","role:admin|moderator,api")->group
     Route::get('delivery',function(){
         $id= -1;    
         return view('delivery')->with('id',$id);
-    });
+    })->name("dashboard.delivery");
 
     //delivery ----------------------------------------------------
     Route::get('statistics',function(){
         $id= -1;    
         return view('statistics')->with('id',$id);
-    });
+    })->name("dashboard.statistics");
     
 });
 
