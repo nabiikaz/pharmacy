@@ -149,6 +149,7 @@ class BatchController extends Controller
         $pharmacist = Auth::user();
         
         
+        
 
         foreach($request->all() as $batch){
 
@@ -162,12 +163,15 @@ class BatchController extends Controller
                 ], 412);
         }
 
+        
+
+        //attach pharmacist with the sale customer 
         $pharmacist->Customers()->attach([$customer->id =>["paid"=>true]]);        
         $sale = Sale::where("user_id","=",$pharmacist->id)
                             ->where("customer_id","=",$customer_id)
-                            ->orderBy('created_at', 'desc')->first();
-
-        //attach pharmacist with the sale customer 
+                            ->orderBy("id","DESC")
+                            ->orderBy('created_at', 'DESC')
+                            ->first();
 
 
         //update batches's Quantities and attach batches to the current sale
@@ -190,9 +194,7 @@ class BatchController extends Controller
             $medicine = Medicine::where('id',$Batch->Medicine->id)->update(["total_quantity" => $Batch->Medicine->total_quantity - $batch["quantity"]]);
             
         }
-        $sales = Sale::all();
-        foreach($sales as $sale)
-            $sale->totalPrice();
+        $sale->totalPrice();
 
         event(new \App\Events\InventoryUpdate());
 

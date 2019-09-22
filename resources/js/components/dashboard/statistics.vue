@@ -106,6 +106,21 @@
 
         </div>
 
+
+        <div class="row">
+            <h4 class="pl-5  " style="color:gray">Histogram of sales numbers of the last month :  </h4>
+            
+                <canvas id="histogram_1" height="150"></canvas>
+
+        </div>
+
+        <div class="row">
+            <h4 class="pl-5  " style="color:gray">Histogram of sales numbers of the last month :  </h4>
+            
+                <canvas id="histogram_2" height="150"></canvas>
+
+        </div>
+
     </div>
 </template>
 
@@ -115,7 +130,8 @@
     export default {
 
         mounted() {
-            this.Listen();
+           this.Listen();
+           this.chartInit();
            
         },
         data() {
@@ -162,6 +178,95 @@
                         }
                     }
                     
+                },
+                chart :null,
+                histo1_model:{
+                   
+                                labels:[],
+                                datasets: [
+                                    {
+                                        label: "Number Of Sales",
+                                        backgroundColor:[
+                                            "#191970",
+                                            "#191970",
+                                            "#000080",
+                                            "#000080",
+                                            "#000080",
+                                            "#6495ED",
+                                            "#6495ED",
+                                            "#483D8B",
+                                            "#483D8B",
+                                            "#6A5ACD",
+                                            "#6A5ACD",
+                                            "#7B68EE",
+                                            "#7B68EE",
+                                            "#A52A2A",
+                                            "#E9967A",
+                                            "#FFA07A",
+                                            "#FFA07A",
+                                            "#FFA500",
+                                            "#FF8C00",
+                                            "#FF8C00",
+                                            "#FF7F50",
+                                            "#F08080",
+                                            "#F08080",
+                                            "#FF6347",
+                                            "#FF4500",
+                                            "#FF4500",
+                                            "#FF0000",
+                                            "#FF69B4",
+                                            "#FF69B4",
+                                            "#FF1493",
+                                        ],
+                                        data:[]
+                                    }
+                                ]
+                        
+                    
+                },
+                histo2_model:{
+                   
+                                labels:[],
+                                datasets: [
+                                    {
+                                        label: "Profit",
+                                        backgroundColor:[
+                                            "#191970",
+                                            "#191970",
+                                            "#000080",
+                                            "#000080",
+                                            "#000080",
+                                            "#6495ED",
+                                            "#6495ED",
+                                            "#483D8B",
+                                            "#483D8B",
+                                            "#6A5ACD",
+                                            "#6A5ACD",
+                                            "#7B68EE",
+                                            "#7B68EE",
+                                            "#A52A2A",
+                                            "#E9967A",
+                                            "#FFA07A",
+                                            "#FFA07A",
+                                            "#FFA500",
+                                            "#FF8C00",
+                                            "#FF8C00",
+                                            "#FF7F50",
+                                            "#F08080",
+                                            "#F08080",
+                                            "#FF6347",
+                                            "#FF4500",
+                                            "#FF4500",
+                                            "#FF0000",
+                                            "#FF69B4",
+                                            "#FF69B4",
+                                            "#FF1493",
+                                        ],
+                                        data:[]
+                                    }
+                                ]
+                        
+                    
                 }
                
 
@@ -204,22 +309,42 @@
              */
             init_event: function(){
                 axios.get("/api/init_stat_event/").then((response)=>{
-                    console.log("1")
+                   // console.log("1")
                 });
             },
             Listen: function(){ 
-
+                
                this.listener = Echo.channel('statistics').listen("InventoryUpdate",(e)=>{
-                   console.log(e)
+                   console.log(e);
                    this.main_statistics.model = e.main_statistics;
+                   this.histo1_model.datasets[0].data = e.histo1.data;
+                   this.histo1_model.labels = e.histo1.dates;
+
+                   this.histo2_model.datasets[0].data = e.histo2.data;
+                   this.histo2_model.labels = e.histo2.dates;
+                   this.chartInit();
                })
                
 
             
 
+            },
+            
+            chartInit: function(){
+                var histogram_1 = document.getElementById("histogram_1").getContext('2d'),options = {}
+                    var lineChart = new Chart(histogram_1,{
+                                        type: "bar",
+                                        data: this.histo1_model, 
+                                    });
+                var histogram_2 = document.getElementById("histogram_2").getContext('2d'),options = {}
+                    var lineChart2 = new Chart(histogram_2,{
+                                        type: "bar",
+                                        data: this.histo2_model, 
+                                    });
+                
             }
 
-            
+              
         }
     }
 

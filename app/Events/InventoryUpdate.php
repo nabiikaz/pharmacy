@@ -19,6 +19,8 @@ class InventoryUpdate implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $main_statistics;
+    public $histo1;
+    public $histo2;
 
     /**
      * Create a new event instance.
@@ -56,6 +58,10 @@ class InventoryUpdate implements ShouldBroadcast
                                             "last_month" =>$this->getCustomers($lastMonth) ,
                                             "last_year" =>$this->getCustomers($lastYear) 
                                         ],];
+        $this->histo1 = $this->histogram1();
+        $this->histo2 = $this->histogram2();
+
+        
     }
 
     /**
@@ -99,6 +105,71 @@ class InventoryUpdate implements ShouldBroadcast
                             ->join("users","users.id","=","role_user.user_id")
                             ->where("users.created_at",">=",$date)
                             ->count("users.created_at");
+    }
+
+    public function histogram1(){
+        $day = array();
+       for ($i = 30;$i >=-1;$i--) {
+        $day_str = date('F jS, Y', strtotime(Carbon::today()->subDay($i)->format("Y-m-d")));           
+         
+           
+        $day["dates"][$day_str] =   $day_str ;
+        $day["data"][$day_str] = 0;
+    }
+    
+      $sales = Sale::join("sale_batches","sale_batches.sale_id","=","sales.id")
+                    ->select('sales.id', 'created_at','quantity')
+                    ->where('created_at',">=",Carbon::today()->subDay(31))
+                    
+                    ->get()
+                    ->groupBy(function($date) {
+                        return date('F jS, Y',strtotime(Carbon::parse($date->created_at)->format("Y-m-d"))); // grouping by days
+                    })->map(function ($row,$id) use ($day) {
+                        return ['sum' =>intval($row->sum('quantity'))];
+                    })/*->keyBy('0')->map(function($row){
+                        return $row["sum"];
+                    })*/;
+
+
+        foreach ($sales as $key => $value) {
+            $day["data"][$key] = $value["sum"];
+            
+        }
+        $day["dates"] = array_values($day["dates"]);    
+        $day["data"] = array_values($day["data"]);    
+        return $day;
+ 
+    }
+
+    public function histogram2(){
+        $month = array();
+        for ($i = 12;$i >=0;$i--) {
+            $month_str = date('F Y', strtotime(Carbon::today()->subMonth($i)->format("Y M")));           
+            //$month_int = Carbon::today()->subMonth($i)->format('m');
+                
+            $month["dates"][$month_str] =   $month_str ;
+            $month["data"][$month_str] = 0;
+        }
+     $sales = Sale::where('created_at',">=",Carbon::today()->subYear(1))
+                   ->orderBy('created_at','ASC')
+                   ->where("total_price",">",0)
+                   ->where('paid',"=",true)
+                   ->get()
+                   ->groupBy(function($date){
+                     return date('F Y', strtotime(Carbon::parse($date->created_at)->format("Y M")));
+                   })->map(function($row,$id){
+                     return ["total_price" => $row->sum("total_price")];
+                   });
+  
+       foreach ($sales as $key => $value) {
+           $month["data"][$key] = $value["total_price"];
+           
+       }
+       $month["dates"] = array_values($month["dates"]);    
+       $month["data"] = array_values($month["data"]);    
+       return $month ;
+        
+ 
     }
 
     

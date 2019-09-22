@@ -112,9 +112,9 @@
                                                     <td class="text-right">{{medicine.price}} DA</td>
                                                     <td  v-if="customer_refund > 0" class="text-center">{{customer_refund}} %</td>
                                                     <td  v-if="customer_refund > 0" class="text-center">{{medicine.price-(medicine.price * customer_refund/100)}} DA</td>
-                                                    <td class="text-right" style="width:8px;">
+                                                    <td class="text-right" style="width:50px;">
                                                         <a href="#" class="delete" title="" data-tooltip="tooltip" data-original-title="Delete" @click="deleteMedicine(medicine.id)">
-                                                            <img src="/img/icons/trash.png" width="24">
+                                                            <img src="/img/icons/trash.png" width="100">
                                                         </a>
                                                     </td>
                                                 </tr>

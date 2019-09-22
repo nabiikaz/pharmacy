@@ -363,7 +363,7 @@
                             <div class="col-6"></div>
                             <div class="col-6 d-flex justify-content-end">
                                 <input type="text" class="btn btn-warning mr-2" style="width: 140px;" value="Select Customer" @click="selectCustomer">
-                                <input type="text" class="btn btn-primary " style="width: 140px;" value="Confirm Sale" @click="SubmitBatches" >
+                                <input type="text" class="btn btn-primary " style="width: 140px;" value="Confirm Sale" @click="SubmitBatches" :disabled="submitBatches_btn" >
                             </div>
                            
                         </div>
@@ -394,6 +394,7 @@ import { constants } from 'crypto';
         data() {
 
             return {
+                submitBatches_btn:false,
                 error_batch_id:-1,
                  Message:"",
                 MessageClass:"text-success",
@@ -696,6 +697,7 @@ import { constants } from 'crypto';
                     return;
                 }
 
+                this.submitBatches_btn = true;
                 
                 
                 axios.patch('/api/batches/'+this.selected_customer_id,this.batches_in_cart)
@@ -709,6 +711,7 @@ import { constants } from 'crypto';
                                 //clear all inputs 
                                 this.batches_in_cart = []
                                 $("#modalCart").modal("hide");
+                                this.submitBatches_btn = false;
 
 
                                 
