@@ -81,10 +81,10 @@
                 <div class="single-report new-customers-report">
                     <div class="s-sale-inner  mb-3 pl-3 pr-3 pt--30 ">
                         <div class="s-report-title d-flex justify-content-between">
-                            <h4 class="header-title mb-0">New Customers</h4>
+                            <h4 class="header-title mb-0">Customers</h4>
                             
 
-                            <select class="custome-select border-0 pr-3" v-model="main_statistics.controllers.new_customers"  >
+                            <select class="custome-select border-0 pr-3" v-model="main_statistics.controllers.customers"  >
                                 <option selected  value="today">Today</option>
                                 <option  value="last_week" >Last 7 Days</option>
                                 <option  value="last_month" >Last Month</option>
@@ -95,7 +95,7 @@
                     <div class="row pb--20 ">
                         <span class="w-100 text-center ">
                             <h1 class="report-value ">
-                                {{main_statistics_new_customers}} 
+                                {{main_statistics_customers}} 
                             </h1>
                         </span>
                     </div>
@@ -115,20 +115,23 @@
     export default {
 
         mounted() {
-            this.initServerSE();
+            this.Listen();
+           
         },
         data() {
             return {
-                serverStream:{
-                    status:false, //false => closed
-                    reconnect_count:0 
+                listener:{
+                    subscription:{
+                        subscribed:false
+                    }
                 },
+                
                 main_statistics:{
                     controllers:{ //0 => today , 1 => last 7 days , 2 => last month , 3 => last year
                         product_sold:'today',
                         gross_profit:'today',
                         delivery_orders:'today',
-                        new_customers:'today',
+                        customers:'today',
                         
                     },
                    
@@ -151,7 +154,7 @@
                             last_month:325,
                             last_year:145,
                         },
-                        new_customers:{
+                        customers:{
                             today:0,
                             last_week:12,
                             last_month:45,
@@ -166,7 +169,10 @@
             }
         },
         watch: {
-           
+           'listener.subscription.subscribed' :function () {
+               if(this.listener.subscription.subscribed)
+                this.init_event()
+           }
         },
         computed:{
             main_statistics_product_sold:function(){
@@ -181,9 +187,9 @@
                var option = this.main_statistics.controllers.delivery_orders //get the select option from the binding object property
                return this.main_statistics.model.delivery_orders[option];
             },
-            main_statistics_new_customers:function(){
-              var option = this.main_statistics.controllers.new_customers //get the select option from the binding object property
-               return this.main_statistics.model.new_customers[option];
+            main_statistics_customers:function(){
+              var option = this.main_statistics.controllers.customers //get the select option from the binding object property
+               return this.main_statistics.model.customers[option];
             }
         },
 
@@ -192,33 +198,24 @@
 
 
         methods: {
+
             /**
-             * initiate SSE server sent event
+             * initiate event 
              */
-            initServerSE: function(){ 
+            init_event: function(){
+                axios.get("/api/init_stat_event/").then((response)=>{
+                    console.log("1")
+                });
+            },
+            Listen: function(){ 
 
-                var serverEvent  = new EventSource('/api/stream');
+               this.listener = Echo.channel('statistics').listen("InventoryUpdate",(e)=>{
+                   console.log(e)
+                   this.main_statistics.model = e.main_statistics;
+               })
+               
 
-                serverEvent.addEventListener("message",event => {
-                    console.log(JSON.parse(event.data).product_sold)
-                    /*let data = JSON.parse(event.data);
-                    //extract and assigne the main_statistics
-                    this.main_statistics.model = data.main_statistics;*/
-
-                },false)
-
-                serverEvent.addEventListener("error" ,event => {
-                    if(event.readyState == EventSource.CLOSED){
-                        console.log("Connection Closed : trying to reconnect ....")
-                        this.serverStream.status = false
-                        //if(this.serverStream.reconnect_count < 10)
-
-                    }
-                })
-                
-                serverEvent.addEventListener("open",event => {
-                    this.serverStream.status = true
-                })
+            
 
             }
 

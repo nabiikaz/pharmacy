@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Http\Request;
-
+use App\Sale;
+use \Carbon\Carbon;
+use App\User;
+use DB;
 class streamController extends Controller
 {
     /**
@@ -11,26 +14,36 @@ class streamController extends Controller
      */
 
     public function index(Request $request){
-        $start = time();
-        $max_timeout = ini_get('max_execution_time');
+
         
-        $response = new StreamedResponse(function() use ($request,$start,$max_timeout) {
-            while(true) {
-                //check if the connection time is max out 
-                if( time() >= $start+$max_timeout )
-                    exit(200);
-                $data = array("product_sold"=>["today"=>0]);
-               
-                echo "data: ".json_encode($data)."\n\n";
-                ob_flush();
-                flush();
-                usleep(2000000);
-            }
-        });
-        $response->headers->set('Content-Type', 'text/event-stream');
-        $response->headers->set('X-Accel-Buffering', 'no');
-        $response->headers->set('Cach-Control', 'no-cache');
-        return $response;
+
+       return event(new \App\Events\InventoryUpdate());
+       
+
+
+        return Db::table("roles")->where("roles.name","=","customer")
+                            ->join("role_user","role_user.role_id","=","id")
+                            ->join("users","users.id","=","role_user.user_id")
+                            ->where("users.created_at",">=",$lastMonth)
+                            ->count("users.created_at");
+
+
+       return Sale::select('id', 'created_at')
+                    ->get()
+                    ->groupBy(function($date) {
+                        return Carbon::parse($date->created_at)->format('d'); // grouping by days
+                    });
+        
+
+
+
+      /* return Sale::select('id', 'created_at')
+                    ->get()
+                    ->groupBy(function($date) {
+                    return Carbon::parse($date->created_at)->format('d'); // grouping by days
+                    });;
+*/
+       return $lastYear;
 
     }
 }

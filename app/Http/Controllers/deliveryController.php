@@ -96,6 +96,7 @@ class deliveryController extends Controller
 
         $delivery->paid = true;
         $delivery->save();
+        event(new \App\Events\InventoryUpdate());
         
     }
 

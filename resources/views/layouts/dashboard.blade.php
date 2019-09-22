@@ -31,7 +31,7 @@
     </div>
 
 
-    @if (Route::currentRouteName() == 'dashboard.delivery')
+    @if (Route::currentRouteName() == 'dashboard.delivery' || Route::currentRouteName() == 'dashboard.customers')
         <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
         <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
         <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>

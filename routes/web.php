@@ -111,12 +111,12 @@ Route::prefix('dashboard')->middleware("auth","role:admin|moderator,api")->group
     Route::get('customers',function(){
         $id= -1;    
         return view('customers')->with('id',$id);
-    });
+    })->name("dashboard.customers");
 
 
     Route::get('customers/{id}',function($id){
         return view('customers')->with('id',$id);
-    });
+    })->name("dashboard.customers");
 
 
     //delivery ----------------------------------------------------

@@ -77,6 +77,9 @@ class CustomerController extends Controller
                 
                 if(!$request->has("geo_coord"))
                     $request->geo_coord = "";
+                else if($request->geo_coor == null)
+                    $request->geo_coord = "";
+
                 //add new customer
                 $customer = Customer::create([
                     'name' => $request->name,
@@ -92,7 +95,7 @@ class CustomerController extends Controller
                 //attach customer (user)
                 $customer->attachRole("customer");
 
-                
+                event(new \App\Events\InventoryUpdate());
                 
                 return new CustomerResource($customer) ;
             
@@ -165,5 +168,7 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         $customer->delete();
+        event(new \App\Events\InventoryUpdate());
+
     }
 }

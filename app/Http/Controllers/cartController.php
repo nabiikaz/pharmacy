@@ -170,6 +170,7 @@ class cartController extends Controller
         $client_session = $_COOKIE["client_session"];
         Cache::forget($client_session);
 
+        event(new \App\Events\InventoryUpdate());
 
 
     }

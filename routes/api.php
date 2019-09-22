@@ -38,4 +38,4 @@ Route::post("cart/checkout","cartController@checkout")->middleware("auth");
 
 
 
-Route::get("stream","streamController@index");
+Route::get("init_stat_event","streamController@index");

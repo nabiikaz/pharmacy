@@ -79,6 +79,9 @@ class RegisterController extends Controller
 
         $user->attachRole("customer");
 
+        event(new \App\Events\InventoryUpdate());
+        
+
         return $user;
     }
 }
