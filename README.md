@@ -8,16 +8,16 @@ Labo-Professor Mr Tadlaoui Mohamed
 < php artisan websocket:serve > 
 because almost every dashboard page it depandes on a websocket connection 
 
-# deployement : 
-1- install all dependencies : \n
-    composer install 
-2- Migrate all migrations : 
-    php artisan migrate
-3- initiate Administrator Permissions : 
-    you need to go to this link:
-    http://localhost/permissions/init
-    then to visit the dashboard Panel: 
-    email : admin@admin.com
-    password : password
+# deployement : <br /><br />
+1- install all dependencies : <br />
+    composer install <br />
+2- Migrate all migrations :<br /> 
+    php artisan migrate<br />
+3- initiate Administrator Permissions : <br />
+    you need to go to this link:<br />
+    http://localhost/permissions/init<br />
+    then to visit the dashboard Panel: <br />
+    email : admin@admin.com<br />
+    password : password<br />
     
   
