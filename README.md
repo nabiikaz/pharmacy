@@ -9,7 +9,7 @@ Labo-Professor Mr Tadlaoui Mohamed
 because almost every dashboard page it depandes on a websocket connection 
 
 # deployement : 
-1- install all dependencies : 
+1- install all dependencies : \n
     composer install 
 2- Migrate all migrations : 
     php artisan migrate
